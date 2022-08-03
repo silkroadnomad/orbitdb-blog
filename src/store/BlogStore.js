@@ -8,6 +8,7 @@ class BlogStore {
     title: "Welcome to Nico-Krause.com!"
   };
   @observable isOnline = false;
+  @observable currentFeed = {};
   @observable currentPost = {};
 
   constructor() {
@@ -59,6 +60,7 @@ class BlogStore {
       this.posts.push(newPostObj);
     }
   };
+
   async loadPosts() {
     // this.feed = await this.odb.feed(this.odb.identity.id + '/playlists')
 
@@ -76,6 +78,7 @@ class BlogStore {
       console.log("wrote something adding to Posts" + hash, entry);
       this.addPostToStore(entry);
     });
+
     // When the database is ready (ie. loaded), display results
     this.feed.events.on("ready", (a, b) => {
       console.log("database ready " + a, b);
@@ -83,14 +86,8 @@ class BlogStore {
     });
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
-      // await this.feed.load()
       console.log("replicate.progress", dbAddress, hash, obj);
       console.log("this.playlists.length", this.posts.length);
-      // const filteredData = this.playlists.filter(item => {
-      //   console.log('item.hash',item.hash,hash)
-      //   return item.hash !== hash}
-      //   );
-      // this.playlists.replace(filteredData);
       console.log("this.playlists.length", this.posts.length);
       this.feed = await this.feed.load();
       const entry = await feed.get(hash);
@@ -103,14 +100,7 @@ class BlogStore {
           );
           this.playlist = this.posts.splice(i, 1);
         }
-        //   console.log("syncing",this.playlists[i].hash)
-        //   const entry = await newFeed.get(this.playlists[i].hash)
-        //   console.log(entry)
-        //   if(entry===undefined) {
-        // this.removePlaylist(hash)
       }
-
-      // }
     });
     await this.feed.load();
   }
@@ -118,22 +108,21 @@ class BlogStore {
   /**
    * Create a new feed for every post
    */
-  async createNewPost(subject,body) {
-    // const postsFeed = this.feed
+  async createNewPost() {
     // Creates a new feed for every playlist (or post)
-    console.log("creating new postFeed", subject);
+    console.log("creating new postFeed", this.currentPost.subject);
     
-    const postsFeed = await this.odb.feed(subject, {
+    const postsFeed = await this.odb.feed(this.currentPost.subject, {
       accessController: { type: "orbitdb", write: [this.odb.identity.id] },
     })
 
     const p = {
-      subject: subject,
-      body: body,
-      createdAt: new Date().getTime(),
+      subject: this.currentPost.subject,
+      body: this.currentPost.body,
+      createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: postsFeed.address.toString(),
     }
-    //next we add it to our saved playlists feed
+
     const hash = await this.feed.add(p);
     return hash;
   }
@@ -152,9 +141,10 @@ class BlogStore {
       const blogPost =
         this.odb.stores[address] || (await this.odb.open(address));
       await blogPost.load();
-      this.currentPost = blogPost;
-      console.log('currentPost',this.currentPost)
-    }
+      const ourPost = this.posts.filter((item)=>{return item.address === address})
+      this.currentFeed = blogPost 
+      this.currentPost = ourPost.length>0?ourPost[0]:undefined
+    }else console.log('odb not loaded')
   }
 
   sendFiles(files, address) {
@@ -221,8 +211,8 @@ class BlogStore {
       const hash = await blogPost.add(data);
       console.log("got hash", hash);
       await blogPost.load();
-      this.currentPost = blogPost;
-      console.log("blogPost feed loaded", this.currentPost);
+      this.currentFeed = blogPost;
+      console.log("blogPost feed loaded", this.currentFeed);
       return blogPost.get(hash);
     }
     return;

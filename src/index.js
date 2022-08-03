@@ -1,14 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import './styles/style.css'
-import './styles/normalize.css'
 import {create} from 'ipfs'
 import store from './store/BlogStore'
-// import Posts from './Posts'
-// import Post from './Post'
 import BlogPost from './components/BlogPost'
 import BlogIndex from './pages/BlogIndex'
+import './styles/style.css'
+import './styles/normalize.css'
 
 class App extends React.Component {
   async componentDidMount () {
@@ -44,18 +42,6 @@ class App extends React.Component {
       </div>
     )
   }
-  // return (
-  //   <div>
-  //     <pre>      .-``'.  📻                            📻  .'''-.</pre>
-  //     <pre>    .`   .`       ~ O R B I T   W A V E S ~      `.   '.</pre>
-  //     <pre>_.-'     '._ <a href="https://github.com/orbitdb/web3-workshop/">github.com/orbitdb/web3-workshop/</a> _.'     '-._</pre>
-  //     <Router>
-  //       <Route path="/orbitdb/:hash/:name" component={(props) => <Post {...props} store={store}/> }/>
-  //       <Route exact path="/" component={(props) => <Posts {...props} store={store}/> }/>
-  //     </Router>
-  //   </div>
-  // )
-  // }
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))

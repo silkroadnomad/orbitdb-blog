@@ -5,7 +5,7 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import CreatePost from "../components/CreatePost"
-
+import ReactMarkdown from 'react-markdown'
 const BlogIndex = (props) => {
 
   const siteTitle = props.store.data.title //data?.site?.siteMetadata?.title || `Title`
@@ -28,12 +28,11 @@ const BlogIndex = (props) => {
       <CreatePost {...props} />
       <ol style={{ listStyle: `none` }}>
         {props.store.posts.map(post => {
-          console.log(post.subject)
           const subject  = post.name || post.subject // post.frontmatter.title || post.fields.slug
           //const key = post.hash //post.fields.slug
           const slug = post.hash
           const postDate = new Date(post.createdAt || new Date().getTime()).toISOString()
-          const description = post.description //post.frontmatter.description || post.excerpt,
+          const description =  post.description //post.frontmatter.description || post.excerpt,
           
           return (
             <li key={slug}>
@@ -50,14 +49,7 @@ const BlogIndex = (props) => {
                   </h2>
                   <small>{postDate}</small>
                 </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: description
-                    }}
-                    itemProp="description"
-                  />
-                </section>
+                <section><ReactMarkdown>{post.body}</ReactMarkdown></section>
               </article>
             </li>
           )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom";
-
+import { observer } from 'mobx-react'
+import ReactMarkdown from 'react-markdown'
 import Bio from "./bio"
 import Layout from "./layout"
 import Seo from "./seo"
@@ -9,52 +9,49 @@ import CreatePost from "./CreatePost"
 const BlogPost = (props) => {
 
   const [comments, setComments] = useState([])
-  const [post, setPost] = useState()
   // const { previous, next } = data
   let mounted = true
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
 
   useEffect(() => {
-    console.log('useEffect')
-    const ourPost = props.store.posts.filter((item)=>{return item.address === address})
-    setPost(ourPost[0])
-
+   
     function load () {
       props.store.joinBlogPost(address).then(() => {
         if (mounted) {
           setComments(props.store.currentPost.all)
-          // props.store.currentPost?.events.on('replicated', () => {
-          //   setComments(props.store.currentPost.all)
-          // })
+          props.store.currentPost.events?.on('replicated', () => {
+            setComments(props.store.currentPost.all)
+          })
         }
       })
     }
     load()
-
     return () => {
       setComments([])
       mounted = false
     }
-  }, [address,post])
+  }, [props.store.isOnline,address])
 
   return (
-    <Layout location={props.location} title={post?.subject}>
-      <Seo title={post?.subject} description={post?.body || post?.excerpt} />
+    <Layout location={props.location} title={props.store.currentPost?.subject}>
+      <Seo
+        title={props.store.currentPost.subject?props.store.currentPost?.subject:''}
+        description={props.store.currentPost.body?props.store.currentPost.body:''}
+      />
       <article
         className="blog-post"
         itemScope
         itemType="http://schema.org/Article"
       >
         <header>
-          <h1 itemProp="headline">{post?.subject}</h1>
-          <p>{post?.date}</p>
+          <h1 itemProp="headline">{props.store.currentPost?.subject}</h1>
+          <p>{props.store.currentPost?.date}</p>
         </header>
-        <section
-          dangerouslySetInnerHTML={{ __html: post?.body }}
-          itemProp="articleBody"
-        />
+
+        <ReactMarkdown>{props.store.currentPost?.body}</ReactMarkdown>
+
         <hr />
-        <CreatePost {...props} post={post} updateHandler={(post) => {setPost(post); console.log("newPost",post)}} />
+        <CreatePost {...props} />
         <hr />
         <footer>
           <Bio />
@@ -92,4 +89,4 @@ const BlogPost = (props) => {
   )
 }
 
-export default BlogPost
+export default observer(BlogPost) 

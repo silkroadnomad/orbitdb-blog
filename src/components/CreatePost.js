@@ -1,38 +1,36 @@
 import React, { useState,useEffect } from "react";
+import { observer } from 'mobx-react'
 import '../styles/CreatePlaylist.scss'
 
 const CreatePost = (props) => {
 
-  const [post,setPost] = useState({subject:'',body:""})
-
   const handleValues = (e) => {
     const {name,value} = e.target
-    const newPost = {...post,[name]:value}
-    props.updateHandler(newPost)
-    setPost(newPost)
+    props.store.currentPost[name] = value
   }
 
-  
   async function handleSubmit (event) {
     event.preventDefault()
-    const newPost = await props.store.createNewPost(post.subject,post.body) //TODO give createdAt time to post if exists  
-    console.log("Created",newPost)
+    if (props.post === undefined) {
+      const newPost = await props.store.createNewPost()
+      console.log("Created", newPost)
+      props.history.push("/")
+    }else{
+      const newPost = await props.store.createNewPost() //TODO give createdAt time to post if exists
+      console.log("Created", newPost)
+    }
     //TODO delete old post for update? props.post !== undefined
-    props.history.push('/');
+    
   }
-  
-  useEffect(() => {
-    setPost({'subject':props?.post?.subject,'body':props?.post?.body})
-  }, [props?.post]);
 
   return(
     <form onSubmit={handleSubmit}>
-      <input name="subject" type="text" value={post?.subject} placeholder="Subject" onChange={handleValues} /><br/>
-      <textarea name="body" type="text" value={post?.body} cols={70} rows={10} placeholder="Body" onChange={handleValues} />
+      <input name="subject" type="text" value={props.store.currentPost.subject?props.store.currentPost.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
+      <textarea name="body" type="text" value={props.store.currentPost.body?props.store.currentPost.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
       <br/>
       {props.post===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}
     </form>
   )
 }
 
-export default CreatePost
+export default observer(CreatePost)
