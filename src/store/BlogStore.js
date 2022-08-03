@@ -45,15 +45,12 @@ class BlogStore {
   }
 
   addPostToStore = (entry) => {
-    if (
-      this.posts.filter((e) => {
-        return e.hash === entry.hash;
-      }).length === 0
-    ) {
+    if (this.posts.filter((e) => {return e.hash === entry.hash;}).length === 0) {
       const newPostObj = {
         hash: entry.hash,
         subject: entry.payload.value.subject || entry.payload.value.name,
         body: entry.payload.value.body,
+        createdAt: entry.payload.value.createdAt,
         address: entry.payload.value.address,
       };
       console.log("adding newPostObj to posts store", newPostObj);
@@ -88,7 +85,6 @@ class BlogStore {
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
       console.log("replicate.progress", dbAddress, hash, obj);
       console.log("this.playlists.length", this.posts.length);
-      console.log("this.playlists.length", this.posts.length);
       this.feed = await this.feed.load();
       const entry = await feed.get(hash);
       for (let i = 0; i < this.posts.length; i++) {
@@ -109,9 +105,7 @@ class BlogStore {
    * Create a new feed for every post
    */
   async createNewPost() {
-    // Creates a new feed for every playlist (or post)
-    console.log("creating new postFeed", this.currentPost.subject);
-    
+    console.log("creating new postFeed", this.currentPost.subject)
     const postsFeed = await this.odb.feed(this.currentPost.subject, {
       accessController: { type: "orbitdb", write: [this.odb.identity.id] },
     })
@@ -127,11 +121,16 @@ class BlogStore {
     return hash;
   }
 
-  async removePost(ourHash) {
-    const filteredData = this.posts.filter((item) => item.hash !== ourHash);
+  async removePost() {
+
+    const filteredData = this.posts.filter((item) => {
+      return item.hash !== this.currentPost.hash
+    });
+
     this.posts.replace(filteredData);
-    const hash = await this.feed.remove(ourHash);
-    console.log(hash, ourHash);
+    this.posts.map((item)=>console.log(item.subject))
+
+    const hash = await this.feed.remove(this.currentPost.hash);
     return hash;
   }
 

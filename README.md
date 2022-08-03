@@ -10,15 +10,17 @@
 - open browser on http://localhost:8080
 
 ## todos
-- save post / edit post
-- delete post
 - previous post / next post  
 - upload photos to post via ipfs
 - test chakra-ui 
 - add comments
+# ui - todos
+- when deleting a post ask user before action
 
 ## done
 - 2022-08-03
+    - save post / edit post
+    - delete post
     - use markdown for rendering body https://www.npmjs.com/package/react-markdown#install
 - 2022-08-02 
     - rerender post subject and body while typing 

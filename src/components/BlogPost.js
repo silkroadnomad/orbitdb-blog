@@ -35,8 +35,8 @@ const BlogPost = (props) => {
   return (
     <Layout location={props.location} title={props.store.currentPost?.subject}>
       <Seo
-        title={props.store.currentPost.subject?props.store.currentPost?.subject:''}
-        description={props.store.currentPost.body?props.store.currentPost.body:''}
+        title={props.store.currentPost?.subject?props.store.currentPost?.subject:''}
+        description={props.store.currentPost?.body?props.store.currentPost?.body:''}
       />
       <article
         className="blog-post"

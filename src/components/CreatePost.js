@@ -5,30 +5,35 @@ import '../styles/CreatePlaylist.scss'
 const CreatePost = (props) => {
 
   const handleValues = (e) => {
+    console.log('props.store.currentPost',props.store.currentPost?.subject)
+    if(props.store.currentPost===undefined) props.store.currentPost = {}
     const {name,value} = e.target
     props.store.currentPost[name] = value
   }
 
   async function handleSubmit (event) {
     event.preventDefault()
-    if (props.post === undefined) {
+    if (props.store.currentPost?.hash === undefined) {
       const newPost = await props.store.createNewPost()
-      console.log("Created", newPost)
       props.history.push("/")
+      props.store.currentPost = undefined
     }else{
-      const newPost = await props.store.createNewPost() //TODO give createdAt time to post if exists
-      console.log("Created", newPost)
+      await props.store.removePost()
+      const newPost = await props.store.createNewPost() 
+      props.history.push("/") //TODO maybe forward to new post address here
+      props.store.currentPost = undefined
     }
-    //TODO delete old post for update? props.post !== undefined
     
   }
 
   return(
     <form onSubmit={handleSubmit}>
-      <input name="subject" type="text" value={props.store.currentPost.subject?props.store.currentPost.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
-      <textarea name="body" type="text" value={props.store.currentPost.body?props.store.currentPost.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
+      <input name="subject" type="text" value={props.store.currentPost?.subject?props.store.currentPost?.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
+      <textarea name="body" type="text" value={props.store.currentPost?.body?props.store.currentPost?.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
       <br/>
-      {props.post===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}
+      {props.store.currentPost?.hash===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}&nbsp;
+      {props.store.currentPost?.hash!==undefined?<input type="button" value="Delete" onClick={() => {props.store.removePost();  props.store.currentPost = undefined; props.history.push("/")}}/>:''}
+
     </form>
   )
 }

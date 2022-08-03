@@ -15,7 +15,7 @@ const BlogIndex = (props) => {
         <Seo title="All posts" />
         <Bio />
         <p>
-          No blog posts found.
+          {props.store.isOnline?'No blog posts found.':'Blog loading ...'} 
         </p>
       </Layout>
     )
@@ -47,7 +47,7 @@ const BlogIndex = (props) => {
                       <span itemProp="headline">{subject}</span>
                     </Link>
                   </h2>
-                  <small>{postDate}</small>
+                  <small>Created: {postDate}</small>
                 </header>
                 <section><ReactMarkdown>{post.body}</ReactMarkdown></section>
               </article>
