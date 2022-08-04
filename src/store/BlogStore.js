@@ -62,9 +62,9 @@ class BlogStore {
     // this.feed = await this.odb.feed(this.odb.identity.id + '/playlists')
 
     this.feed.events.on("replicated", async (dbAddress, count, newFeed, d) => {
-      this.feed = await newFeed.load();
+     // this.feed = await newFeed.load(); (seems not to work correctly)
       console.log("replicated - loading posts from db");
-      console.log("dbNmae", dbAddress);
+      console.log("dbAddress", dbAddress);
       console.log("count", count);
       console.log("feed", newFeed);
       newFeed.all.map(this.addPostToStore);
@@ -77,16 +77,19 @@ class BlogStore {
     });
 
     // When the database is ready (ie. loaded), display results
-    this.feed.events.on("ready", (a, b) => {
-      console.log("database ready " + a, b);
-      this.feed.all.map(this.addPostToStore);
+    this.feed.events.on("ready", (dbAddress, feedReady) => {
+      console.log("database ready " + dbAddress, feedReady);
+      // this.feed = feedReady
+      if(this.feed !== undefined)        this.feed.all.map(this.addPostToStore);
+      else console.log('feed is still undefined although ready')
+
     });
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
       console.log("replicate.progress", dbAddress, hash, obj);
       console.log("this.playlists.length", this.posts.length);
-      this.feed = await this.feed.load();
-      const entry = await feed.get(hash);
+      // this.feed = await this.feed.load(); doesn't seem to be useful here.
+      const entry = await this.feed.get(hash);
       for (let i = 0; i < this.posts.length; i++) {
         console.log(">", this.posts[i].hash, this.posts[i].address);
         if (this.posts[i].hash === entry.hash) {
@@ -128,8 +131,6 @@ class BlogStore {
     });
 
     this.posts.replace(filteredData);
-    this.posts.map((item)=>console.log(item.subject))
-
     const hash = await this.feed.remove(this.currentPost.hash);
     return hash;
   }

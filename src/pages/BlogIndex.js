@@ -17,6 +17,7 @@ const BlogIndex = (props) => {
         <p>
           {props.store.isOnline?'No blog posts found.':'Blog loading ...'} 
         </p>
+        <CreatePost {...props} />
       </Layout>
     )
   }
@@ -25,15 +26,14 @@ const BlogIndex = (props) => {
     <Layout location={props.location} title={siteTitle}>
       <Seo title="All posts" />
       <Bio />
-      <CreatePost {...props} />
       <ol style={{ listStyle: `none` }}>
-        {props.store.posts.map(post => {
+        {props.store.posts.map((post,i) => {
+          if(post.subject===undefined) return (<li key={"empty_"+i}>&nbsp;</li>) //for some reason elements stay undefined in stores array after deleting them
           const subject  = post.name || post.subject // post.frontmatter.title || post.fields.slug
           //const key = post.hash //post.fields.slug
           const slug = post.hash
-          const postDate = new Date(post.createdAt || new Date().getTime()).toISOString()
-          const description =  post.description //post.frontmatter.description || post.excerpt,
-          
+          const postDate = post.createdAt?new Date(post.createdAt).toISOString():undefined
+       
           return (
             <li key={slug}>
               <article
@@ -55,6 +55,7 @@ const BlogIndex = (props) => {
           )
         })}
       </ol>
+      <CreatePost {...props} />
     </Layout>
   )
 }

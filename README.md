@@ -14,6 +14,10 @@
 - upload photos to post via ipfs
 - test chakra-ui 
 - add comments
+
+# orbit - todos 
+- when deleting a post - replication is informed but hard to identify the removed item
+
 # ui - todos
 - when deleting a post ask user before action
 

@@ -5,7 +5,6 @@ import '../styles/CreatePlaylist.scss'
 const CreatePost = (props) => {
 
   const handleValues = (e) => {
-    console.log('props.store.currentPost',props.store.currentPost?.subject)
     if(props.store.currentPost===undefined) props.store.currentPost = {}
     const {name,value} = e.target
     props.store.currentPost[name] = value
