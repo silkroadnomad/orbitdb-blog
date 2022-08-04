@@ -6,6 +6,7 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 import CreatePost from "../components/CreatePost"
 import ReactMarkdown from 'react-markdown'
+
 const BlogIndex = (props) => {
 
   const siteTitle = props.store.data.title //data?.site?.siteMetadata?.title || `Title`

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
 import { observer } from 'mobx-react'
 import ReactMarkdown from 'react-markdown'
 import Bio from "./bio"
@@ -9,7 +10,8 @@ import CreatePost from "./CreatePost"
 const BlogPost = (props) => {
 
   const [comments, setComments] = useState([])
-  // const { previous, next } = data
+  const [nextPost,setNextPost] = useState()
+  const [previousPost,setPreviousPost] = useState()
   let mounted = true
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
 
@@ -18,6 +20,8 @@ const BlogPost = (props) => {
     function load () {
       props.store.joinBlogPost(address).then(() => {
         if (mounted) {
+          setNextPost( props.store.nextPost(address))
+          setPreviousPost( props.store.previousPost(address))
           setComments(props.store.currentPost.all)
           props.store.currentPost.events?.on('replicated', () => {
             setComments(props.store.currentPost.all)
@@ -67,22 +71,12 @@ const BlogPost = (props) => {
             padding: 0,
           }}
         >
-          {
-            // <li>
-            //   {previous && (
-            //     <Link to={previous.fields.slug} rel="prev">
-            //       ← {previous.frontmatter.title}
-            //     </Link>
-            //   )}
-            // </li>
-            // <li>
-            //   {next && (
-            //     <Link to={next.fields.slug} rel="next">
-            //       {next.frontmatter.title} →
-            //     </Link>
-            //   )}
-            // </li>
-          }
+            <li>
+                <Link to={previousPost?.address} rel="prev">{previousPost?.subject}</Link>
+            </li>
+            <li>
+                <Link to={nextPost?.address} rel="next">{nextPost?.subject}</Link>
+            </li>
         </ul>
       </nav>
     </Layout>

@@ -125,7 +125,6 @@ class BlogStore {
   }
 
   async removePost() {
-
     const filteredData = this.posts.filter((item) => {
       return item.hash !== this.currentPost.hash
     });
@@ -134,6 +133,39 @@ class BlogStore {
     const hash = await this.feed.remove(this.currentPost.hash);
     return hash;
   }
+
+  previousPost(address) {
+    if(!address) return "please provide address of current post"
+    console.log(`loading previous post of address ${address}`);
+    for (var i = 0;i < this.posts.length;i++){
+      if(this.posts[i].address===address){
+        const previousPost =  {address:this.posts[i-1]?.address,subject:this.posts[i-1]?.subject}
+        return previousPost
+        break;
+      }
+    }
+  }
+
+  nextPost(address) {
+    if(!address) return "please provide address of current post"
+    console.log(`loading next post of address ${address}`);
+    for (var i = 0;i < this.posts.length;i++){
+      if(this.posts[i].address===address){
+        const nextPost =  {address:this.posts[i+1]?.address,subject:this.posts[i+1]?.subject}
+        return nextPost
+        break;
+      }
+    }
+  }
+
+  //   if (this.odb) {
+  //     console.log('loading comments of post ',nextAddress)
+  //     const blogPost = this.odb.stores[nextAddress] || (await this.odb.open(nextAddress));
+  //     await blogPost.load();
+  //     this.currentFeed = blogPost; 
+  //   }else console.log('odb not loaded')
+
+  // }
 
   async joinBlogPost(address) {
     console.log("joinBlogPost - loading address", address);
