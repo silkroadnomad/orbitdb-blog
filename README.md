@@ -10,12 +10,11 @@
 - open browser on http://localhost:8080
 
 ## build 
-- 
+- run ``npm run build``
+- run ``ìpfs add dist`` update dns with new cid 
 
 ## todos
 ### orbit - todos
-- store project on ipfs 
-- link ipfs hash with dns name
 - pin project on ipfs
 - when deleting a post - replication is informed but hard to identify the removed item
 
@@ -26,6 +25,9 @@
 - when deleting a post ask user before action
 
 ## done
+- 2022-08-05
+    - link ipfs hash with dns name
+    - store blog on ipfs 
 - 2022-08-04
     - previous post / next post 
 - 2022-08-03
