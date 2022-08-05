@@ -9,6 +9,9 @@
 - run ``npm start``
 - open browser on http://localhost:8080
 
+## build 
+- 
+
 ## todos
 ### orbit - todos
 - store project on ipfs 

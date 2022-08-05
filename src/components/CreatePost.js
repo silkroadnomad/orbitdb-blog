@@ -30,9 +30,8 @@ const CreatePost = (props) => {
       <input name="subject" type="text" value={props.store.currentPost?.subject?props.store.currentPost?.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
       <textarea name="body" type="text" value={props.store.currentPost?.body?props.store.currentPost?.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
       <br/>
-      {props.store.currentPost?.hash===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}&nbsp;
+      {props.store.currentPost?.hash===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}
       {props.store.currentPost?.hash!==undefined?<input type="button" value="Delete" onClick={() => {props.store.removePost();  props.store.currentPost = undefined; props.history.push("/")}}/>:''}
-
     </form>
   )
 }
