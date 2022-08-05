@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { HashRouter as Router, Route } from 'react-router-dom'
 import {create} from 'ipfs'
 import store from './store/BlogStore'
 import BlogPost from './components/BlogPost'

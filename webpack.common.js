@@ -15,7 +15,7 @@ module.exports = {
         rules : [
             {test : /\.(js)$/, use:'babel-loader'},
             {test : /\.scss|css$/, use:['style-loader', 'css-loader', 'sass-loader']},
-            {test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/, use: 'url-loader?limit=100000' }
+            {test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/, use: 'file-loader' }
         ]
     },
     mode:'development',
