@@ -10,16 +10,18 @@ import CreatePost from "./CreatePost"
 const BlogPost = (props) => {
 
   const [comments, setComments] = useState([])
-  const [nextPost,setNextPost] = useState()
-  const [previousPost,setPreviousPost] = useState()
+  const [nextPost,setNextPost] = useState({address:'#'})
+  const [previousPost,setPreviousPost] = useState({address:'#'})
   let mounted = true
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
 
   useEffect(() => {
    
     function load () {
+
       props.store.joinBlogPost(address).then(() => {
         if (mounted) {
+          console.log('loading')
           setNextPost( props.store.nextPost(address))
           setPreviousPost( props.store.previousPost(address))
           setComments(props.store.currentPost.all)
