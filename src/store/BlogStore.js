@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { observable,makeAutoObservable } from 'mobx'
 import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
 
@@ -12,6 +12,7 @@ class BlogStore {
   @observable currentPost = {};
 
   constructor() {
+    makeAutoObservable(this)
     this.ipfs = null;
     this.odb = null;
     this.feed = null;

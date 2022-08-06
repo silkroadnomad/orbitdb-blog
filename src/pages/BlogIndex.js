@@ -9,10 +9,9 @@ import ReactMarkdown from 'react-markdown'
 
 const BlogIndex = (props) => {
 
-  const siteTitle = props.store.data.title //data?.site?.siteMetadata?.title || `Title`
   if (props.store.posts.length === 0) {
     return (
-      <Layout location={props.location} title={siteTitle}>
+      <Layout location={props.location} title={props.store.data.title}>
         <Seo title="All posts" />
         <Bio />
         <p>
@@ -24,7 +23,7 @@ const BlogIndex = (props) => {
   }
 
   return (
-    <Layout location={props.location} title={siteTitle}>
+    <Layout location={props.location} title={props.store.data.title}>
       <Seo title="All posts" />
       <Bio />
       <ol style={{ listStyle: `none` }}>

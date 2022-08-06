@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { useEffect } from "react"
+import ReactDOM from "react-dom/client";
 import { HashRouter as Router, Route } from 'react-router-dom'
 import {create} from 'ipfs'
 import store from './store/BlogStore'
@@ -8,31 +8,32 @@ import BlogIndex from './pages/BlogIndex'
 import './styles/style.css'
 import './styles/normalize.css'
 
-class App extends React.Component {
-  async componentDidMount () {
-    const ipfs = await create({
-      repo: './ipfs-repo',
-      EXPERIMENTAL: { pubsub: true },
-      preload: { "enabled": false },
-      config: {
-        // Bootstrap: [
-        // ],
-        Addresses: {
-          Swarm: [
-            // Use IPFS dev webrtc signal server
-            '/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
-            '/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
-            // Use local signal server
-            // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
-          ]
-        },
-      }
-    })
-    await store.connect(ipfs)
-    console.log("odb id:", store.odb.identity.id)
-  }
-
-  render() {
+const App = () => {
+  useEffect(() => {
+    const load = async () => {
+      const ipfs = await create({
+        repo: './ipfs-repo',
+        EXPERIMENTAL: { pubsub: true },
+        preload: { "enabled": false },
+        config: {
+          // Bootstrap: [
+          // ],
+          Addresses: {
+            Swarm: [
+              // Use IPFS dev webrtc signal server
+              '/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
+              '/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
+              // Use local signal server
+              // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
+            ]
+          },
+        }
+      })
+      await store.connect(ipfs)
+      console.log("odb id:", store.odb.identity.id)
+    }
+    load()
+  })
     return (
       <div>
         <Router>
@@ -41,7 +42,10 @@ class App extends React.Component {
         </Router>
       </div>
     )
-  }
 }
-
-ReactDOM.render(<App />, document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
