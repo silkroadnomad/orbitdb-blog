@@ -88,7 +88,6 @@ class BlogStore {
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
       console.log("replicate.progress", dbAddress, hash, obj);
-      console.log("this.playlists.length", this.posts.length);
       // this.feed = await this.feed.load(); doesn't seem to be useful here.
       const entry = await this.feed.get(hash);
       for (let i = 0; i < this.posts.length; i++) {
@@ -171,12 +170,16 @@ class BlogStore {
   async joinBlogPost(address) {
     console.log("joinBlogPost - loading address", address);
     if (this.odb) {
-      const blogPost =
-        this.odb.stores[address] || (await this.odb.open(address));
-      await blogPost.load();
       const ourPost = this.posts.filter((item)=>{return item.address === address})
-      this.currentFeed = blogPost 
       this.currentPost = ourPost.length>0?ourPost[0]:undefined
+      try {
+        const blogPost =
+        this.odb.stores[address] || (await this.odb.open(address));
+        await blogPost.load();
+        this.currentFeed = blogPost
+      }catch(ex){
+        console.log(ex,'comments feed could not loaded')
+      } 
     }else console.log('odb not loaded')
   }
 
