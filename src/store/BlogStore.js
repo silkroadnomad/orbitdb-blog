@@ -144,6 +144,7 @@ class BlogStore {
         break;
       }
     }
+    return "#"
   }
 
   nextPost(address) {
@@ -156,6 +157,7 @@ class BlogStore {
         break;
       }
     }
+    return "#"
   }
 
   //   if (this.odb) {

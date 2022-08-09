@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import ReactDOM from "react-dom/client";
+// import ReactDOM from "react-dom/client";
 import { ChakraProvider } from '@chakra-ui/react'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import {create} from 'ipfs'
@@ -37,18 +37,19 @@ const App = () => {
   })
     return (
       <ChakraProvider>
-        <div>
           <Router>
             <Route path="/orbitdb/:hash/:name" component={(props) => <BlogPost {...props} store={store}/> }/>
             <Route exact path="/" component={props => <BlogIndex {...props} store={store} />}/>
           </Router>
-        </div>
       </ChakraProvider>
     )
 }
-const root = ReactDOM.createRoot(document.getElementById("root"))
-root.render(
-  <React.StrictMode>
-      <App />
-  </React.StrictMode>
-)
+// const root = ReactDOM.createRoot(document.getElementById("root"))
+// root.render(<React.StrictMode>
+//       <App />
+//   </React.StrictMode>
+// )
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('root');
+const root = createRoot(container); // createRoot(container!) if you use TypeScript
+root.render(<App/>);

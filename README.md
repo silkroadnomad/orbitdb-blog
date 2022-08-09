@@ -15,6 +15,7 @@
 
 ## todos
 ### orbit - todos
+- Responsive mobile navigation chakra-ui
 - store profile data in orbit-db (bio, seo, profile pic)
 - set database name in profile / store
 - use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
@@ -24,14 +25,20 @@
 - add identities to allowed blog posters
 
 #### ui - todos
+
 - sort posts by date 
 - add comments (make writeable to everybody)
 - upload photos to post via ipfs
 - when deleting a post ask user before action
 
 ## done
-- 2022-08-07
-    - added Chakra V1 libs https://v1.chakra-ui.com/guides/migration
+- 2022-08-08
+- add moment.js 
+    - https://www.npmjs.com/package/react-moment#parsing-dates
+- added Chakra V1 
+    - react examples https://codesandbox.io/examples/package/@chakra-ui/react
+    - chakra show case https://chakra-ui.com/community/showcase
+    - migration of chakra libs https://v1.chakra-ui.com/guides/migration
 - 2022-08-06
     - upgrade to react@18 
 - 2022-08-05

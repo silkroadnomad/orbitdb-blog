@@ -1,5 +1,7 @@
-import React, { useState,useEffect } from "react";
+import React from "react";
 import { observer } from 'mobx-react'
+import { Button, Input,Textarea,Stack } from '@chakra-ui/react'
+import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons'
 import '../styles/CreatePlaylist.scss'
 
 const CreatePost = (props) => {
@@ -26,13 +28,16 @@ const CreatePost = (props) => {
   }
 
   return(
-    <form onSubmit={handleSubmit}>
-      <input name="subject" type="text" value={props.store.currentPost?.subject?props.store.currentPost?.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
-      <textarea name="body" type="text" value={props.store.currentPost?.body?props.store.currentPost?.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
-      <br/>
-      {props.store.currentPost?.hash===undefined?<input type="submit" value="Post" />:<input type="submit" value="Update" />}
-      {props.store.currentPost?.hash!==undefined?<input type="button" value="Delete" onClick={() => {props.store.removePost();  props.store.currentPost = undefined; props.history.push("/")}}/>:''}
-    </form>
+      <form onSubmit={handleSubmit}>
+        <Input name="subject" type="text" value={props.store.currentPost?.subject?props.store.currentPost?.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
+        <Textarea name="body" type="text" value={props.store.currentPost?.body?props.store.currentPost?.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />
+        <br/>
+        <br/>
+        <Stack direction='row' spacing={4} align='center'>
+          {props.store.currentPost?.hash===undefined?<Button type="submit" colorScheme='teal' variant='solid' leftIcon={<AddIcon/>}>Post</Button>:<Button type="submit" colorScheme='teal' variant='solid' leftIcon={<EditIcon/>}>Update</Button>}
+          {props.store.currentPost?.hash!==undefined?<Button type="submit" colorScheme='teal' variant='solid' leftIcon={<DeleteIcon/>} onClick={() => {props.store.removePost();  props.store.currentPost = undefined; props.history.push("/")}}>Delete</Button>:''}
+        </Stack>
+      </form>
   )
 }
 
