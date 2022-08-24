@@ -5,8 +5,8 @@
 ## usage
 - use node 18.x
 - clone this repo 
-- run ``npm i``
-- run ``npm start``
+- run ``yarn``
+- run ``yarn start``
 - open browser on http://localhost:8080
 
 ## build 

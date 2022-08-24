@@ -82,18 +82,8 @@ const BlogPost = (props) => {
         itemType="http://schema.org/Article"
       >
         <header>
-          <h2>
-            <Link
-              // as={ReachLink}
-              to={props.store.currentPost?.address}
-              itemProp="url"
-            >
-              <span itemProp="headline">
-                {props.store.currentPost?.subject}
-              </span>
-            </Link>
-          </h2>
-          <h1  style={{fontSize:"2em"}}  itemProp="headline">{props.store.currentPost?.subject}</h1>
+
+          <h1 style={{fontSize:"2em"}} itemProp="headline">{props.store.currentPost?.subject}</h1>
           <p>
             <Moment fromNow ago>
               {props.store.currentPost?.createdAt}
