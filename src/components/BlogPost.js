@@ -93,7 +93,7 @@ const BlogPost = (props) => {
               </span>
             </Link>
           </h2>
-          <h1 itemProp="headline">{props.store.currentPost?.subject}</h1>
+          <h1  style={{fontSize:"2em"}}  itemProp="headline">{props.store.currentPost?.subject}</h1>
           <p>
             <Moment fromNow ago>
               {props.store.currentPost?.createdAt}
