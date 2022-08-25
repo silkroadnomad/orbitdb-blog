@@ -10,7 +10,7 @@
 - open browser on http://localhost:8080
 
 ## build 
-- run ``npm run build``
+- run ``yarn build``
 - run ``ìpfs add dist`` update dns with new cid 
 
 ## todos

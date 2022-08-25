@@ -9,8 +9,8 @@ const Bio = () => {
 
   const authorName = process.env.AUTOR
   const authorSummary = process.env.SUMMARY
-  const social = process.env.SOCIAL //data.site.siteMetadata?.social
-  console.log(social)
+  const social = process.env.SOCIAL 
+
   return (
     <div className="bio">
     <img  
@@ -25,9 +25,10 @@ const Bio = () => {
       />
       {authorName && (
         <p>
-          Written by <strong>{authorName}</strong> {authorSummary || null}
+          Written by <strong>{authorName}</strong> &nbsp;
+          {authorSummary || null}
           {` `}
-          <a href={`${social}`}>You should follow me on Twitter</a>
+          <a href={`${social}`}>You should also follow via twitter</a>
         </p>
       )}
     </div>

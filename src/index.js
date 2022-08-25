@@ -12,7 +12,7 @@ import './styles/normalize.css'
 const App = () => {
   useEffect(() => {
     const load = async () => {
-      const dbName = "testOrbit01"
+
       const ipfs = await create({
         repo: './ipfs-repo',
         EXPERIMENTAL: { pubsub: true },
@@ -31,7 +31,8 @@ const App = () => {
           },
         }
       })
-      await store.connect(ipfs, {dbName:dbName})
+      const dbName = process.env.DB_NAME
+      await store.connect(ipfs, {dbName: dbName})
       console.log("odb id:", store.odb.identity.id)
       console.log("dbName:",dbName)
     }

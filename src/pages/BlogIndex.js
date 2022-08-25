@@ -16,7 +16,7 @@ const BlogIndex = (props) => {
   }, []);
   if (props.store.posts.length === 0) {
     return (
-      <Layout location={props.location} title={props.store.data.title}>
+      <Layout location={props.location} title={process.env.TITLE}>
         <Seo title="All posts" />
         <Bio />
         <p>
