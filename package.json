@@ -15,8 +15,8 @@
   },
   "scripts": {
     "create": "webpack",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && webpack --config webpack.prod.js",
-    "start": "export NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server --open --config webpack.dev.js"
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && webpack --env ENVIRONMENT=production --config webpack.common.js",
+    "start": "export NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server --env ENVIRONMENT=development --open --config webpack.common.js"
   },
   "babel": {
     "presets": [
@@ -78,6 +78,7 @@
     "babel-preset-env": "^1.7.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^5.2.7",
+    "dotenv": "^16.0.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.2",
     "sass": "^1.53.0",

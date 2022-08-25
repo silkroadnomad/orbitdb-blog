@@ -1,32 +1,16 @@
 /**
  * Bio component 
- *
  */
 
 import * as React from "react"
 import profilePic from '../images/profile-pic.png';
 
 const Bio = () => {
-  // const data = useStaticQuery(graphql`
-  //   query BioQuery {
-  //     site {
-  //       siteMetadata {
-  //         author {
-  //           name
-  //           summary
-  //         }
-  //         social {
-  //           twitter
-  //         }
-  //       }
-  //     }
-  //   }
-  // `)
 
-  // Set these values by editing "siteMetadata" in gatsby-config.js
-  const author = {name:"Nico Krause", summary:"I am doing decentralized blogs"} //data.site.siteMetadata?.author
-  const social = {twitter:"inspiraluna"}  //data.site.siteMetadata?.social
-
+  const authorName = process.env.AUTOR
+  const authorSummary = process.env.SUMMARY
+  const social = process.env.SOCIAL //data.site.siteMetadata?.social
+  console.log(social)
   return (
     <div className="bio">
     <img  
@@ -39,13 +23,11 @@ const Bio = () => {
       quality={95}
       alt="Profile picture"
       />
-      {author?.name && (
+      {authorName && (
         <p>
-          Written by <strong>{author.name}</strong> {author?.summary || null}
+          Written by <strong>{authorName}</strong> {authorSummary || null}
           {` `}
-          <a href={`https://twitter.com/${social?.twitter || ``}`}>
-            You should follow them on Twitter
-          </a>
+          <a href={`${social}`}>You should follow me on Twitter</a>
         </p>
       )}
     </div>

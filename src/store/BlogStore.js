@@ -30,7 +30,7 @@ class BlogStore {
     });
 
     const publicAccess = true;
-    this.feed = await this.odb.open("testOrbit01", {
+    this.feed = await this.odb.open(options.dbName, {
       create: true, // If database doesn't exist, create it
       overwrite: true, // Load only the local version of the database, don't load the latest from the network yet
       localOnly: false,
