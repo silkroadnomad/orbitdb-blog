@@ -16,7 +16,6 @@ const BlogPost = (props) => {
   const [previousPost,setPreviousPost] = useState({address:'#'})
   let mounted = true
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
-
   useEffect(() => {
    
     function load () {
@@ -25,9 +24,9 @@ const BlogPost = (props) => {
       props.store.joinBlogPost(address).then(() => {
         if (mounted) {
           console.log('loading')
-          setComments(props.store.currentPost.all)
-          props.store.currentPost.events?.on('replicated', () => {
-            setComments(props.store.currentPost.all)
+          setComments(props.store.currentPost?.all)
+          props.store.currentPost?.events.on('replicated', () => {
+            setComments(props.store.currentPost?.all)
           })
         }
       },() =>{

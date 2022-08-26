@@ -141,7 +141,6 @@ class BlogStore {
       if(this.posts[i].address===address){
         const previousPost =  {address:this.posts[i-1]?.address,subject:this.posts[i-1]?.subject}
         return previousPost
-        break;
       }
     }
     return "#"
@@ -154,7 +153,6 @@ class BlogStore {
       if(this.posts[i].address===address){
         const nextPost =  {address:this.posts[i+1]?.address,subject:this.posts[i+1]?.subject}
         return nextPost
-        break;
       }
     }
     return "#"
@@ -173,7 +171,9 @@ class BlogStore {
     console.log("joinBlogPost - loading address", address);
     if (this.odb) {
       const ourPost = this.posts.filter((item)=>{return item.address === address})
-      this.currentPost = ourPost.length>0?ourPost[0]:undefined
+      this.posts.forEach((item)=>console.log(item.subject))
+      this.currentPost = ourPost.length>0?ourPost[0]:this.posts[0]
+
       try {
         const blogPost =
         this.odb.stores[address] || (await this.odb.open(address));
