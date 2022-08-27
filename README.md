@@ -15,6 +15,8 @@
 
 ## todos
 ### orbit - todos
+- show currently connected peers
+- dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 - sort posts by date
 - change/edit post date  
 - use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
@@ -29,6 +31,9 @@
 - add comments (make writeable to everybody)
 - upload photos to post via ipfs
 - when deleting a post ask user before action
+
+#### difficulties
+1. another user reported his Windows defender firewall was blocking the website.
 
 ## done
 - 2022-08-25 

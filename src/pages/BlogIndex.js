@@ -18,10 +18,10 @@ const BlogIndex = (props) => {
     return (
       <Layout location={props.location} title={process.env.TITLE}>
         <Seo title="All posts" />
-        <Bio />
         <p>
           {props.store.isOnline?'No blog posts found.':<CircularProgress isIndeterminate  />} 
         </p>
+        <Bio />
         <CreatePost {...props} />
       </Layout>
     )
@@ -29,7 +29,6 @@ const BlogIndex = (props) => {
   return (
     <Layout location={props.location} title={process.env.TITLE}>
       <Seo title="All posts" />
-      <Bio />
       <ol style={{ listStyle: `none` }}>
         {props.store.posts.map((post,i) => {
           if(post.subject===undefined) return (<li key={"empty_"+i}>&nbsp;</li>) //for some reason elements stay undefined in stores array after deleting them
@@ -50,7 +49,7 @@ const BlogIndex = (props) => {
                       <span itemProp="headline">{subject}</span>
                     </Link>
                   </h2>
-                  <Moment fromNow ago>{postDate}</Moment>&nbsp;<Moment date={postDate} />
+                  <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
                 </header>
                 <section><ReactMarkdown>{post.body}</ReactMarkdown></section>
               </article>
@@ -58,6 +57,8 @@ const BlogIndex = (props) => {
           )
         })}
       </ol>
+      <p>&nbsp;</p>
+      <Bio />
       <CreatePost {...props} />
     </Layout>
   )

@@ -3,7 +3,8 @@
  */
 
 import * as React from "react"
-import profilePic from '../images/profile-pic.png';
+import { Image } from '@chakra-ui/react'
+import profilePic from '../images/nico-profile-pic.png';
 
 const Bio = () => {
 
@@ -13,22 +14,18 @@ const Bio = () => {
 
   return (
     <div className="bio">
-    <img  
-      src={profilePic}
-      className="bio-avatar"
-      layout="fixed"
-      formats={["auto", "webp", "avif"]}
-      width={50}
-      height={50}
-      quality={95}
-      alt="Profile picture"
-      />
+    <Image
+    boxSize='100px'
+    objectFit='cover'
+    src={profilePic}
+    alt='Nico Krause'
+  />
       {authorName && (
         <p>
-          Written by <strong>{authorName}</strong> &nbsp;
+          <strong>{authorName}</strong> &nbsp;<br/>
           {authorSummary || null}
           {` `}
-          <a href={`${social}`}>You should also follow via twitter</a>
+          <a href={`${social}`}>Twitter: @decentrasol</a>
         </p>
       )}
     </div>
