@@ -5,27 +5,8 @@
 import * as React from "react"
 import PropTypes from "prop-types"
 import { Helmet } from "react-helmet"
-// import { useStaticQuery, graphql } from "gatsby"
 
 const Seo = ({ description, lang, meta, title }) => {
-  // const { site } = useStaticQuery(
-  //   graphql`
-  //     query {
-  //       site {
-  //         siteMetadata {
-  //           title
-  //           description
-  //           social {
-  //             twitter
-  //           }
-  //         }
-  //       }
-  //     }
-  //   `
-  // )
-
-  const metaDescription = "changed description"// description || site?.siteMetadata.description || "changed description"
-  const defaultTitle = "change title" //site?.siteMetadata?.title || "change title"
 
   return (
     <Helmet
@@ -33,11 +14,11 @@ const Seo = ({ description, lang, meta, title }) => {
         lang,
       }}
       title={title}
-      titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
+      titleTemplate={title ? `%s | ${title}` : null}
       meta={[
         {
           name: `description`,
-          content: metaDescription,
+          content: description,
         },
         {
           property: `og:title`,
@@ -45,7 +26,7 @@ const Seo = ({ description, lang, meta, title }) => {
         },
         {
           property: `og:description`,
-          content: metaDescription,
+          content: description,
         },
         {
           property: `og:type`,
@@ -65,7 +46,7 @@ const Seo = ({ description, lang, meta, title }) => {
         },
         {
           name: `twitter:description`,
-          content: metaDescription,
+          content: description,
         },
       ].concat(meta)}
     />

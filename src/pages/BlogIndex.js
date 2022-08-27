@@ -29,7 +29,7 @@ const BlogIndex = (props) => {
   if (props.store.posts.length === 0) {
     return (
       <Layout location={props.location} title={process.env.TITLE}>
-        <Seo title="All posts" />
+        <Seo title={process.env.TITLE} />
         <p>
           {props.store.isOnline?'No blog posts found.':<CircularProgress isIndeterminate  />} 
         </p>
@@ -40,7 +40,7 @@ const BlogIndex = (props) => {
   }
   return (
     <Layout location={props.location} title={process.env.TITLE}>
-      <Seo title="All posts" />
+      <Seo title={process.env.TITLE} />
       <ol style={{ listStyle: `none` }}>
         {
           props.store.posts.slice().sort((a,b) => {return new Date(b.createdAt) - new Date(a.createdAt);}).map((post,i) => {

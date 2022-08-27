@@ -14,8 +14,7 @@
 - run ``ìpfs add dist`` update dns with new cid 
 
 ## todos
-### orbit - todos
-- change/edit post date  
+### orbit - todos 
 - use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
 - make blog only writable by my (metamask) identity
 - when deleting a post - replication is informed but hard to identify the removed item
@@ -25,7 +24,8 @@
 - dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
 #### ui - todos
-- responsive mobile navigation chakra-ui
+- change/edit post date 
+- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
 - store profile data in orbit-db (bio, seo, profile pic)
 - add comments (make writeable to everybody)
 - upload photos to post via ipfs
@@ -33,10 +33,12 @@
 
 #### difficulties
 1. another user reported his Windows defender firewall was blocking the website.
+2. some isps seem to restrict p2p connections.
 
 ## Changes
 - 2022-08-27
     - sort posts by date (latest on top)
+    - fixed title of main page via helmet / seo component (bio.js)
 - 2022-08-26
     - bug cannot delete nor edit first post
 - 2022-08-25 
