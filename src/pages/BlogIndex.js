@@ -12,9 +12,20 @@ import ReactMarkdown from 'react-markdown'
 import { CircularProgress } from '@chakra-ui/react'
 
 const BlogIndex = (props) => {
+
+  const [posts, setPosts] = useState([]);
+  
   useEffect(() => {
     props.store.currentPost = undefined
   }, []);
+
+  // useEffect(() => {
+    // console.log('posts sorting.')
+    // const sorted = 
+    // setPosts(sorted)
+  // }, []);
+
+ 
   if (props.store.posts.length === 0) {
     return (
       <Layout location={props.location} title={process.env.TITLE}>
@@ -31,7 +42,8 @@ const BlogIndex = (props) => {
     <Layout location={props.location} title={process.env.TITLE}>
       <Seo title="All posts" />
       <ol style={{ listStyle: `none` }}>
-        {props.store.posts.map((post,i) => {
+        {
+          props.store.posts.slice().sort((a,b) => {return new Date(b.createdAt) - new Date(a.createdAt);}).map((post,i) => {
           if(post.subject===undefined) return (<li key={"empty_"+i}>&nbsp;</li>) //for some reason elements stay undefined in stores array after deleting them
           const subject  = post.name || post.subject
           const slug = post.hash

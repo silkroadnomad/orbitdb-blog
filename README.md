@@ -15,15 +15,14 @@
 
 ## todos
 ### orbit - todos
-- show currently connected peers
-- dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
-- sort posts by date
 - change/edit post date  
 - use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
 - make blog only writable by my (metamask) identity
 - when deleting a post - replication is informed but hard to identify the removed item
 - (auto) pin project on ipfs
 - add identities to allowed blog posters
+- show currently connected peers
+- dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
 #### ui - todos
 - responsive mobile navigation chakra-ui
@@ -35,8 +34,10 @@
 #### difficulties
 1. another user reported his Windows defender firewall was blocking the website.
 
-## done
-- 2022-08-25 
+## Changes
+- 2022-08-27
+    - sort posts by date (latest on top)
+- 2022-08-26
     - bug cannot delete nor edit first post
 - 2022-08-25 
     - set database name in env
