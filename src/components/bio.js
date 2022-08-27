@@ -15,6 +15,7 @@ const Bio = () => {
   return (
     <div className="bio">
     <Image
+    m={[2, 3]}
     boxSize='100px'
     objectFit='cover'
     src={profilePic}

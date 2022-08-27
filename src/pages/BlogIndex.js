@@ -7,6 +7,7 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import CreatePost from "../components/CreatePost"
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 import { CircularProgress } from '@chakra-ui/react'
 
@@ -51,7 +52,8 @@ const BlogIndex = (props) => {
                   </h2>
                   <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
                 </header>
-                <section><ReactMarkdown>{post.body}</ReactMarkdown></section>
+                <section><ReactMarkdown  components={ChakraUIRenderer()} children={post.body} skipHtml />
+                </section>
               </article>
             </li>
           )
