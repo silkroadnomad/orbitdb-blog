@@ -6,6 +6,8 @@ import store from './store/BlogStore'
 import BlogPost from './components/BlogPost'
 import Settings from './components/Settings'
 import BlogIndex from './pages/BlogIndex'
+import Identities from 'orbit-db-identity-provider'
+import { ethers } from "ethers";
 import './styles/style.css'
 import './styles/normalize.css'
 
@@ -32,7 +34,28 @@ const App = () => {
         }
       })
       const dbName = process.env.DB_NAME
-      await store.connect(ipfs, {dbName: dbName})
+     // if(store.identity===undefined){
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const wallet = provider.getSigner();
+        try {
+          await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
+          store.identity = await Identities.createIdentity({
+            type: "ethereum",
+            wallet,
+          })
+          console.log("Identity created", store.identity)
+        } catch (ex) {
+          store.identity = undefined
+          console.log("Identity not given.")
+        }
+        const options = {dbName: dbName};
+        if(store.identity!==undefined) options.identity = store.identity
+        await store.connect(ipfs,options)
+   //   }else{
+       // store.connect(ipfs, {dbName: dbName})
+     // }
+
+  
       console.log("odb id:", store.odb.identity.id)
       console.log("dbName:",dbName)
     }

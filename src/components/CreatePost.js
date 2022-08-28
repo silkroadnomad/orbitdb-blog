@@ -23,8 +23,7 @@ const CreatePost = (props) => {
       const newPost = await props.store.createNewPost() 
       props.history.push("/") //TODO maybe forward to new post address here
       props.store.currentPost = undefined
-    }
-    
+    } 
   }
 
   return(

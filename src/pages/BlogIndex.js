@@ -12,23 +12,14 @@ import ReactMarkdown from 'react-markdown'
 import { CircularProgress } from '@chakra-ui/react'
 
 const BlogIndex = (props) => {
-
-  const [posts, setPosts] = useState([]);
   
   useEffect(() => {
     props.store.currentPost = undefined
   }, []);
 
-  // useEffect(() => {
-    // console.log('posts sorting.')
-    // const sorted = 
-    // setPosts(sorted)
-  // }, []);
-
- 
   if (props.store.posts.length === 0) {
     return (
-      <Layout location={props.location} title={process.env.TITLE}>
+      <Layout location={props.location} store={props.store} title={process.env.TITLE}>
         <Seo title={process.env.TITLE} />
         <p>
           {props.store.isOnline?'No blog posts found.':<CircularProgress isIndeterminate  />} 
@@ -38,8 +29,9 @@ const BlogIndex = (props) => {
       </Layout>
     )
   }
+  
   return (
-    <Layout location={props.location} title={process.env.TITLE}>
+    <Layout location={props.location} store={props.store} title={process.env.TITLE}>
       <Seo title={process.env.TITLE} />
       <ol style={{ listStyle: `none` }}>
         {

@@ -44,19 +44,24 @@
       ]
     ]
   },
+  "resolutions": {
+    "acorn": "npm:acorn-with-stage3"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@ezerous/eth-identity-provider": "^0.2.0",
     "chakra-ui-markdown-renderer": "^4.1.0",
+    "ethers": "^5.7.0",
     "framer-motion": "^4.0.0",
     "ipfs": "^0.59.0",
     "mobx": "^6.6.1",
     "mobx-react": "^7.5.2",
     "moment": "^2.29.4",
     "orbit-db": "^0.28.6",
-    "orbit-db-identity-provider": "^0.3.0",
+    "orbit-db-identity-provider": "0.4.0",
     "orbit-db-io": "1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

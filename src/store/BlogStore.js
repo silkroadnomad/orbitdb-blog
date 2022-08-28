@@ -8,6 +8,7 @@ class BlogStore {
     title: "Welcome to Nico-Krause.com!"
   };
   @observable isOnline = false;
+  @observable identity = {};
   @observable currentFeed = {};
   @observable currentPost = {};
 
@@ -21,14 +22,18 @@ class BlogStore {
   async connect(ipfs, options = {}) {
     //set up orbitdb
     this.ipfs = ipfs;
-    const identity =
+    console.log("options.identity",options.identity)
+    const ourIdentity =
       options.identity || (await Identities.createIdentity({ id: "user" }));
 
+
+    console.log("ourIdentity",ourIdentity)
     this.odb = await OrbitDB.createInstance(ipfs, {
-      identity,
+      ourIdentity,
       directory: "./odb",
     });
-
+    this.identity = ourIdentity
+    
     const publicAccess = true;
     this.feed = await this.odb.open(options.dbName, {
       create: true, // If database doesn't exist, create it
@@ -38,7 +43,7 @@ class BlogStore {
       // If "Public" flag is set, allow anyone to write to the database,
       // otherwise only the creator of the database can write
       accessController: {
-        write: publicAccess ? ["*"] : [orbitdb.identity.id],
+        write: publicAccess ? ["*"] : [this.odb.identity.id],
       },
     });
     await this.loadPosts();
