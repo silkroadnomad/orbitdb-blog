@@ -25,7 +25,7 @@ const BlogPost = (props) => {
         if (mounted) {
           console.log('loading')
           setComments(props.store.currentPost?.all)
-          props.store.currentPost?.events.on('replicated', () => {
+          props.store.currentPost?.events?.on('replicated', () => {
             setComments(props.store.currentPost?.all)
           })
         }
