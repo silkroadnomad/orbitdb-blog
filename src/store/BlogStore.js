@@ -35,7 +35,7 @@ class BlogStore {
 		Identities.DIDIdentityProvider.setDIDResolver(KeyResolver.getResolver())
     
     const bip39 = require("bip39")
-
+    //https://github.com/paulmillr/noble-hashes/discussions/28
     const seed = bip39.mnemonicToSeedSync("");
     // const seed = await bip39.mnemonicToSeedSync(mn);
     console.log('seed',seed.length)
