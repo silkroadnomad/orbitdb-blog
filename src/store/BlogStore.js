@@ -1,6 +1,12 @@
 import { observable,makeAutoObservable } from 'mobx'
 import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
+import crypto from 'libp2p-crypto'
+import Keystore from 'orbit-db-keystore'
+import Storage from 'orbit-db-storage-adapter';
+import leveljs from "level-js"
+import sha256 from "sha256"
+import path from 'path';
 
 class BlogStore {
   @observable posts = [];
@@ -21,7 +27,47 @@ class BlogStore {
 
   async connect(ipfs, options = {}) {
     //set up orbitdb
-    this.ipfs = ipfs;
+    this.ipfs = ipfs; 
+   const { decompressPublicKey,decompressPrivateKey } = require('libp2p-crypto/src/keys/secp256k1.js')()
+
+    //https://github.com/mistakia/record-node/blob/master/index.js#L149
+  /* const keys0 = await crypto.keys.generateKeyPair('secp256k1', 256)
+    const decompressedKey0 = Buffer.from(decompressPublicKey(keys0.public.marshal()))
+    const generatedKey = {
+      publicKey: decompressedKey0.toString('hex'),
+      privateKey: keys0.marshal().toString('hex'),
+      privateKeyBytes: keys0.bytes.toString('hex')
+    }
+    console.log('generatedKey',generatedKey) */
+    /*
+    * example to create a identity from a privatekay - unfortunately the resulting identity is always different. */
+    const keys = await crypto.keys.unmarshalPrivateKey(Buffer.from('08021220358f15db8c2014d570e8e3a622454e2273975a3cca443ec0c45375b13d381d18', 'hex'))
+    const hash = await keys.hash()
+    const decompressedKey = Buffer.from(decompressPublicKey(keys.public.marshal()))
+    const key =  {
+      publicKey: decompressedKey.toString('hex'),
+      privateKey: keys.marshal().toString('hex'),
+      privateKeyHash: hash.toString('hex'),
+      privateKeyBytes: keys.bytes.toString('hex')
+    }
+    const _id = sha256(key.publicKey)
+    console.log('imported key is',key)
+
+    const storage = Storage(leveljs)
+    const keystorePath = path.resolve(options.directory!==undefined?options.directory:'./', './keystore')
+    console.log('keystorepath',keystorePath)
+    const keyStorage = await storage.createStore(keystorePath)
+    await keyStorage.put(_id, JSON.stringify(key))
+    const keystore = new Keystore(keyStorage) 
+
+    const migrate = require('localstorage-level-migration')
+    const identityOptions = { id: 'new-id', migrate: migrate('./leve-js/keystore') }
+    options.identity = await Identities.createIdentity(identityOptions)
+
+    console.log(options.identity.toJSON())
+
+    //create identity from existing keystore 
+    // options.identity = await Identities.createIdentity({ id: 'local-id', keystore: keystore})
     console.log("options.identity",options.identity)
     const ourIdentity =
       options.identity || (await Identities.createIdentity({ id: "user" }));
@@ -31,11 +77,35 @@ class BlogStore {
     this.odb = await OrbitDB.createInstance(ipfs, {
       ourIdentity,
       directory: "./odb",
-    });
+     });
     this.identity = ourIdentity
+    console.log("this.odb.identity.id",this.odb.identity.id)
+    console.log("this.identity.publicKey",this.identity.publicKey)
+    const publicAccess = false;
+    const dbAddress = "/orbitdb/zdpuAv2XBx1t7fL2kBU96dh8Xn8nbDqgxz4HcBGeaTPEz8ju4/decentrasol-dev03" 
+    // const dbAddress= "/orbitdb/zdpuAv2XBx1t7fL2kBU96dh8Xn8nbDqgxz4HcBGeaTPEz8ju4/decentrasol-dev03" // 0xC36053102a04E365867dB9554E83d60d6E305231 inside chrome 
+    // this.feed = await this.odb.feed(dbAddress)
     
-    const publicAccess = true;
-    this.feed = await this.odb.open(options.dbName, {
+    this.feed = await this.odb.feed(dbAddress, {
+    // this.feed = await this.odb.feed(options.dbName, {
+      accessController: {
+      //  type: 'orbitdb', //OrbitDBAccessController
+        type: 'orbitdb',
+        write: [
+          "0xC36053102a04E365867dB9554E83d60d6E305231"
+          //this.identity.publicKey,
+          // "02b67d65dbad5efd48d90931349921e07b4ffc0f44c63ea5088889654eb9e6128c",
+          // "0239ebf11e4056f5b7ff76bf787ba6658bd5f870f524790fee6c31a25d489b1313"
+          //0xC36053102a04E365867dB9554E83d60d6E305231  chrome
+          // "04d7daf59cee51bcb8f0fad7d55a54296b0e1adb49652419dfe6a37b48a4a0c00d8662d0124c95047dca4017d41a2d7f0b670ccf86be5d500761cf2835f81c3b29",
+          //0xC36053102a04E365867dB9554E83d60d6E305231 firefox
+          // "04438b880d02f10ee1602f4a1cdadaa7173c846b574bfe892e30d9445afdf8e5edecf0c1befaf5d29bcf0f17dba0a89f24d91cf03f3ea4c2b0b9bd88ff7d5d49ba"
+          // "04a5a39ca48729487bce74429289bc520ea2ce3388c5d05bf3cccf719155b59f80d2a1e145accc9c01c8c5226af5feb2213dc6bd8eff9bf129d3e194269e1d412d",
+          // '04a540c92a9d47ec359ce472809e0d20e5ba92500dddd2ddb91208bef092612960ed97898d8e38a86d4d243ab434b05a992248dea372ffcfa153954a66c40167f9'
+        ]
+      }
+    })
+   /* this.feed = await this.odb.open(options.dbName, {
       create: true, // If database doesn't exist, create it
       overwrite: true, // Load only the local version of the database, don't load the latest from the network yet
       localOnly: false,
@@ -43,9 +113,18 @@ class BlogStore {
       // If "Public" flag is set, allow anyone to write to the database,
       // otherwise only the creator of the database can write
       accessController: {
-        write: publicAccess ? ["*"] : [this.odb.identity.id],
+        type: 'orbitdb', //OrbitDBAccessController
+        // read: ["*"],
+        // write: ["*"],
+        write: [
+          "02b67d65dbad5efd48d90931349921e07b4ffc0f44c63ea5088889654eb9e6128c",
+          "04a5a39ca48729487bce74429289bc520ea2ce3388c5d05bf3cccf719155b59f80d2a1e145accc9c01c8c5226af5feb2213dc6bd8eff9bf129d3e194269e1d412d"]
+        // write: publicAccess ? ["*"] : [
+        //  "04a5a39ca48729487bce74429289bc520ea2ce3388c5d05bf3cccf719155b59f80d2a1e145accc9c01c8c5226af5feb2213dc6bd8eff9bf129d3e194269e1d412d", 
+        // //  "0xd6bAEC21fEFB4ad64d29d3d20527c37c757F409c",
+        //   this.odb.identity.id],
       },
-    });
+    }); */
     await this.loadPosts();
     this.isOnline = true;
   }

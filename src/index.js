@@ -34,26 +34,29 @@ const App = () => {
         }
       })
       const dbName = process.env.DB_NAME
-     // if(store.identity===undefined){
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const wallet = provider.getSigner();
-        try {
-          await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
-          store.identity = await Identities.createIdentity({
-            type: "ethereum",
-            wallet,
-          })
-          console.log("Identity created", store.identity)
-        } catch (ex) {
-          store.identity = undefined
-          console.log("Identity not given.")
-        }
-        const options = {dbName: dbName};
-        if(store.identity!==undefined) options.identity = store.identity
-        await store.connect(ipfs,options)
-   //   }else{
-       // store.connect(ipfs, {dbName: dbName})
-     // }
+
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const wallet = provider.getSigner();
+      // const signer = async (id, data) => { return await wallet.signMessage({ message: data }) }
+
+
+      // try {
+      //   await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
+      //   const address  = await wallet.getAddress()
+      //   console.log('wallet.getAddress()',address)
+      //   // store.identity = await IdentityProvider.createIdentity(wallet1.address, { type: 'ethers', identitySignerFn: signer })
+      //   store.identity = await Identities.createIdentity({
+      //     type: "ethereum",
+      //     wallet: wallet,
+      //   })
+      //   console.log("Identity created", store.identity)
+      // } catch (ex) {
+      //   store.identity = undefined
+      //   console.log("Identity not given.")
+      // }
+      const options = {dbName: dbName};
+      if(store.identity!==undefined) options.identity = store.identity //add to eth-identiy to connect to orbit-db only when given (otherwise generate one in browser)
+      await store.connect(ipfs,options)
 
   
       console.log("odb id:", store.odb.identity.id)

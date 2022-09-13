@@ -57,6 +57,8 @@
     "ethers": "^5.7.0",
     "framer-motion": "^4.0.0",
     "ipfs": "^0.59.0",
+    "level-js": "^6.1.0",
+    "localstorage-level-migration": "^0.1.0",
     "mobx": "^6.6.1",
     "mobx-react": "^7.5.2",
     "moment": "^2.29.4",
@@ -69,6 +71,7 @@
     "react-markdown": "^8.0.3",
     "react-moment": "^1.1.2",
     "react-router-dom": "^5.0.1",
+    "sha256": "^0.2.0",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
