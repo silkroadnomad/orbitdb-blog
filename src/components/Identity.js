@@ -1,6 +1,7 @@
 import React from 'react';
+import { observer } from 'mobx-react'
 
-const Identity = ({store}) => {
-    return( <div> Identity: {store?.identity?.id} </div> )
+const Identity = (props) => {
+    return (<div> Identity: {props.store?.identity?.id} </div>)
 }
-export default Identity
+export default observer(Identity)

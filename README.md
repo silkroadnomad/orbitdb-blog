@@ -36,6 +36,11 @@
 2. some isps seem to restrict p2p connections.
 
 ## Changes
+- 2022-09-14
+    - show capabilities (admin/write permissions) under settings
+- 2022-09-13
+    - new branch 'did' with an identity which can write from two different browsers
+    - new branch 'eth-identity' with an identity which can write from two different browsers   
 - 2022-08-27
     - sort posts by date (latest on top)
     - fixed title of main page via helmet / seo component (bio.js)
