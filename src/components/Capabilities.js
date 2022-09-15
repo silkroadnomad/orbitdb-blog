@@ -13,6 +13,7 @@ const Capabilities = (props) => {
     
     return (
       <div>
+      <h1>Capabilities</h1>
         <b>Admins Id's:</b>
         <ul>{adminList}</ul>
         <b>Write Permission Id's:</b>

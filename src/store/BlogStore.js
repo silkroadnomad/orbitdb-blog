@@ -54,19 +54,7 @@ class BlogStore {
       this.feed.access.grant("admin","0xC36053102a04E365867dB9554E83d60d6E305231");
       console.log('capabilities',this.feed.access.capabilities)
       this.capabilities = this.feed.access.capabilities
-      // this.write = this.feed.access.capabilities.write
-    // const publicAccess = true;
-    // this.feed = await this.odb.open(options.dbName, {
-    //   create: true, // If database doesn't exist, create it
-    //   overwrite: true, // Load only the local version of the database, don't load the latest from the network yet
-    //   localOnly: false,
-    //   type: "feed", //eventlog,feed,keyvalue,docstore,counter
-    //   // If "Public" flag is set, allow anyone to write to the database,
-    //   // otherwise only the creator of the database can write
-    //   accessController: {
-    //     write: publicAccess ? ["*"] : [this.odb.identity.id],
-    //   },
-    // });
+
     await this.loadPosts();
     this.isOnline = true;
   }
@@ -120,10 +108,11 @@ class BlogStore {
         console.log(">", this.posts[i].hash, this.posts[i].address);
         if (this.posts[i].hash === entry.hash) {
           console.log(
-            "removed playlist from store because it was deleted on another node",
+            "removed post from store because it was deleted on another node",
             entry.hash
           );
-          this.playlist = this.posts.splice(i, 1);
+          await this.feed.remove(entry.hash); //removing it from the db
+          this.playlist = this.posts.splice(i, 1); //removing it from store
         }
       }
     });

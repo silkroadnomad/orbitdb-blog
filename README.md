@@ -14,33 +14,40 @@
 - run ``ìpfs add dist`` update dns with new cid 
 
 ## todos
-### orbit - todos 
-- use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
-- make blog only writable by my (metamask) identity
-- when deleting a post - replication is informed but hard to identify the removed item
-- (auto) pin project on ipfs
-- add identities to allowed blog posters
+### orbit - todos
+- add tags to blog post
 - show currently connected peers
+
+## nice to haves
+- (auto) pin project on ipfs - orbit-pinning service
+    - https://github.com/orbitdb/field-manual/issues/83
 - dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
 #### ui - todos
-- change/edit post date 
-- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
-- store profile data in orbit-db (bio, seo, profile pic)
-- add comments (make writeable to everybody)
-- upload photos to post via ipfs
+- create textbox + dropdown (admin/write) + button to add permission to current database 
+- change/edit post date
 - when deleting a post ask user before action
+- create component which lists posts of a certain tag 
+- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
+- add comments (make writeable to everybody)
+- store profile data in orbit-db (bio, seo, profile pic)
+- upload photos to post via ipfs
+
 
 #### difficulties
 1. another user reported his Windows defender firewall was blocking the website.
 2. some isps seem to restrict p2p connections.
 
 ## Changes
+- 2022-09-15
+   - when deleting a post - replication is informed but hard to identify the removed item
 - 2022-09-14
     - show capabilities (admin/write permissions) under settings
 - 2022-09-13
     - new branch 'did' with an identity which can write from two different browsers
-    - new branch 'eth-identity' with an identity which can write from two different browsers   
+    - new branch 'eth-identity' with an identity which can write from two different browsers
+        - use identity of metamask https://github.com/orbitdb/orbit-db-identity-provider#creating-an-identity-with-an-ethereum-wallet
+        - make blog only writable by my (metamask) identity
 - 2022-08-27
     - sort posts by date (latest on top)
     - fixed title of main page via helmet / seo component (bio.js)
