@@ -6,6 +6,11 @@
 - (planed) writing comments (everybody allowed) 
 - (planed) writing comments only against btc deposit to prevent spam 
 - (planed) create several react-ui components to display features posts and/or posts with a certain tag
+
+## demo
+- https://ipfs.le-space.de/ipns/decentrasol.network / https://decentrasol.network 
+- https://ipfs.le-space.de/ipns/nicokrause.com  / https://nicokrause.com
+
 ## usage
 - use node 18.x
 - clone this repo 
