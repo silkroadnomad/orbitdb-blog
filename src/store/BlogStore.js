@@ -3,6 +3,9 @@ import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
 
 class BlogStore {
+
+  @observable feed = null;
+  @observable dbName = process.env.DB_NAME
   @observable posts = [];
   @observable data = {
     title: "Welcome to Nico-Krause.com!"
@@ -17,19 +20,15 @@ class BlogStore {
     makeAutoObservable(this)
     this.ipfs = null;
     this.odb = null;
-    this.feed = null;
-  }
-
-  getFeed() {
-    return this.feed
+    // this.feed = null;
   }
 
   async connect(ipfs, options = {}) {
     //set up orbitdb
     this.ipfs = ipfs;
     console.log("options.identity",options.identity)
-    const ourIdentity =
-      options.identity || (await Identities.createIdentity({ id: "user" }));
+
+    const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
 
     console.log("ourIdentity",ourIdentity)
     this.odb = await OrbitDB.createInstance(ipfs, {
@@ -37,29 +36,26 @@ class BlogStore {
       directory: "./odb",
     });
     this.identity = ourIdentity
-    const  dbAddress = "/orbitdb/zdpuArefdqxWRmCe18Gj56uyn1cWFF7TEdNubF8ecYAdfLsLx/decentrasol-dev07"
-    this.feed = await this.odb.feed(dbAddress, {
-      // this.feed = await this.odb.feed(options.dbName, {
-        identity: ourIdentity, 
-        accessController: {
-        //  type: 'orbitdb', //OrbitDBAccessController
-          type: 'orbitdb',
-            accessController: {
-              type: 'orbitdb',
-             // write: [options.identity.id]
-              //     write: publicAccess ? ["*"] : [this.odb.identity.id],
-            }
-        }
-      })
-      this.feed.access.grant("admin","0xC36053102a04E365867dB9554E83d60d6E305231");
-      console.log('capabilities',this.feed.access.capabilities)
-      this.capabilities = this.feed.access.capabilities
+
+    this.feed = await this.odb.feed(options.dbName, {
+      identity: ourIdentity, 
+      accessController: {
+        type: 'orbitdb',
+          accessController: {
+            type: 'orbitdb',
+            // write: [options.identity.id]
+            //     write: publicAccess ? ["*"] : [this.odb.identity.id],
+          }
+      }
+    })
+    this.capabilities = this.feed.access.capabilities
 
     await this.loadPosts();
     this.isOnline = true;
   }
 
   addPostToStore = (entry) => {
+
     if (this.posts.filter((e) => {return e.hash === entry.hash;}).length === 0) {
       const newPostObj = {
         hash: entry.hash,
@@ -74,16 +70,13 @@ class BlogStore {
   };
 
   async loadPosts() {
-    // this.feed = await this.odb.feed(this.odb.identity.id + '/playlists')
 
     this.feed.events.on("replicated", async (dbAddress, count, newFeed, d) => {
-     // this.feed = await newFeed.load(); (seems not to work correctly)
       console.log("replicated - loading posts from db");
       console.log("dbAddress", dbAddress);
       console.log("count", count);
       console.log("feed", newFeed);
       newFeed.all.map(this.addPostToStore);
-      //remove remotely deleted entries from playlist store
     });
 
     this.feed.events.on("write", async (hash, entry, heads) => {
@@ -94,33 +87,28 @@ class BlogStore {
     // When the database is ready (ie. loaded), display results
     this.feed.events.on("ready", (dbAddress, feedReady) => {
       console.log("database ready " + dbAddress, feedReady);
-      // this.feed = feedReady
-      if(this.feed !== undefined)        this.feed.all.map(this.addPostToStore);
+      if(this.feed !== undefined) this.feed.all.map(this.addPostToStore);
       else console.log('feed is still undefined although ready')
-
     });
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
       console.log("replicate.progress", dbAddress, hash, obj);
-      // this.feed = await this.feed.load(); doesn't seem to be useful here.
-      const entry = await this.feed.get(hash);
-      for (let i = 0; i < this.posts.length; i++) {
-        console.log(">", this.posts[i].hash, this.posts[i].address);
-        if (this.posts[i].hash === entry.hash) {
-          console.log(
-            "removed post from store because it was deleted on another node",
-            entry.hash
-          );
-          await this.feed.remove(entry.hash); //removing it from the db
-          this.playlist = this.posts.splice(i, 1); //removing it from store
-        }
+      if(obj.payload.op==="DEL"){
+        const entryHash = obj.payload.value
+        for (let i = 0; i < this.posts.length; i++) {
+          console.log(">", this.posts[i].hash, this.posts[i].address);
+          if (this.posts[i].hash === entryHash) {
+            console.log("removed post from store because it was deleted on another node",entryHash);
+            this.posts = [] //empty store because it gets reloaded anyways
+          }
+        } 
       }
     });
     await this.feed.load();
   }
 
   /**
-   * Create a new feed for every post
+   * Create a new comment feed for every post
    */
   async createNewPost() {
     console.log("creating new postFeed", this.currentPost.subject)
@@ -185,17 +173,18 @@ class BlogStore {
   async joinBlogPost(address) {
     console.log("joinBlogPost - loading address", address);
     if (this.odb) {
+
       const ourPost = this.posts.filter((item)=>{return item.address === address})
       this.posts.forEach((item)=>console.log(item.subject))
       this.currentPost = ourPost.length>0?ourPost[0]:this.posts[0]
 
       try {
         const blogPost =
-        this.odb.stores[address] || (await this.odb.open(address));
-        await blogPost.load();
+          this.odb.stores[address] || (await this.odb.open(address))
+        await blogPost.load()
         this.currentFeed = blogPost
-      }catch(ex){
-        console.log(ex,'comments feed could not loaded')
+      } catch (ex) {
+        console.log(ex, "comments feed could not loaded")
       } 
     }else console.log('odb not loaded')
   }

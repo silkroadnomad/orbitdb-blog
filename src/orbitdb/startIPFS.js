@@ -22,10 +22,11 @@ export const startIPFS = async () => {
         },
       }
     })
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const wallet = provider.getSigner();
-    let identity = undefined
+
+    let identity
     try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const wallet = provider.getSigner();
         await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
         identity = await Identities.createIdentity({
           type: "ethereum",

@@ -10,7 +10,7 @@ const CreatePost = (props) => {
     if(props.store.currentPost===undefined) props.store.currentPost = {}
     const {name,value} = e.target
     props.store.currentPost[name] = value
-  }
+   }
 
   async function handleSubmit (event) {
     event.preventDefault()

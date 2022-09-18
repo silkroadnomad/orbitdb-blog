@@ -15,7 +15,11 @@
 
 ## todos
 ### orbit - todos
-- add tags to blog post
+- get db address from url 
+- Bug: if device is offline - ipfs cannot connect to webrtc star - must work without internet too
+    - e.g. remove addresses from swarm programmatically 
+    - other possibilities? e.g. tell ipfs to not connect to swarm if not available or work without swarm.
+    - ipfs node connects to some strange nodes e.g. wss://node2.preload.ipfs.io/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS where is this coming from?
 - show currently connected peers
 
 ## nice to haves
@@ -24,21 +28,23 @@
 - dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
 #### ui - todos
-- create textbox + dropdown (admin/write) + button to add permission to current database 
+- display author (identity) next to post 
+- upload photos to post via ipfs
+- add comments (make writeable to everybody)
 - change/edit post date
+- add tags to blog post
 - when deleting a post ask user before action
 - create component which lists posts of a certain tag 
 - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
-- add comments (make writeable to everybody)
 - store profile data in orbit-db (bio, seo, profile pic)
-- upload photos to post via ipfs
-
 
 #### difficulties
 1. another user reported his Windows defender firewall was blocking the website.
-2. some isps seem to restrict p2p connections.
+2. some isp's seem to restrict p2p connections.
 
 ## Changes
+- 2022-09-18
+    - create textbox + dropdown (admin/write) + button to add permission to current database 
 - 2022-09-15
    - when deleting a post - replication is informed but hard to identify the removed item
 - 2022-09-14

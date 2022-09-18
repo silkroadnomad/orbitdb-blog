@@ -16,6 +16,7 @@ const BlogPost = (props) => {
   const [previousPost,setPreviousPost] = useState({address:'#'})
   let mounted = true
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
+  
   useEffect(() => {
    
     function load () {

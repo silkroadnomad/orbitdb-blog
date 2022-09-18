@@ -13,17 +13,23 @@ import { CircularProgress } from '@chakra-ui/react'
 
 const BlogIndex = (props) => {
   
-  useEffect(() => {
-    props.store.currentPost = undefined
-  }, []);
+  useEffect(() => { props.store.currentPost = undefined}, []);
 
+  if(props.match.params.hash!==undefined){
+
+      let dbName = props.match.params.hash;
+      if(props.match.params.name!==undefined)
+        dbName = dbName + '/' + props.match.params.name
+
+      console.log('received dbName from url',dbName)
+      props.store.setDbName = dbName
+  }
+ 
   if (props.store.posts.length === 0) {
     return (
       <Layout location={props.location} store={props.store} title={process.env.TITLE}>
         <Seo title={process.env.TITLE} />
-        <p>
           {props.store.isOnline?'No blog posts found.':<CircularProgress isIndeterminate  />} 
-        </p>
         <Bio />
         <CreatePost {...props} />
       </Layout>

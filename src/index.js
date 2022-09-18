@@ -13,23 +13,27 @@ import './styles/normalize.css'
 const App = () => {
 
   useEffect(() => {
-
     const conectIPFS = async () => {
+      console.log("running connectIFS with dbName",store.dbName)
       const {ipfs,identity} = await startIPFS()
-      const dbName = process.env.DB_NAME
+      let dbName = process.env.DB_NAME
+      dbName = store.dbName
       const options = {dbName: dbName};
       if(store.identity!==undefined) options.identity = identity
       await store.connect(ipfs,options)
   
       console.log("odb id:", store.odb.identity.id)
       console.log("dbName:",dbName)
+      console.log("store.feed.id:", store.feed.id)
     }
     conectIPFS()
     
-  })
+  },[store.dbName])
     return (
       <ChakraProvider>
           <Router>
+          <Route path="/address/:hash" component={props => <BlogIndex {...props} store={store} />}/>  
+          <Route path="/address/:hash/:name" component={props => <BlogIndex {...props} store={store} />}/>
             <Route path="/orbitdb/:hash/:name" component={(props) => <BlogPost {...props} store={store}/> }/>
             <Route exact path="/" component={props => <BlogIndex {...props} store={store} />}/>
             <Route exact path="/settings" component={props => <Settings {...props} store={store} />}/>
@@ -41,3 +45,8 @@ import { createRoot } from 'react-dom/client';
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(<App/>);
+
+const test = () => {
+  console.log('called test function')
+}
+window.test = test;
