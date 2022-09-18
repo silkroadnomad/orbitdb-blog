@@ -1,7 +1,11 @@
 # orbit-db decentralized blog
 ## features
 - create your own decentralized blog with your own identity key
-
+- add other identities (metamask supported right now) in order to allow writing to the blog
+- (planed) upload media post attachments to ipfs
+- (planed) writing comments (everybody allowed) 
+- (planed) writing comments only against btc deposit to prevent spam 
+- (planed) create several react-ui components to display features posts and/or posts with a certain tag
 ## usage
 - use node 18.x
 - clone this repo 

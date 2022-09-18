@@ -2,10 +2,10 @@ import {create} from 'ipfs'
 import Identities from 'orbit-db-identity-provider'
 import { ethers } from "ethers";
 
-export const startIPFS = async () => {
-
+export const startIPFS = async (options) => {
+    let repo = options?.repo!==undefined?options.repo:'./ipfs-repo'
     const ipfs = await create({
-      repo: './ipfs-repo',
+      repo: repo,
       EXPERIMENTAL: { pubsub: true },
       preload: { "enabled": false },
       config: {
