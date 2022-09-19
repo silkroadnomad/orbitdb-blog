@@ -24,7 +24,7 @@
 
 ## todos
 ### orbit - todos
-- get db address from url 
+- get db address from url - needs to be tested (current url + address + / + dbHash + / + dbName)
 - Bug: if device is offline - ipfs cannot connect to webrtc star - must work without internet too
     - e.g. remove addresses from swarm programmatically 
     - other possibilities? e.g. tell ipfs to not connect to swarm if not available or work without swarm.
@@ -52,6 +52,8 @@
 2. some isp's seem to restrict p2p connections.
 
 ## Changes
+- 2022-09-18
+    - added button which opens drawer to display identity, permission and orbitdb related informations.
 - 2022-09-18
     - create textbox + dropdown (admin/write) + button to add permission to current database 
 - 2022-09-15
