@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
 import { observer } from 'mobx-react'
 import { Button, Input,Textarea,Stack } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons'
@@ -25,8 +25,11 @@ const CreatePost = (props) => {
       props.store.currentPost = undefined
     } 
   }
+  const [canAppend, setCanAppend] = useState();
+  useEffect(() => setCanAppend(props.store.canWrite(props.store?.identity?.id)), []);
 
-  return(
+  
+  return !canAppend?"":(
       <form onSubmit={handleSubmit}>
         <Input name="subject" type="text" value={props.store.currentPost?.subject?props.store.currentPost?.subject:''} onChange={handleValues} placeholder="Subject" /><br/>
         <Textarea name="body" type="text" value={props.store.currentPost?.body?props.store.currentPost?.body:''} cols={70} rows={10} onChange={handleValues}  placeholder="Body" />

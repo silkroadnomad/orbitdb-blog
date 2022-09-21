@@ -17,6 +17,7 @@
 - run ``yarn``
 - run ``yarn start``
 - open browser on http://localhost:8080
+- make a copy of the current db: Go to console -> await 
 
 ## build 
 - run ``yarn build``
@@ -31,27 +32,32 @@
     - ipfs node connects to some strange nodes e.g. wss://node2.preload.ipfs.io/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS where is this coming from?
 - show currently connected peers
 
+#### ui - todos
+- when deleting a post ask user before action
+- display author (identity) next to post
+- change/edit post date
+- add tags to blog post
+- create component which lists posts of a certain tag 
+- upload photos to post via ipfs
+- add comments (make writeable to everybody)
+- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
+- store profile data in orbit-db (bio, seo, profile pic)
+
 ## nice to haves
 - (auto) pin project on ipfs - orbit-pinning service
     - https://github.com/orbitdb/field-manual/issues/83
 - dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
-#### ui - todos
-- display author (identity) next to post 
-- upload photos to post via ipfs
-- add comments (make writeable to everybody)
-- change/edit post date
-- add tags to blog post
-- when deleting a post ask user before action
-- create component which lists posts of a certain tag 
-- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
-- store profile data in orbit-db (bio, seo, profile pic)
-
-#### difficulties
+#### difficulties & discoveries
 1. another user reported his Windows defender firewall was blocking the website.
 2. some isp's seem to restrict p2p connections.
+3. running vpn connections seem to disturb connecting via peer2peer
 
 ## Changes
+- 2022-09-21
+    - hide add post box when no permission to append to log
+- 2022-09-19
+    - run cp in console to create a a new ipfs instance and a new feed with the data of current db but new permissions
 - 2022-09-18
     - added button which opens drawer to display identity, permission and orbitdb related informations.
 - 2022-09-18

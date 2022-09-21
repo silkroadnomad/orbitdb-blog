@@ -72,6 +72,7 @@ const BlogIndex = (props) => {
       <p>&nbsp;</p>
       <Bio />
       <CreatePost {...props} />
+     
     </Layout>
   )
 }

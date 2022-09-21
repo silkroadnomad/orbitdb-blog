@@ -16,6 +16,7 @@ import './styles/normalize.css'
 const App = () => {
 
   useEffect(() => {
+
     const conectIPFS = async () => {
       console.log("running connectIFS with dbName",store.dbName)
       const {ipfs,identity} = await startIPFS()
@@ -53,33 +54,35 @@ root.render(<App/>);
  * Function executable in the command line to spin up a second ipfs node with a second orbit node
  * in order to migrate from another database and change the permissions.
  */
-const ipfs2 = async () => {
-  console.log('starting ipfs2')
+const cp = async ourDBName => {
+  console.log('starting second ipfs node')
+  let newDbName = ourDBName!==undefined?ourDBName:"notTheSame02" //process.env.DB_NAME
   const {ipfs,identity} = await startIPFS({'repo':'./ipfs-repo2'})
   const ourIdentity = identity || (await Identities.createIdentity({ id: "user" }))
-
+  window.ipfs2 = ipfs;
   console.log("ourIdentity",ourIdentity)
   const odb = await OrbitDB.createInstance(ipfs, {
     ourIdentity,
     directory: "./odb2",
   });
-  console.log('odb',odb)
-  const dbName = "notTheSame02" //process.env.DB_NAME
-  const feed = await odb.feed(dbName, {
+  console.log('created new odb',odb)
+  const feed = await odb.feed(newDbName, {
     identity: ourIdentity, 
     accessController: {
       type: 'orbitdb',
         accessController: {
           type: 'orbitdb',
-          write: ["*"]
-          // write: [options.identity.id]
+          admin: [odb.identity.id, ourIdentity._id],
+          write: [odb.identity.id, ourIdentity._id]
           //     write: publicAccess ? ["*"] : [this.odb.identity.id],
         }
     }
   })
-  console.log('feed',feed)
   feed.access.grant("admin",ourIdentity._id);
-  feed.access.grant("write","*");
+  feed.access.grant("write",ourIdentity._id);
+  console.log('created new feed',feed)
+
+  feed.access.grant("admin",ourIdentity._id);
   const capabilities = feed.access.capabilities
   console.log("capabilities",capabilities)
 
@@ -89,12 +92,26 @@ const ipfs2 = async () => {
     console.log("count", count);
     console.log("feed", newFeed);
   });
-  feed.events.on("ready", (dbAddress, feedReady) => {
+
+  feed.events.on("ready", async (dbAddress, feedReady) => {
     console.log("database ready " + dbAddress, feedReady);
     if(feed !== undefined) feed.all.map((e)=>console.log(e));
     else console.log('feed is still undefined although ready')
+
+    console.log('copying old feed into new feed')
+    console.log('old feed lenghth',store.feed.all.length)
+    console.log('new feed lenghth',feed.all.length)
+    // await feed.drop()
+    // feed.all.map((e)=> feed.remove(e.hash));
+    store.feed.all.map((e)=>{
+      console.log("adding object",e)
+      feed.add(e.payload.value)});
+    console.log('new feed lenghth',feed.all.length)
+    console.log('feed id',feed.id)
+    window.feed2 = feed;
   });
+
   feed.load();
 
 }
-window.ipfs2 = ipfs2;
+window.cp = cp;

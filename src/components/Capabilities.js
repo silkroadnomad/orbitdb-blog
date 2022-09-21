@@ -31,7 +31,7 @@ const Capabilities = (props) => {
     } 
 
     let capabilities 
-    if(props.store?.capabilities!=undefined) capabilities = values(props.store?.capabilities)
+    if(props.store?.capabilities!==undefined) capabilities = values( props.store?.capabilities)
     console.log('capabilities',capabilities)
     let adminList,writeList = []
     if(capabilities !==undefined && capabilities.length>0 && capabilities[0]){

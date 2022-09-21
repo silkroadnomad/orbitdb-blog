@@ -25,7 +25,7 @@ module.exports = env => {
             filename: 'index_bundle.js',
         },
         devServer: {
-        historyApiFallback: true
+            historyApiFallback: true
         },
         module : {
             rules : [

@@ -15,12 +15,12 @@ const Bio = () => {
   return (
     <div className="bio">
     <Image
-    m={[2, 3]}
-    boxSize='100px'
-    objectFit='cover'
-    src={profilePic}
-    alt='Nico Krause'
-  />
+      m={[2, 3]}
+      boxSize='100px'
+      objectFit='cover'
+      src={profilePic}
+      alt='Nico Krause'
+    />
       {authorName && (
         <p>
           <strong>{authorName}</strong> &nbsp;<br/>

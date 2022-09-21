@@ -54,6 +54,12 @@ class BlogStore {
     this.isOnline = true;
   }
 
+  canWrite = (identity) => {
+    const _canAdmin = this.feed?.access?.capabilities?.admin!==undefined?Array.from(this.feed?.access?.capabilities?.admin?.keys()).indexOf(identity)!==-1:""
+    const _canWrite = this.feed?.access?.capabilities?.write!==undefined?Array.from(this.feed?.access?.capabilities?.write?.keys()).indexOf(identity)!==-1:""
+    return _canWrite || _canAdmin
+  }
+
   addPostToStore = (entry) => {
 
     if (this.posts.filter((e) => {return e.hash === entry.hash;}).length === 0) {
