@@ -59,6 +59,10 @@ class BlogStore {
     const _canWrite = this.feed?.access?.capabilities?.write!==undefined?Array.from(this.feed?.access?.capabilities?.write?.keys()).indexOf(identity)!==-1:""
     return _canWrite || _canAdmin
   }
+  
+  setTagsOfCurrentPost = (tags) => {
+    this.currentPost.tags = tags
+  }
 
   addPostToStore = (entry) => {
 
@@ -67,6 +71,7 @@ class BlogStore {
         hash: entry.hash,
         subject: entry.payload.value.subject || entry.payload.value.name,
         body: entry.payload.value.body,
+        tags: entry.payload.value.tags,
         createdAt: entry.payload.value.createdAt,
         address: entry.payload.value.address,
       };
@@ -125,6 +130,7 @@ class BlogStore {
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
+      tags: this.currentPost.tags,
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: postsFeed.address.toString(),
     }

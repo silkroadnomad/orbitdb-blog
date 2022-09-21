@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import Moment from 'react-moment';
-import { Divider } from '@chakra-ui/react'
+import { Divider,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { observer } from 'mobx-react'
 import Bio from "./bio"
@@ -94,7 +94,21 @@ const BlogPost = (props) => {
         </header>
 
         <ReactMarkdown>{props.store.currentPost?.body}</ReactMarkdown>
-
+        
+        <HStack spacing={4}>
+        { 
+          props.store.currentPost?.tags?.map((tagName) => (
+          <Tag
+            size={"md"}
+            key={tagName}
+            borderRadius="full"
+            variant="solid"
+            colorScheme="red"
+          ><TagLabel>{tagName}</TagLabel>
+          </Tag>
+          ))
+        }
+      </HStack>
         <Divider />
         <CreatePost {...props} />
         <Divider />

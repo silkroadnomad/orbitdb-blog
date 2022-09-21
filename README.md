@@ -33,10 +33,12 @@
 - show currently connected peers
 
 #### ui - todos
-- when deleting a post ask user before action
-- display author (identity) next to post
-- change/edit post date
 - add tags to blog post
+    - parse #tags automatically from body
+- display author (identity) next to post (simply id)
+- store profile information under id
+- when deleting a post ask user before action
+- change/edit post date
 - create component which lists posts of a certain tag 
 - upload photos to post via ipfs
 - add comments (make writeable to everybody)

@@ -1,6 +1,6 @@
-import React, { useEffect, useState }  from "react"
+import React, { useEffect }  from "react"
 import { Link as ReachLink  } from 'react-router-dom'
-import { Link } from '@chakra-ui/react'
+import { Link,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
 import { observer } from 'mobx-react'
 import Moment from 'react-moment';
 import Bio from "../components/bio"
@@ -64,6 +64,20 @@ const BlogIndex = (props) => {
                 </header>
                 <section><ReactMarkdown  components={ChakraUIRenderer()} children={post.body} skipHtml />
                 </section>
+                <HStack spacing={4}>
+                  {
+                    post.tags?.map((tagName) => (
+                      <Tag
+                        size={"md"}
+                        key={tagName}
+                        borderRadius="full"
+                        variant="solid"
+                        colorScheme="red"
+                      ><TagLabel>{tagName}</TagLabel>
+                      </Tag>
+                      ))
+                  }
+              </HStack>
               </article>
             </li>
           )
