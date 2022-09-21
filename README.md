@@ -33,8 +33,6 @@
 - show currently connected peers
 
 #### ui - todos
-- add tags to blog post
-    - parse #tags automatically from body
 - display author (identity) next to post (simply id)
 - store profile information under id
 - when deleting a post ask user before action
@@ -58,6 +56,7 @@
 ## Changes
 - 2022-09-21
     - hide add post box when no permission to append to log
+    - add tags to blog post (parse #tags automatically from body)
 - 2022-09-19
     - run cp in console to create a a new ipfs instance and a new feed with the data of current db but new permissions
 - 2022-09-18
