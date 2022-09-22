@@ -3,11 +3,16 @@ import { Link } from "react-router-dom";
 import { Container,Grid, GridItem } from '@chakra-ui/react'
 import SettingsDrawer from './SettingsDrawer'
 const Layout = ({ location, title, children, store }) => {
-  const rootPath = "/" //`${__PATH_PREFIX__}/`
-  const isRootPath = location.pathname === rootPath
-  let header
 
-  if (isRootPath) {
+  const rootPath = "/" //`${__PATH_PREFIX__}/`
+  const tagPath = "/tag"
+  const dbPath = "/db"
+  const isRootPath = location.pathname === rootPath
+  const isTagPath = location.pathname.startsWith(tagPath)
+  const isDbPath = location.pathname.startsWith(dbPath)
+  let header
+  console.log('isTagPath:'+location.pathname,isTagPath)
+  if (isRootPath || isTagPath || isDbPath) {
     header = (
       <Grid templateColumns='repeat(5, 1fr)' gap={6}>
           <GridItem colSpan={4} ><h1 className="main-heading"><Link to={"/"}>{title}</Link></h1></GridItem>

@@ -24,9 +24,10 @@ class BlogStore {
   }
 
   async connect(ipfs, options = {}) {
+
     //set up orbitdb
-    this.ipfs = ipfs;
-    console.log("options.identity",options.identity)
+    if(ipfs) this.ipfs = ipfs;
+    console.log("options",options)
 
     const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
 
@@ -53,6 +54,8 @@ class BlogStore {
     await this.loadPosts();
     this.isOnline = true;
   }
+
+  setDbAddress = dbAddress => this.dbName = dbAddress
 
   canWrite = (identity) => {
     const _canAdmin = this.feed?.access?.capabilities?.admin!==undefined?Array.from(this.feed?.access?.capabilities?.admin?.keys()).indexOf(identity)!==-1:""

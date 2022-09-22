@@ -28,13 +28,13 @@ const CreatePost = (props) => {
   async function handleSubmit (event) {
     event.preventDefault()
     if (props.store.currentPost?.hash === undefined) {
-      const newPost = await props.store.createNewPost()
+      await props.store.createNewPost()
       props.history.push("/")
       props.store.currentPost = undefined
     }else{
       await props.store.removePost()
-      const newPost = await props.store.createNewPost() 
-      props.history.push("/") //TODO maybe forward to new post address here
+      await props.store.createNewPost() 
+      props.history.push("/") 
       props.store.currentPost = undefined
     } 
   }

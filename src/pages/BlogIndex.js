@@ -1,4 +1,4 @@
-import React, { useEffect }  from "react"
+import React, { useEffect,useState }  from "react"
 import { Link as ReachLink  } from 'react-router-dom'
 import { Link,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
 import { observer } from 'mobx-react'
@@ -10,21 +10,33 @@ import CreatePost from "../components/CreatePost"
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 import { CircularProgress } from '@chakra-ui/react'
+import connectOrbit from '../orbitdb/connectOrbit'
 
 const BlogIndex = (props) => {
   
-  useEffect(() => { props.store.currentPost = undefined}, []);
+  const runConnctOrbit = async (options) => await connectOrbit(props.store,options)
+  const [tag, setTag] = useState();
+  useEffect(() => {
 
-  if(props.match.params.hash!==undefined){
+    props.store.currentPost === undefined
 
-      let dbName = props.match.params.hash;
-      if(props.match.params.name!==undefined)
-        dbName = dbName + '/' + props.match.params.name
+    if(props.match.params.tag!==undefined) setTag(props.match.params.tag)
 
-      console.log('received dbName from url',dbName)
-      props.store.setDbName = dbName
-  }
- 
+    if(props.match.params.hash!==undefined){
+  
+        let dbName = props.match.params.hash;
+        if(props.match.params.name!==undefined)
+          dbName = dbName + '/' + props.match.params.name
+  
+        console.log('received dbName from url',dbName)
+        props.store.setDbAddress(dbName)
+        runConnctOrbit({repo:"./ipfs-repo-alt"})
+        props.store.loadPosts().then(console.log('loaded db from url',dbName))
+    }
+
+  
+  }, []);
+
   if (props.store.posts.length === 0) {
     return (
       <Layout location={props.location} store={props.store} title={process.env.TITLE}>
@@ -46,7 +58,8 @@ const BlogIndex = (props) => {
           const subject  = post.name || post.subject
           const slug = post.hash
           const postDate = post.createdAt?new Date(post.createdAt).toISOString():undefined
-       
+          const tagsLowerCase = post.tags.map( e => e.toLowerCase())
+          if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (
             <li key={slug}>
               <article
