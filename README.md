@@ -25,7 +25,9 @@
 
 ## todos
 ### orbit - todos
-- get db address from url - needs to be tested (current url + address + / + dbHash + / + dbName)
+- ipfs pin uploaded media
+- (auto) pin project on ipfs - orbit-pinning service
+    - https://github.com/orbitdb/field-manual/issues/83
 - Bug: if device is offline - ipfs cannot connect to webrtc star - must work without internet too
     - e.g. remove addresses from swarm programmatically 
     - other possibilities? e.g. tell ipfs to not connect to swarm if not available or work without swarm.
@@ -33,19 +35,17 @@
 - show currently connected peers
 
 #### ui - todos
+- delete uploaded media from post
+- create component which lists posts of a certain tag
+- add comments (make writeable to everybody)
 - display author (identity) next to post (simply id)
-- store profile information under id
 - when deleting a post ask user before action
 - change/edit post date
-- create component which lists posts of a certain tag 
-- upload photos to post via ipfs
-- add comments (make writeable to everybody)
 - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
 - store profile data in orbit-db (bio, seo, profile pic)
+- store profile information under id
 
 ## nice to haves
-- (auto) pin project on ipfs - orbit-pinning service
-    - https://github.com/orbitdb/field-manual/issues/83
 - dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
 
 #### difficulties & discoveries
@@ -54,6 +54,12 @@
 3. running vpn connections seem to disturb connecting via peer2peer
 
 ## Changes
+- 2022-09-21
+    - upload photos via drag & drop to a post
+    - display the photos below the post 
+- 2022-09-21
+    - added tag filter to url e.g. /#/tag/yoga 
+    - fixed db address via url in the form /#/db/{dbAddress}
 - 2022-09-21
     - hide add post box when no permission to append to log
     - add tags to blog post (parse #tags automatically from body)

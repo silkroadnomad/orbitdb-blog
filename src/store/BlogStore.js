@@ -12,8 +12,8 @@ class BlogStore {
   };
   @observable isOnline = false;
   @observable identity = {};
-  @observable currentFeed = {};
-  @observable currentPost = {};
+  @observable currentMediaFeed = {}; //feed holding the current feed
+  @observable currentPost = {}; //simple object holding the post
   @observable capabilities = []
 
   constructor() {
@@ -89,7 +89,7 @@ class BlogStore {
       console.log("replicated - loading posts from db");
       console.log("dbAddress", dbAddress);
       console.log("count", count);
-      console.log("feed", newFeed);
+      // console.log("feed", newFeed);
       newFeed.all.map(this.addPostToStore);
     });
 
@@ -106,7 +106,7 @@ class BlogStore {
     });
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
-      console.log("replicate.progress", dbAddress, hash, obj);
+      console.log("replicate.progress", dbAddress, hash);
       if(obj.payload.op==="DEL"){
         const entryHash = obj.payload.value
         for (let i = 0; i < this.posts.length; i++) {
@@ -176,32 +176,22 @@ class BlogStore {
     return "#"
   }
 
-  //   if (this.odb) {
-  //     console.log('loading comments of post ',nextAddress)
-  //     const blogPost = this.odb.stores[nextAddress] || (await this.odb.open(nextAddress));
-  //     await blogPost.load();
-  //     this.currentFeed = blogPost; 
-  //   }else console.log('odb not loaded')
-
-  // }
-
   async joinBlogPost(address) {
     console.log("joinBlogPost - loading address", address);
     if (this.odb) {
-
       const ourPost = this.posts.filter((item)=>{return item.address === address})
+      
       this.posts.forEach((item)=>console.log(item.subject))
       this.currentPost = ourPost.length>0?ourPost[0]:this.posts[0]
 
       try {
-        const blogPost =
-          this.odb.stores[address] || (await this.odb.open(address))
-        await blogPost.load()
-        this.currentFeed = blogPost
+        const mediaFeedOfPost = this.odb.stores[address] || (await this.odb.open(address))
+        await mediaFeedOfPost.load()
+        this.currentMediaFeed = mediaFeedOfPost
       } catch (ex) {
         console.log(ex, "comments feed could not loaded")
       } 
-    }else console.log('odb not loaded')
+    } else console.log('odb not loaded')
   }
 
   sendFiles(files, address) {
@@ -263,14 +253,14 @@ class BlogStore {
 
   async addPost(address, data) {
     console.log("adding data to db on address", address);
-    const blogPost = this.odb.stores[address] || (await this.odb.open(address));
-    if (blogPost) {
-      const hash = await blogPost.add(data);
+    const mediaFeed = this.odb.stores[address] || (await this.odb.open(address));
+    if (mediaFeed) {
+      const hash = await mediaFeed.add(data);
       console.log("got hash", hash);
-      await blogPost.load();
-      this.currentFeed = blogPost;
-      console.log("blogPost feed loaded", this.currentFeed);
-      return blogPost.get(hash);
+      await mediaFeed.load();
+      // this.currentPost = mediaFeed;
+      // console.log("blogPost feed loaded", this.currentPost);
+      return mediaFeed.get(hash);
     }
     return;
   }

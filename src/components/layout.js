@@ -4,14 +4,13 @@ import { Container,Grid, GridItem } from '@chakra-ui/react'
 import SettingsDrawer from './SettingsDrawer'
 const Layout = ({ location, title, children, store }) => {
 
-  const rootPath = "/" //`${__PATH_PREFIX__}/`
+  const rootPath = "/"
   const tagPath = "/tag"
   const dbPath = "/db"
   const isRootPath = location.pathname === rootPath
   const isTagPath = location.pathname.startsWith(tagPath)
   const isDbPath = location.pathname.startsWith(dbPath)
   let header
-  console.log('isTagPath:'+location.pathname,isTagPath)
   if (isRootPath || isTagPath || isDbPath) {
     header = (
       <Grid templateColumns='repeat(5, 1fr)' gap={6}>

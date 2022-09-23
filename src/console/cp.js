@@ -33,7 +33,6 @@ import {startIPFS} from '../orbitdb/startIPFS'
     feed.access.grant("write",ourIdentity._id);
     console.log('created new feed',feed)
   
-    feed.access.grant("admin",ourIdentity._id);
     const capabilities = feed.access.capabilities
     console.log("capabilities",capabilities)
   
@@ -52,11 +51,12 @@ import {startIPFS} from '../orbitdb/startIPFS'
       console.log('copying old feed into new feed')
       console.log('old feed lenghth',store.feed.all.length)
       console.log('new feed lenghth',feed.all.length)
-      // await feed.drop()
-      // feed.all.map((e)=> feed.remove(e.hash));
+
       store.feed.all.map((e)=>{
         console.log("adding object",e)
-        feed.add(e.payload.value)});
+        feed.add(e.payload.value)
+      });
+      
       console.log('new feed lenghth',feed.all.length)
       console.log('feed id',feed.id)
       window.feed2 = feed;
