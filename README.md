@@ -35,6 +35,9 @@
 - show currently connected peers
 
 #### ui - todos
+- bug: when deleting media from post its deleting a wrong media from orbit
+- when using navigation - its not possible to add new media - identity seems not correct 
+- add a route to react router which delivers a media file of a certain mediafeed 
 - create component which lists posts of a certain tag
 - add comments (make writeable to everybody)
 - display author (identity) next to post (simply id)
@@ -56,7 +59,7 @@
 - 2022-09-25
     - delete uploaded media from post
     - change permissions recursively also for all mediethreads of all posts
-    - when creating new post inherit admin and write permissions from blog 
+    - when creating new post inherit admin and write permissions from blog
 - 2022-09-21
     - upload photos via drag & drop to a post
     - display the photos below the post 

@@ -53,8 +53,10 @@ class BlogStore {
   setDbAddress = dbAddress => this.dbName = dbAddress
 
   canWrite = (identity) => {
-    const _canAdmin = this.feed?.access?.capabilities?.admin!==undefined?Array.from(this.feed?.access?.capabilities?.admin?.keys()).indexOf(identity)!==-1:""
-    const _canWrite = this.feed?.access?.capabilities?.write!==undefined?Array.from(this.feed?.access?.capabilities?.write?.keys()).indexOf(identity)!==-1:""
+    const _canAdmin = this.feed?.access?.capabilities?.admin!==undefined?Array.from(
+      this.feed?.access?.capabilities?.admin?.keys()).indexOf(identity)!==-1:""
+    const _canWrite = this.feed?.access?.capabilities?.write!==undefined?Array.from(
+      this.feed?.access?.capabilities?.write?.keys()).indexOf(identity)!==-1:""
     return _canWrite || _canAdmin
   }
   
@@ -190,6 +192,7 @@ class BlogStore {
 
       try {
         const mediaFeedOfPost =  await this.odb.open(address,{identity:this.identity})
+        console.log("opened mediaFeedOfPost",mediaFeedOfPost)
         // const mediaFeedOfPost = this.odb.stores[address] || (await this.odb.open(address))
         console.log('mediaFeedOfPost permissions',mediaFeedOfPost.access.capabilities)
 
@@ -197,11 +200,15 @@ class BlogStore {
           console.log("replicated - loading posts from db");
           console.log("dbAddress", dbAddress);
           console.log("count", count);
-          // console.log("feed", newFeed);
           const mediaElements = []
-          mediaFeedOfPost.all.map( m => mediaElements.push(m));
-          console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
-          setMediaFunc(mediaElements)
+          
+          //this seems necessary because allmfeeds of the current odb are replicating even if its not the current feed
+          //otherwise a replication of another feed is updating the media in the current media feed.
+          if(dbAddress===this.currentMediaFeed.id){ 
+            mediaFeedOfPost.all.map( m => mediaElements.push(m));
+            console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+            setMediaFunc(mediaElements)
+          }
         });
     
         mediaFeedOfPost.events.on("write", async (hash, entry, heads) => {
@@ -216,24 +223,17 @@ class BlogStore {
         mediaFeedOfPost.events.on("ready", (dbAddress, feedReady) => {
           console.log("database ready " + dbAddress, feedReady);
           const mediaElements = []
-          mediaFeedOfPost.all.map( m => mediaElements.push(m));
-          console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
-          setMediaFunc(mediaElements)
+          if(dbAddress===mediaFeedOfPost.id){
+            mediaFeedOfPost.all.map( m => mediaElements.push(m));
+            console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+            setMediaFunc(mediaElements)
+          }
         });
     
         mediaFeedOfPost.events.on("replicate.progress", async (dbAddress, hash, obj) => {
           console.log("replicate.progress", dbAddress, hash);
           if(obj.payload.op==="DEL"){ //TODO fix deleting media by replication
             const entryHash = obj.payload.value
-            const currentMedia = getMedia
-            console.log('currentMedia',currentMedia)
-            for (let i = 0; i < currentMedia.length; i++) {
-          //     console.log(">", this.posts[i].hash, this.posts[i].address);
-          //     if (this.posts[i].hash === entryHash) {
-          //       console.log("removed post from store because it was deleted on another node",entryHash);
-          //       this.posts = [] //empty store because it gets reloaded anyways
-          //     }
-            } 
           }
         });
         

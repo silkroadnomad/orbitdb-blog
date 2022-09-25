@@ -15,7 +15,7 @@ const BlogPost = (props) => {
   const [media, setMedia] = useState([])
   const [nextPost,setNextPost] = useState({address:'#'})
   const [previousPost,setPreviousPost] = useState({address:'#'})
-  let mounted = true
+
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
   
   useEffect(() => {
@@ -25,29 +25,11 @@ const BlogPost = (props) => {
       setPreviousPost( props.store.previousPost(address))
 
       props.store.joinBlogPost(address,media,setMedia)
-
-      // props.store.joinBlogPost(address).then(() => {
-      //   if (mounted) {
-      //     props.store.currentMediaFeed?.events?.on('ready', () => {
-      //       console.log("mediafeed ready")
-      //       setMedia(props.store.currentMediaFeed?.all)
-      //     })
-      //     console.log('loading mediaposts from feed - length',props.store.currentMediaFeed?.all.length)
-      //     setMedia(props.store.currentMediaFeed?.all)
-      //     props.store.currentMediaFeed?.events?.on('replicated', () => {
-      //       console.log("REPLICATED")
-      //       setMedia(props.store.currentMediaFeed?.all)
-      //     })
-      //   }
-      // },() =>{
-      //   console.log('failed loading previous and next post')
-      // })
     }
     
     load()
     return () => {
-      setMedia([])
-      mounted = false
+      setMedia([])  
     }
   }, [props.store.isOnline,address])
 
