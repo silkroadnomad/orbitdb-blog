@@ -50,6 +50,7 @@ class BlogStore {
     this.isOnline = true;
   }
 
+  setCurrentPost = currentPost => this.currentPost = currentPost
   setDbAddress = dbAddress => this.dbName = dbAddress
 
   canWrite = (identity) => {
@@ -126,16 +127,15 @@ class BlogStore {
     console.log("creating new postFeed", this.currentPost.subject)
 
     const newMediaFeed = await this.odb.feed(this.currentPost.subject, {
-      identity: ourIdentity, 
+      identity: this.identity, 
       accessController: {
-        type: 'orbitdb'
+        type: 'orbitdb',
+        admin: this.feed.access.capabilities.admin,
+        write: this.feed.access.capabilities.write
       }
     })
-
-    this.capabilities.write.map( p => newMediaFeed.grant("write",p))
-    this.capabilities.admin.map( p => newMediaFeed.grant("admin",p))
-
-
+    
+    console.log('newMediaFeed.capabilities',newMediaFeed.access.capabilities)
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,

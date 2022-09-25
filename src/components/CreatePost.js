@@ -40,8 +40,12 @@ const CreatePost = (props) => {
     if(value.indexOf("#")!=undefined){
       const tags = getHashTags(value)
       props.store.setTagsOfCurrentPost(tags)
-    } 
-    props.store.currentPost[name] = value
+    }
+
+    const currentPost = props.store.currentPost
+    currentPost[name] = value
+    props.store.setCurrentPost(currentPost) 
+    
   }
 
   async function handleSubmit (event) {
@@ -59,7 +63,9 @@ const CreatePost = (props) => {
   }
 
   const [canAppend, setCanAppend] = useState();
-  useEffect(() => setCanAppend(props.store.canWrite(props.store?.identity?.id)), []);
+  useEffect(() => {
+    setCanAppend(props.store.canWrite(props.store?.identity?.id))
+  }, []);
 
   return !canAppend ? (
     ""
@@ -89,6 +95,9 @@ const CreatePost = (props) => {
         placeholder="Body"
       />
       <br />
+
+      {
+        (props.store.currentPost?.address!==undefined)?(
       <Box
         boxSize="sm"
         bg="tomato"
@@ -104,7 +113,8 @@ const CreatePost = (props) => {
         <h2 className="message">
           Drag media files here to add them to the blog post
         </h2>
-      </Box>
+      </Box>):("")}
+      
       <br />
       <Stack direction="row" spacing={4} align="center">
         {props.store.currentPost?.hash === undefined ? (

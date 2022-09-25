@@ -18,8 +18,8 @@ const BlogIndex = (props) => {
   const [tag, setTag] = useState();
   useEffect(() => {
 
-    props.store.currentPost === undefined
-
+    props.store.currentPost = undefined
+    console.log('loading index',props.store.currentPost)
     if(props.match.params.tag!==undefined) setTag(props.match.params.tag)
 
     if(props.match.params.hash!==undefined){
@@ -72,7 +72,7 @@ const BlogIndex = (props) => {
                   </h2>
                   <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
                 </header>
-                <section><ReactMarkdown  components={ChakraUIRenderer()} children={post.body} skipHtml />
+                <section><ReactMarkdown components={ChakraUIRenderer()} children={post.body} skipHtml />
                 </section>
                 <HStack spacing={4}>
                   {
