@@ -1,10 +1,28 @@
 import React, {useEffect,useState} from "react";
 import { observer } from 'mobx-react'
-import { Button, Input,Textarea,Stack,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
+import { Button, Input,Textarea,Stack,Box } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons'
+import { getDataTransferFiles } from '../utils/helper.js'
 import '../styles/CreatePlaylist.scss'
 
 const CreatePost = (props) => {
+  const [dragActive, setDragActive] = useState(false)
+  // const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
+  async function onDrop (event) {
+    event.preventDefault()
+    setDragActive(false)
+    const files = getDataTransferFiles(event)
+
+    try {
+      console.log("props.store.currenMediaFeed.id",props.store.currentMediaFeed.id)
+      await store.sendFiles(files, props.store.currentMediaFeed.id)
+      console.log('media feed length now:',props.store.currentMediaFeed?.all.length)
+      props.refreshFunc(props.store.currentMediaFeed?.all)
+    } catch (err) {
+      console.log("ERROR", err)
+      throw err
+    }
+ }
 
   function getHashTags(inputText) {  
     var regex = /(?:^|\s)(?:#)([a-zA-Z\d]+)/gm;
@@ -14,7 +32,8 @@ const CreatePost = (props) => {
         matches.push(match[1]);
     }
     return matches;
-}
+  }
+
   const handleValues = (e) => {
     if(props.store.currentPost===undefined) props.store.currentPost = {}
     const {name,value} = e.target
@@ -23,7 +42,7 @@ const CreatePost = (props) => {
       props.store.setTagsOfCurrentPost(tags)
     } 
     props.store.currentPost[name] = value
-   }
+  }
 
   async function handleSubmit (event) {
     event.preventDefault()
@@ -38,11 +57,13 @@ const CreatePost = (props) => {
       props.store.currentPost = undefined
     } 
   }
+
   const [canAppend, setCanAppend] = useState();
   useEffect(() => setCanAppend(props.store.canWrite(props.store?.identity?.id)), []);
 
-  
-  return !canAppend ? ("") : (
+  return !canAppend ? (
+    ""
+  ) : (
     <form onSubmit={handleSubmit}>
       <Input
         name="subject"
@@ -68,6 +89,22 @@ const CreatePost = (props) => {
         placeholder="Body"
       />
       <br />
+      <Box
+        boxSize="sm"
+        bg="tomato"
+        w="100%"
+        className="dragZone"
+        onDragOver={event => {
+          event.preventDefault()
+          // event.originalEvent.dataTransfer.setData('text/plain', 'anything');
+          !dragActive && setDragActive(true)
+        }}
+        onDrop={event => onDrop(event)}
+      >
+        <h2 className="message">
+          Drag media files here to add them to the blog post
+        </h2>
+      </Box>
       <br />
       <Stack direction="row" spacing={4} align="center">
         {props.store.currentPost?.hash === undefined ? (

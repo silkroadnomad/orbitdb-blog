@@ -16,7 +16,6 @@ import Capabilities from "./Capabilities";
 function SettingsDrawer(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
-  
     return (
       <>
         <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>

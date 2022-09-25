@@ -23,7 +23,6 @@ const BlogIndex = (props) => {
     if(props.match.params.tag!==undefined) setTag(props.match.params.tag)
 
     if(props.match.params.hash!==undefined){
-  
         let dbName = props.match.params.hash;
         if(props.match.params.name!==undefined)
           dbName = dbName + '/' + props.match.params.name
@@ -33,8 +32,6 @@ const BlogIndex = (props) => {
         runConnctOrbit({repo:"./ipfs-repo-alt"})
         props.store.loadPosts().then(console.log('loaded db from url',dbName))
     }
-
-  
   }, []);
 
   if (props.store.posts.length === 0) {
@@ -53,12 +50,12 @@ const BlogIndex = (props) => {
       <Seo title={process.env.TITLE} />
       <ol style={{ listStyle: `none` }}>
         {
-          props.store.posts.slice().sort((a,b) => {return new Date(b.createdAt) - new Date(a.createdAt);}).map((post,i) => {
+          props.store.posts.slice()?.sort((a,b) => {return new Date(b.createdAt) - new Date(a.createdAt);})?.map((post,i) => {
           if(post.subject===undefined) return (<li key={"empty_"+i}>&nbsp;</li>) //for some reason elements stay undefined in stores array after deleting them
           const subject  = post.name || post.subject
           const slug = post.hash
           const postDate = post.createdAt?new Date(post.createdAt).toISOString():undefined
-          const tagsLowerCase = post.tags.map( e => e.toLowerCase())
+          const tagsLowerCase = post.tags?.map( e => e.toLowerCase())
           if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (
             <li key={slug}>

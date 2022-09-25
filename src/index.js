@@ -8,7 +8,9 @@ import BlogPost from './components/BlogPost'
 import Settings from './components/Settings'
 import BlogIndex from './pages/BlogIndex'
 
+import './console/help'
 import './console/cp' //javascript console browser 
+import './console/dropCurrentMediaFeed'
 
 import './styles/style.css'
 import './styles/normalize.css'

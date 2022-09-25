@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Container,Grid, GridItem } from '@chakra-ui/react'
 import SettingsDrawer from './SettingsDrawer'
 const Layout = ({ location, title, children, store }) => {
-
   const rootPath = "/"
   const tagPath = "/tag"
   const dbPath = "/db"
@@ -28,7 +27,7 @@ const Layout = ({ location, title, children, store }) => {
   }
 
   return (
-    <Container>
+    <Container maxW='container.sm'>
 
         <header className="global-header">{header}</header>
         <main>{children}</main>

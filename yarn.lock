@@ -4691,6 +4691,11 @@ cborg@^1.3.1, cborg@^1.3.3, cborg@^1.3.4, cborg@^1.5.4, cborg@^1.6.0:
   resolved "https://registry.yarnpkg.com/cborg/-/cborg-1.9.4.tgz#85354ee6e0fe017dd34e300c3dcd044407a27800"
   integrity sha512-ltobKo17xKYJolhg8UxQhvzcqXhjtUnovwe9Xx59Izo32gLwozGoJs/efp+8dZ5+zu9pNJYnHtmp6iJnDUapww==
 
+chakra-ui-contextmenu@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/chakra-ui-contextmenu/-/chakra-ui-contextmenu-1.0.4.tgz#f19c2a38d9ab92d41f29b477c7dd798b6f2df6af"
+  integrity sha512-VoEFhF4Xguj7n4RZeKoRUlMhbX4cosQg5Jke8UHdfGCduCpHyo0/vD+vJ76g6hIUisCBDZYTlfO4hMoJ60sjvg==
+
 chakra-ui-markdown-renderer@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/chakra-ui-markdown-renderer/-/chakra-ui-markdown-renderer-4.1.0.tgz#f50b76151455f404900a7b9da9f0f43dcd8d4088"

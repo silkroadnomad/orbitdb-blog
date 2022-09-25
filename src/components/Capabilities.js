@@ -23,12 +23,31 @@ const Capabilities = (props) => {
       event.preventDefault();
       console.log('remove '+permission+" permission from ",identity)
       props.store.feed.access.revoke(permission,identity);
+
+      //change permission recursivly of all posts feeds
+      props.store.feed.all.forEach( async (f) =>{
+        console.log(f)
+          const mediaFeedOfPost = props.store.odb.stores[f.payload.value.address] || await props.store.odb.open(f.payload.value.address)
+          await mediaFeedOfPost.load()
+          mediaFeedOfPost.access.revoke(permission,identity);
+          console.log(`revoking ${permission} permission for id:${identity} for feed ${f.payload.value.address}`) 
+      });
     }
 
     function addPermission(values) {
-      console.log('adding '+values.permission+" permission to ",values.identity)
+      console.log('granting '+values.permission+" permission to ",values.identity)
       props.store.feed.access.grant(values.permission,values.identity);
-    } 
+
+      //change permission recursivly of all posts feeds //TODO do this only if wanted 
+      props.store.feed.all.forEach(async (f) => {
+        console.log(f)
+        const mediaFeedOfPost = props.store.odb.stores[f.payload.value.address] || await props.store.odb.open(f.payload.value.address)
+        await mediaFeedOfPost.load()
+        mediaFeedOfPost.access.grant(values.permission,values.identity);
+
+        console.log(`granting ${values.permission} permission for id:${values.identity} for feed ${f.payload.value.address}`) 
+      });
+    }
 
     let capabilities 
     if(props.store?.capabilities!==undefined) capabilities = values( props.store?.capabilities)

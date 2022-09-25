@@ -35,7 +35,6 @@
 - show currently connected peers
 
 #### ui - todos
-- delete uploaded media from post
 - create component which lists posts of a certain tag
 - add comments (make writeable to everybody)
 - display author (identity) next to post (simply id)
@@ -54,6 +53,10 @@
 3. running vpn connections seem to disturb connecting via peer2peer
 
 ## Changes
+- 2022-09-25
+    - delete uploaded media from post
+    - change permissions recursively also for all mediethreads of all posts
+    - when creating new post inherit admin and write permissions from blog 
 - 2022-09-21
     - upload photos via drag & drop to a post
     - display the photos below the post 

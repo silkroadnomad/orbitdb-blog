@@ -53,6 +53,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@ezerous/eth-identity-provider": "^0.2.0",
+    "chakra-ui-contextmenu": "^1.0.4",
     "chakra-ui-markdown-renderer": "^4.1.0",
     "ethers": "^5.7.0",
     "framer-motion": "^4.0.0",

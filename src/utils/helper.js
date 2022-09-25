@@ -57,6 +57,7 @@ export  function getFileBuffer (ipfs, hash, options = {}) {
   }
 
   export async function loadImgURL (ipfs, cid, mime, limit) {
+    console.log('loading image from cid ',cid)
     if (cid == "" || cid == null || cid == undefined) {
         return;
     }
