@@ -65,7 +65,7 @@ const CreatePost = (props) => {
   const [canAppend, setCanAppend] = useState();
   useEffect(() => {
     setCanAppend(props.store.canWrite(props.store?.identity?.id))
-  }, []);
+  }, [props.store?.feed]);
 
   return !canAppend ? (
     ""
@@ -110,9 +110,7 @@ const CreatePost = (props) => {
         }}
         onDrop={event => onDrop(event)}
       >
-        <h2 className="message">
-          Drag media files here to add them to the blog post
-        </h2>
+        <h2 className="message">Drag media files here to add them to the blog post</h2>
       </Box>):("")}
       
       <br />
