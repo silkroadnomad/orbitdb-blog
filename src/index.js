@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect,useState } from "react"
 import { ChakraProvider } from '@chakra-ui/react'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import connectOrbit from './orbitdb/connectOrbit'
@@ -14,15 +14,53 @@ import './console/dropCurrentMediaFeed'
 
 import './styles/style.css'
 import './styles/normalize.css'
+import {loadImgURL} from './utils/helper'
+
 
 const App = () => {
 
+  const OrbitImage = (props) => {
+    
+    const MAX_BYTES = 100024000
+    const [imgData, setImgData] = useState();
+    console.log('OrbitImage.props',props)
+  
+    useEffect(() => {
+        console.log('loading image data',props.store.ipfs)
+        const loadData = async () => {
+            await connectOrbit(store,{noAuth:true})
+            const cid = props.match.params.cid
+            const mimeType = props.match.params.mime.replace('_','/')  
+            if(cid!==undefined) 
+              console.log("calling orbitimage cid",cid,mimeType)
+            else 
+            console.log('image param undefined')
+            const _imgData = await loadImgURL(props.store.ipfs,cid,mimeType,MAX_BYTES)
+            console.log("_imgData",_imgData)
+            setImgData(_imgData)
+        }
+
+        //if(props.store.ipfs) 
+        loadData()
+
+    }, [props.store.ipfs]);
+
+    return (
+      <div>
+        <img src={imgData} />
+      </div>
+    )
+  }
+
   useEffect(() => {
-    connectOrbit(store)
+    console.log("window.location.hash",window.location.hash)
+    if(window.location.hash.indexOf('#/images/')===-1)
+      connectOrbit(store) //don't load orbit again when loading an image from ipfs via OrbitImage
   },[store.dbName])
     return (
       <ChakraProvider>
           <Router>
+            <Route path="/images/:cid/:mime" component={props => <OrbitImage {...props} store={store} />}/>  
             <Route exact path="/tag/:tag" component={props => <BlogIndex {...props} store={store} />}/>  
             <Route path="/orbitdb/:hash/:name" component={(props) => <BlogPost {...props} store={store}/> }/>
             <Route path="/db/:hash/:name" component={props => <BlogIndex {...props} store={store} />}/>

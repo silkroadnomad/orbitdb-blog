@@ -7,11 +7,12 @@ import { MenuList, MenuItem } from '@chakra-ui/menu';
 const MediaItem = (props) => {
 
     const [imgData, setImgData] = useState();
+    const MAX_BYTES = 100024000
 
     useEffect(() => {
-        console.log("MediaItem",props.item.payload.value.meta)
+        console.log("MediaItem",props.item.payload.value.meta)  
         const loadData = async () => {
-            const _imgData = await loadImgURL(props.store.ipfs,props.item.payload.value.content,props.item.payload.value.meta.mimeType, 1024000);
+            const _imgData = await loadImgURL(props.store.ipfs,props.item.payload.value.content,props.item.payload.value.meta.mimeType, MAX_BYTES);
             setImgData(_imgData)
         }
         loadData()
@@ -43,7 +44,9 @@ const MediaItem = (props) => {
               src={imgData}
               alt={props.item.payload.value.meta.name}
             />
+            <div>CID:{props.item.payload.value.content}</div>
           </div>
+
         )}
       </ContextMenu>
     )

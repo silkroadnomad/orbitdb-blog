@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import Moment from 'react-moment';
-import { Divider,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
+import { Divider,HStack,Tag,TagLabel,Img } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { observer } from 'mobx-react'
 import Bio from "./bio"
@@ -9,17 +9,25 @@ import Layout from "./layout"
 import Seo from "./seo"
 import CreatePost from "./CreatePost"
 import MediaItem from "./MediaItem"
+import OrbitImageComponent from "./OrbitImageComponent";
+
 
 const BlogPost = (props) => { 
 
   const [media, setMedia] = useState([])
+
   const [nextPost,setNextPost] = useState({address:'#'})
   const [previousPost,setPreviousPost] = useState({address:'#'})
 
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
-  
+
+  const getOrbitImageComponent = (otherProps) => {
+              console.log("orbitImage",props)
+    return (<OrbitImageComponent store={props.store} {...otherProps}/>)
+  }
+
   useEffect(() => {
-    
+  
     function load () {
       setNextPost( props.store.nextPost(address))
       setPreviousPost( props.store.previousPost(address))
@@ -28,11 +36,12 @@ const BlogPost = (props) => {
     }
     
     load()
+
     return () => {
       setMedia([])  
     }
   }, [props.store.isOnline,address])
-
+  
   return (
     <Layout location={props.location} title={props.store.currentPost?.subject} store={props.store}>
       <Seo
@@ -86,7 +95,7 @@ const BlogPost = (props) => {
           </p>
         </header>
 
-        <ReactMarkdown>{props.store.currentPost?.body}</ReactMarkdown>
+        <ReactMarkdown components={{ img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
 
         <HStack spacing={4}>
           {props.store.currentPost?.tags?.map(tagName => (
@@ -101,6 +110,7 @@ const BlogPost = (props) => {
             </Tag>
           ))}
         </HStack>
+
         {
           media?.map((item,i) => (<MediaItem key={i} item={item} store={store} />))
         }
@@ -138,5 +148,4 @@ const BlogPost = (props) => {
     </Layout>
   )
 }
-
 export default observer(BlogPost) 

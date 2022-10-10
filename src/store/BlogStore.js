@@ -20,7 +20,6 @@ class BlogStore {
     makeAutoObservable(this)
     this.ipfs = null;
     this.odb = null;
-    // this.feed = null;
   }
 
   async connect(ipfs, options = {}) {
@@ -79,7 +78,7 @@ class BlogStore {
       console.log("adding newPostObj to posts store", newPostObj);
       this.posts.push(newPostObj);
     }
-  };
+  }
 
   async loadPosts() {
 
@@ -114,7 +113,7 @@ class BlogStore {
             this.posts = [] //empty store because it gets reloaded anyways
           }
         } 
-      }
+      } 
     });
     await this.feed.load();
   }

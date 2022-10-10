@@ -6,12 +6,12 @@ const connectOrbit = async (store,options) => {
     let dbName =  store.dbName===undefined?process.env.DB_NAME:store.dbName
     if(options===undefined) options = {}
     options.dbName= dbName;
-
+  
     let startIPFSObj
     console.log("store.ipfs",store.ipfs)
     if(store.ipfs===undefined || store.ipfs===null){
       console.log('starting ipfs')
-      startIPFSObj = await startIPFS()
+      startIPFSObj = await startIPFS(options)
       console.log('startIPFSObj.ipfs',startIPFSObj.ipfs)
       console.log("store.identity",store.identity)
       if(store?.identity?.id === undefined) options.identity = startIPFSObj.identity

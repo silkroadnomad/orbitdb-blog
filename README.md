@@ -35,6 +35,8 @@
 - show currently connected peers
 
 #### ui - todos
+- alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
+- add markdown editor https://morioh.com/p/46067e5674d2
 - bug: when deleting media from post its deleting a wrong media from orbit
 - when using navigation - its not possible to add new media - identity seems not correct 
 - add a route to react router which delivers a media file of a certain mediafeed 

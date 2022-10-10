@@ -9,8 +9,8 @@ export const startIPFS = async (options) => {
       EXPERIMENTAL: { pubsub: true },
       preload: { "enabled": false },
       config: {
-        // Bootstrap: [
-        // ],
+        Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3 '
+        ],
         Addresses: {
           Swarm: [
             // Use IPFS dev webrtc signal server
@@ -22,19 +22,21 @@ export const startIPFS = async (options) => {
         },
       }
     })
-
+    
     let identity
-    try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const wallet = provider.getSigner();
-        await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
-        identity = await Identities.createIdentity({
-          type: "ethereum",
-          wallet,
-        })
-        console.log("Identity created", identity)
-    } catch (ex) {
-      console.log("Identity not given.")
+    if(options.noAuth===undefined){
+      try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const wallet = provider.getSigner();
+          await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
+          identity = await Identities.createIdentity({
+            type: "ethereum",
+            wallet,
+          })
+          console.log("Identity created", identity)
+      } catch (ex) {
+        console.log("Identity not given.")
+      }
     }
 
     return {ipfs, identity};

@@ -6,8 +6,8 @@ import { getDataTransferFiles } from '../utils/helper.js'
 import '../styles/CreatePlaylist.scss'
 
 const CreatePost = (props) => {
+
   const [dragActive, setDragActive] = useState(false)
-  // const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
   async function onDrop (event) {
     event.preventDefault()
     setDragActive(false)
@@ -37,6 +37,7 @@ const CreatePost = (props) => {
   const handleValues = (e) => {
     if(props.store.currentPost===undefined) props.store.currentPost = {}
     const {name,value} = e.target
+
     if(value.indexOf("#")!=undefined){
       const tags = getHashTags(value)
       props.store.setTagsOfCurrentPost(tags)
