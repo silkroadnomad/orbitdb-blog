@@ -135,6 +135,10 @@ class BlogStore {
       console.log('granting identity to new feed',identity)
       newMediaFeed.access.grant("admin",identity)
     })
+    this.feed.access.capabilities.write.forEach((identity)=>{
+      console.log('granting identity to new feed',identity)
+      newMediaFeed.access.grant("write",identity)
+    })
     
     console.log('newMediaFeed.capabilities',newMediaFeed.access.capabilities)
     const p = {
