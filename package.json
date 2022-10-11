@@ -64,6 +64,7 @@
     "orbit-db": "^0.28.6",
     "orbit-db-identity-provider": "0.4.0",
     "orbit-db-io": "1.0.2",
+    "orbit-db-keystore": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",

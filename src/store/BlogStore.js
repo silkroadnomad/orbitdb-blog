@@ -128,10 +128,12 @@ class BlogStore {
     const newMediaFeed = await this.odb.feed(this.currentPost.subject, {
       identity: this.identity, 
       accessController: {
-        type: 'orbitdb',
-        admin: this.feed.access.capabilities.admin,
-        write: this.feed.access.capabilities.write
+        type: 'orbitdb'
       }
+    })
+    this.feed.access.capabilities.admin.forEach((identity)=>{
+      console.log('granting identity to new feed',identity)
+      newMediaFeed.access.grant("admin",identity)
     })
     
     console.log('newMediaFeed.capabilities',newMediaFeed.access.capabilities)
