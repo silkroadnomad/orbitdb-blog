@@ -1,6 +1,6 @@
 import React, { useEffect,useState }  from "react"
 import { Link as ReachLink  } from 'react-router-dom'
-import { Link,HStack,Tag,TagLabel,TagCloseButton } from '@chakra-ui/react'
+import { Link,HStack,Tag,TagLabel } from '@chakra-ui/react'
 import { observer } from 'mobx-react'
 import Moment from 'react-moment';
 import Bio from "../components/bio"
@@ -11,11 +11,17 @@ import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import ReactMarkdown from 'react-markdown'
 import { CircularProgress } from '@chakra-ui/react'
 import connectOrbit from '../orbitdb/connectOrbit'
+import OrbitImageComponent from "../components/OrbitImageComponent";
 
 const BlogIndex = (props) => {
   
   const runConnctOrbit = async (options) => await connectOrbit(props.store,options)
   const [tag, setTag] = useState();
+  
+  const getOrbitImageComponent = (otherProps) => {
+    return (<OrbitImageComponent store={props.store} {...otherProps}/>)
+  }
+
   useEffect(() => {
 
     props.store.currentPost = undefined
@@ -23,6 +29,7 @@ const BlogIndex = (props) => {
     if(props.match.params.tag!==undefined) setTag(props.match.params.tag)
 
     if(props.match.params.hash!==undefined){
+
         let dbName = props.match.params.hash;
         if(props.match.params.name!==undefined)
           dbName = dbName + '/' + props.match.params.name
@@ -72,7 +79,9 @@ const BlogIndex = (props) => {
                   </h2>
                   <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
                 </header>
-                <section><ReactMarkdown components={ChakraUIRenderer()} children={post.body} skipHtml />
+                <section>
+                {/*<ReactMarkdown components={ChakraUIRenderer()} children={post.body} skipHtml />*/}
+                <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{post.body}</ReactMarkdown>
                 </section>
                 <HStack spacing={4}>
                   {

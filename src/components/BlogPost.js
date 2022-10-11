@@ -9,6 +9,7 @@ import Layout from "./layout"
 import Seo from "./seo"
 import CreatePost from "./CreatePost"
 import MediaItem from "./MediaItem"
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import OrbitImageComponent from "./OrbitImageComponent";
 
 
@@ -20,9 +21,7 @@ const BlogPost = (props) => {
   const [previousPost,setPreviousPost] = useState({address:'#'})
 
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
-
   const getOrbitImageComponent = (otherProps) => {
-              console.log("orbitImage",props)
     return (<OrbitImageComponent store={props.store} {...otherProps}/>)
   }
 
@@ -95,7 +94,7 @@ const BlogPost = (props) => {
           </p>
         </header>
 
-        <ReactMarkdown components={{ img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
+        <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
 
         <HStack spacing={4}>
           {props.store.currentPost?.tags?.map(tagName => (
