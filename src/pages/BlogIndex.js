@@ -80,9 +80,6 @@ const BlogIndex = (props) => {
                   <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
                 </header>
                 <section>
-                {/*<ReactMarkdown components={ChakraUIRenderer()} children={post.body} skipHtml />*/}
-                <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{post.body}</ReactMarkdown>
-                </section>
                 <HStack spacing={4}>
                   {
                     post.tags?.map((tagName) => (
@@ -96,7 +93,9 @@ const BlogIndex = (props) => {
                       </Tag>
                       ))
                   }
-              </HStack>
+                </HStack>
+                <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{post.body}</ReactMarkdown>
+                </section>
               </article>
             </li>
           )

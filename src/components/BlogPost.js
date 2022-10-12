@@ -93,9 +93,6 @@ const BlogPost = (props) => {
             <Moment date={props.store.currentPost?.createdAt} />
           </p>
         </header>
-
-        <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
-
         <HStack spacing={4}>
           {props.store.currentPost?.tags?.map(tagName => (
             <Tag
@@ -109,6 +106,7 @@ const BlogPost = (props) => {
             </Tag>
           ))}
         </HStack>
+        <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
 
         {
           media?.map((item,i) => (<MediaItem key={i} item={item} store={store} />))

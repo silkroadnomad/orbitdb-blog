@@ -140,7 +140,7 @@ class BlogStore {
       newMediaFeed.access.grant("write",identity)
     })
     
-    console.log('newMediaFeed.capabilities',newMediaFeed.access.capabilities)
+    console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities)
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
@@ -230,7 +230,7 @@ class BlogStore {
           const mediaElements = []
           if(dbAddress===mediaFeedOfPost.id){
             mediaFeedOfPost.all.map( m => mediaElements.push(m));
-            console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+            console.log('ready - mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
             setMediaFunc(mediaElements)
           }
         });
@@ -245,7 +245,7 @@ class BlogStore {
         await mediaFeedOfPost.load()
         this.currentMediaFeed = mediaFeedOfPost
       } catch (ex) {
-        console.log(ex, "comments feed could not loaded")
+        console.log(ex, "comments feed could not loaded",this.currentMediaFeed )
       } 
     } else console.log('odb not loaded')
   }
@@ -310,7 +310,7 @@ class BlogStore {
   async addPost(address, data) {
     console.log("adding data to db on address", this.currentMediaFeed);
     if (this.currentMediaFeed) {
-      console.log("mediaFeed permissions",this.currentMediaFeed.access.capabilities)
+      console.log("mediaFeed permissions",this.currentMediaFeed?.access?.capabilities)
       const hash = await this.currentMediaFeed.add(data);
       console.log("got hash", hash);
       await this.currentMediaFeed.load();

@@ -35,10 +35,12 @@
 - show currently connected peers
 
 #### ui - todos
+- only display posts in "published" state, add other states "draft","archived"
+- authentication should be requested when clicking authentication button only
 - alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
 - add markdown editor https://morioh.com/p/46067e5674d2
 - bug: when deleting media from post its deleting a wrong media from orbit
-- when using navigation - its not possible to add new media - identity seems not correct 
+- bug: when using navigation - its not possible to add new media - identity seems not correct 
 - add a route to react router which delivers a media file of a certain mediafeed 
 - create component which lists posts of a certain tag
 - add comments (make writeable to everybody)
@@ -58,6 +60,8 @@
 3. running vpn connections seem to disturb connecting via peer2peer
 
 ## Changes
+- 2022-10-11
+    - 
 - 2022-09-25
     - delete uploaded media from post
     - change permissions recursively also for all mediethreads of all posts
