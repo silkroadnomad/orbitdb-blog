@@ -56,8 +56,9 @@ const CreatePost = (props) => {
       props.history.push("/")
       props.store.currentPost = undefined
     }else{
+      //udpate existing post (first delete old and then create new one - don't create new media feed in such a situation)
       await props.store.removePost()
-      await props.store.createNewPost() 
+      await props.store.createNewPost(true) //true means update 
       props.history.push("/") 
       props.store.currentPost = undefined
     } 

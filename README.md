@@ -2,7 +2,8 @@
 ## features
 - create your own decentralized blog with your own identity key
 - add other identities (metamask supported right now) in order to allow writing to the blog
-- (planed) upload media post attachments to ipfs
+- upload images to ipfs as attachments for the post
+- images stored anywhere on ipfs can be embedded inside markdown using IPFS CID instead filename
 - (planed) writing comments (everybody allowed) 
 - (planed) writing comments only against btc deposit to prevent spam 
 - (planed) create several react-ui components to display features posts and/or posts with a certain tag
@@ -35,19 +36,25 @@
 - show currently connected peers
 
 #### ui - todos
-- only display posts in "published" state, add other states "draft","archived"
-- authentication should be requested when clicking authentication button only
-- alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
-- add markdown editor https://morioh.com/p/46067e5674d2
-- bug: when deleting media from post its deleting a wrong media from orbit
-- bug: when using navigation - its not possible to add new media - identity seems not correct 
-- add a route to react router which delivers a media file of a certain mediafeed 
+- when loading main feed with posts, media feeds must be loaded too and load all media so they can be displayed in post
+- when deleting post feed mediafeed must be deleted too
+- generate
+- Index-Page modifications
+    - alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
+    - only display posts in "published" state, add other states "draft","archived"
+    - authentication should be requested when clicking authentication button only
+    - display author (identity) next to post (simply id)
+    - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
+- View Edit/Create Post page
+    - display author (identity) next to post (simply id)
+    - change/edit post date
+    - when deleting a post ask user before action
+    - add markdown editor to EditPost https://morioh.com/p/46067e5674d2
+    - bug: when deleting media from post its deleting a wrong media from orbit (last first - wrong index)
+    - bug: when using navigation - its not possible to add new media - identity seems not correct 
+    - add comments (make writeable to everybody)
+
 - create component which lists posts of a certain tag
-- add comments (make writeable to everybody)
-- display author (identity) next to post (simply id)
-- when deleting a post ask user before action
-- change/edit post date
-- responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
 - store profile data in orbit-db (bio, seo, profile pic)
 - store profile information under id
 

@@ -121,44 +121,55 @@ class BlogStore {
   /**
    * Create a new comment feed for every post
    */
-  async createNewPost() {
+  async createNewPost(update) {
 
-    console.log("creating new postFeed", this.currentPost.subject)
+    let newMediaFeed = this.currentMediaFeed
+    
+    if(update===undefined){ //only create new feed if we create it first time (in case of update no need to do that)
+      console.log(`creating new postFeed update:${(update===true)}`, this.currentPost.subject)
+      newMediaFeed = await this.odb.feed(this.currentPost.subject, {
+        identity: this.identity, 
+        accessController: {
+          type: 'orbitdb'
+        }
+      })
+    }
 
-    const newMediaFeed = await this.odb.feed(this.currentPost.subject, {
-      identity: this.identity, 
-      accessController: {
-        type: 'orbitdb'
+    this.feed.access.capabilities.admin.forEach((identity) => {
+      //only add if not there yet
+      if(Array.from(newMediaFeed?.access?.capabilities?.admin?.keys()  || []).indexOf(identity)===-1){  
+        newMediaFeed.access.grant("admin",identity)
+        console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
       }
     })
-    this.feed.access.capabilities.admin.forEach((identity)=>{
-      console.log('granting identity to new feed',identity)
-      newMediaFeed.access.grant("admin",identity)
+
+    this.feed.access.capabilities.write.forEach((identity) => {
+      console.log(`granting admin identity to ${identity} for new feed`,newMediaFeed)
+      //only add if not there yet
+      if(Array.from(newMediaFeed?.access?.capabilities?.write?.keys()  || []).indexOf(identity)===-1)  
+        newMediaFeed.access.grant("write",identity)
+      console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
     })
-    this.feed.access.capabilities.write.forEach((identity)=>{
-      console.log('granting identity to new feed',identity)
-      newMediaFeed.access.grant("write",identity)
-    })
-    
-    console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities)
+
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
       tags: this.currentPost.tags?this.currentPost.tags:[],
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
-      address: newMediaFeed.address.toString(),
+      address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
 
     const hash = await this.feed.add(p);
     return hash;
   }
 
-  async removePost() {
+  async removePost(absolute) {
     const filteredData = this.posts.filter((item) => {
       return item.hash !== this.currentPost.hash
     });
 
     this.posts.replace(filteredData);
+    if(absolute) this.currentMediaFeed.drop()
     const hash = await this.feed.remove(this.currentPost.hash);
     return hash;
   }
