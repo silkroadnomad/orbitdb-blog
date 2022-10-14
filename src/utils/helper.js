@@ -63,7 +63,9 @@ export  function getFileBuffer (ipfs, hash, options = {}) {
     }
     const res = ipfs.cat(cid)
     for await (const file of res) {
-      let blob = new Blob([file], {type:"image/png"})
-      return URL.createObjectURL(blob)
+      let blob = new Blob([file], {type:mime})
+      const url = URL.createObjectURL(blob)
+      console.log("found cid created blob url",url)
+      return url
     }
   }

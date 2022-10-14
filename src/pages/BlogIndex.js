@@ -19,6 +19,7 @@ const BlogIndex = (props) => {
   const [tag, setTag] = useState();
   
   const getOrbitImageComponent = (otherProps) => {
+    console.log('checking markdown document for ipfs images ...')
     return (<OrbitImageComponent store={props.store} {...otherProps}/>)
   }
 

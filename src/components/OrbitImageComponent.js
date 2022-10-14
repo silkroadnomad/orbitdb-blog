@@ -12,12 +12,12 @@ const OrbitImageComponent = ({...props}) => {
             const _url = await loadImgURL(props.store.ipfs,cid,mimeType, MAX_BYTES)
             setUrl(_url)
         }
-        
-        props?.store?.currentMediaFeed?.all?.map    ((item)=>{
-            if(item.payload.value.content===props.src){
-                loadData(props.src,item.payload.value.meta.mimeType)
-            }
-        })
+        loadData(props.src,"images/jpeg")
+        // props?.store?.currentMediaFeed?.all?.map((item)=>{
+        //     if(item.payload.value.content===props.src){
+                // loadData(props.src,item.payload.value.meta.mimeType)
+            // }
+        // })
        
     }, []);
      return (<Img  {...props} src={url} />)
