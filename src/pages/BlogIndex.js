@@ -58,11 +58,12 @@ const BlogIndex = (props) => {
       <Seo title={process.env.TITLE} />
       <ol style={{ listStyle: `none` }}>
         {
-          props.store.posts.slice()?.sort((a,b) => {return new Date(b.createdAt) - new Date(a.createdAt);})?.map((post,i) => {
+          props.store.posts.slice()?.sort((a,b) => {return new Date(b.postDate) - new Date(a.postDate);})?.map((post,i) => {
           if(post.subject===undefined) return (<li key={"empty_"+i}>&nbsp;</li>) //for some reason elements stay undefined in stores array after deleting them
           const subject  = post.name || post.subject
           const slug = post.hash
-          const postDate = post.createdAt?new Date(post.createdAt).toISOString():undefined
+          const postDate = post.postDate
+          console.log(post)
           const tagsLowerCase = post.tags?.map( e => e.toLowerCase())
           if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (

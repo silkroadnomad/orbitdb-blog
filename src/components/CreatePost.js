@@ -4,7 +4,7 @@ import { Button, Input,Textarea,Stack,Box } from '@chakra-ui/react'
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons'
 import { getDataTransferFiles } from '../utils/helper.js'
 import '../styles/CreatePlaylist.scss'
-
+import moment from 'moment'
 const CreatePost = (props) => {
 
   const [dragActive, setDragActive] = useState(false)
@@ -36,17 +36,24 @@ const CreatePost = (props) => {
 
   const handleValues = (e) => {
     if(props.store.currentPost===undefined) props.store.currentPost = {}
-    const {name,value} = e.target
-
-    if(value.indexOf("#")!=undefined){
-      const tags = getHashTags(value)
-      props.store.setTagsOfCurrentPost(tags)
-    }
-
-    const currentPost = props.store.currentPost
-    currentPost[name] = value
-    props.store.setCurrentPost(currentPost) 
+    let {name,value} = e.target
     
+    if(name === "postDate" && value.length===10){ 
+        if(moment(value).isValid()){
+          props.store.currentPost["postDate"] = value
+          // props.store.currentPost["createdAt"] = value
+        }
+    }
+    else {
+      if(value.indexOf("#")!==undefined){
+        const tags = getHashTags(value)
+        props.store.setTagsOfCurrentPost(tags)
+      }
+
+      const currentPost = props.store.currentPost
+      currentPost[name] = value
+      props.store.setCurrentPost(currentPost) 
+    }
   }
 
   async function handleSubmit (event) {
@@ -73,13 +80,11 @@ const CreatePost = (props) => {
     ""
   ) : (
     <form onSubmit={handleSubmit}>
-      <Input
+        <Input
         name="subject"
         type="text"
         value={
-          props.store.currentPost?.subject
-            ? props.store.currentPost?.subject
-            : ""
+          props.store.currentPost?.subject ? props.store.currentPost?.subject : ""
         }
         onChange={handleValues}
         placeholder="Subject"
@@ -116,6 +121,15 @@ const CreatePost = (props) => {
       </Box>):("")}
       
       <br />
+      <Input
+          name="postDate"
+          type="text"
+          value={  props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:props.store.currentPost?.createdAt!==undefined?moment(props.store.currentPost?.createdAt).format("YYYY-MM-DD"):moment(new Date()).format("YYYY-MM-DD") }
+          defaultValue={ props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:moment(new Date()).format("YYYY-MM-DD")}
+          onChange={handleValues}
+          placeholder="Post Date"
+      /> 
+      <br/>
       <Stack direction="row" spacing={4} align="center">
         {props.store.currentPost?.hash === undefined ? (
           <Button

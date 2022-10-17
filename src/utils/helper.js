@@ -1,3 +1,4 @@
+// import {fileTypeFromBuffer, fileTypeFromStream} from 'file-type';
 export function getDataTransferFiles (event) {
     const files = []
     if (event.dataTransfer.items) {
@@ -56,14 +57,14 @@ export  function getFileBuffer (ipfs, hash, options = {}) {
     })
   }
 
-  export async function loadImgURL (ipfs, cid, mime, limit) {
+  export async function loadImgURL (ipfs, cid) {
     console.log('loading image from cid ',cid)
     if (cid == "" || cid == null || cid == undefined) {
         return;
     }
     const res = ipfs.cat(cid)
     for await (const file of res) {
-      let blob = new Blob([file], {type:mime})
+      let blob = new Blob([file], {type:"image/jpeg"})
       const url = URL.createObjectURL(blob)
       console.log("found cid created blob url",url)
       return url

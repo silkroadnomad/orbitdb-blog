@@ -87,10 +87,10 @@ const BlogPost = (props) => {
           </h1>
           <p>
             <Moment fromNow ago>
-              {props.store.currentPost?.createdAt}
+              {props.store.currentPost?.postDate}
             </Moment>{" "}
             ago &nbsp;
-            <Moment date={props.store.currentPost?.createdAt} />
+            <Moment date={props.store.currentPost?.postDate} />
           </p>
         </header>
         <HStack spacing={4}>

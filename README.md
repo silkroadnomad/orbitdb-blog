@@ -47,7 +47,6 @@
     - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
 - View Edit/Create Post page
     - display author (identity) next to post (simply id)
-    - change/edit post date
     - when deleting a post ask user before action
     - add markdown editor to EditPost https://morioh.com/p/46067e5674d2
     - bug: when deleting media from post its deleting a wrong media from orbit (last first - wrong index)
@@ -67,8 +66,6 @@
 3. running vpn connections seem to disturb connecting via peer2peer
 
 ## Changes
-- 2022-10-11
-    - 
 - 2022-09-25
     - delete uploaded media from post
     - change permissions recursively also for all mediethreads of all posts

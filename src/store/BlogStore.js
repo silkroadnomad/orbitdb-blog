@@ -72,6 +72,7 @@ class BlogStore {
         subject: entry.payload.value.subject || entry.payload.value.name,
         body: entry.payload.value.body,
         tags: entry.payload.value.tags,
+        postDate: entry.payload.value.postDate,
         createdAt: entry.payload.value.createdAt,
         address: entry.payload.value.address,
       };
@@ -155,6 +156,7 @@ class BlogStore {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
       tags: this.currentPost.tags?this.currentPost.tags:[],
+      postDate: this.currentPost.postDate,
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
