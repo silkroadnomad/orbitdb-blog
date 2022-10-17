@@ -74,7 +74,6 @@ const BlogPost = (props) => {
         </ul>
       </nav>
       <Divider />
-
       <article
         key={"0"}
         className="blog-post"
@@ -111,14 +110,15 @@ const BlogPost = (props) => {
         {
           media?.map((item,i) => (<MediaItem key={i} item={item} store={store} />))
         }
-  
-        <Divider />
-        <CreatePost {...props} refreshFunc={setMedia} />
+
         <Divider />
         <footer>
           <Bio />
         </footer>
       </article>
+      <Divider />
+      <CreatePost {...props} refreshFunc={setMedia} />
+
       <Divider />
       <nav className="blog-post-nav">
         <ul

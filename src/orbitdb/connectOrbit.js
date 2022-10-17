@@ -12,10 +12,11 @@ const connectOrbit = async (store,options) => {
     if(store.ipfs===undefined || store.ipfs===null){
       console.log('starting ipfs')
       startIPFSObj = await startIPFS(options)
+      store.identity = startIPFSObj.identity
       console.log('startIPFSObj.ipfs',startIPFSObj.ipfs)
       console.log("store.identity",store.identity)
-      if(store?.identity?.id === undefined) options.identity = startIPFSObj.identity
-      console.log('options.identity',startIPFSObj.identity)
+      // if(store?.identity?.id === undefined) options.identity = startIPFSObj.identity
+      // console.log('options.identity',startIPFSObj.identity)
       await store.connect(startIPFSObj.ipfs,options)
   
       // store.ipfs = startIPFSObj.ipfs

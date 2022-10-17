@@ -126,7 +126,7 @@ const CreatePost = (props) => {
           type="text"
           value={  props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:props.store.currentPost?.createdAt!==undefined?moment(props.store.currentPost?.createdAt).format("YYYY-MM-DD"):moment(new Date()).format("YYYY-MM-DD") }
           // defaultValue={ props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:moment(new Date()).format("YYYY-MM-DD")}
-          onChange={handleValues}
+          onBlur={handleValues}
           placeholder="Post Date"
       /> 
       <br/>

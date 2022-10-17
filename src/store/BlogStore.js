@@ -27,18 +27,17 @@ class BlogStore {
     //set up orbitdb
     if(ipfs) this.ipfs = ipfs;
     console.log("options",options)
-
-    const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
-
-    console.log("ourIdentity",ourIdentity)
+    if(this.identity===undefined) this.identity = (await Identities.createIdentity({ id: "user" }))
+    // const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
+    options.identity = this.identity
+    console.log("this.identity",this.identity)
     this.odb = await OrbitDB.createInstance(ipfs, {
-      ourIdentity,
+      identity: options.identity,
       directory: "./odb",
     });
-    this.identity = ourIdentity
 
     this.feed = await this.odb.feed(options.dbName, {
-      identity: ourIdentity, 
+      identity: this.identity, 
       accessController: {
         type: 'orbitdb'
       }

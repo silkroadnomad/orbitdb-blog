@@ -1,7 +1,4 @@
 import {create} from 'ipfs'
-import Identities from 'orbit-db-identity-provider'
-import { ethers } from "ethers";
-
 export const startIPFS = async (options) => {
     let repo = options?.repo!==undefined?options.repo:'./ipfs-repo'
     const ipfs = await create({
@@ -22,22 +19,5 @@ export const startIPFS = async (options) => {
         },
       }
     })
-    
-    let identity
-    if(options.noAuth===undefined){
-      try {
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const wallet = provider.getSigner();
-          await provider.send("eth_requestAccounts", []) // <- this promps user to connect metamask
-          identity = await Identities.createIdentity({
-            type: "ethereum",
-            wallet,
-          })
-          console.log("Identity created", identity)
-      } catch (ex) {
-        console.log("Identity not given.")
-      }
-    }
-
-    return {ipfs, identity};
+    return {ipfs};
   }

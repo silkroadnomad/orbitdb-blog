@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react'
 import { Box } from '@chakra-ui/react'
 const Identity = (props) => {
-    console.log("Identity feed",props.store?.feed)
+    console.log("store.feed",props.store?.feed)
     return (
         <Box fontSize='xs'>
             <div> My Identity: {props.store?.identity?.id} </div>

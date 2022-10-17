@@ -23,16 +23,15 @@ const App = () => {
     
     const MAX_BYTES = 100024000
     const [imgData, setImgData] = useState();
-    console.log('OrbitImage.props',props)
   
     useEffect(() => {
-        console.log('loading image data',props.store.ipfs)
+
         const loadData = async () => {
             await connectOrbit(store,{noAuth:true})
             const cid = props.match.params.cid
             const mimeType = props.match.params.mime.replace('_','/')  
             if(cid!==undefined) 
-              console.log("calling orbitimage cid",cid,mimeType)
+              console.log("calling orbitimage cid",cid)
             else 
             console.log('image param undefined')
             const _imgData = await loadImgURL(props.store.ipfs,cid,mimeType,MAX_BYTES)
@@ -41,7 +40,7 @@ const App = () => {
         }
         loadData()
 
-    }, [props.store.ipfs]);
+    }, [props.store.ipfs,props.store.identity]);
 
     return (
       <div>
