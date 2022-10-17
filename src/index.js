@@ -11,9 +11,9 @@ import BlogIndex from './pages/BlogIndex'
 import './console/help'
 import './console/cp' //javascript console browser 
 import './console/dropCurrentMediaFeed'
-
 import './styles/style.css'
 import './styles/normalize.css'
+
 import {loadImgURL} from './utils/helper'
 
 
@@ -39,8 +39,6 @@ const App = () => {
             console.log("_imgData",_imgData)
             setImgData(_imgData)
         }
-
-        //if(props.store.ipfs) 
         loadData()
 
     }, [props.store.ipfs]);

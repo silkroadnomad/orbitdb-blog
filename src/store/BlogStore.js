@@ -75,7 +75,7 @@ class BlogStore {
         postDate: entry.payload.value.postDate,
         createdAt: entry.payload.value.createdAt,
         address: entry.payload.value.address,
-      };
+      }
       console.log("adding newPostObj to posts store", newPostObj);
       this.posts.push(newPostObj);
     }

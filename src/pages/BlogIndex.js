@@ -63,7 +63,6 @@ const BlogIndex = (props) => {
           const subject  = post.name || post.subject
           const slug = post.hash
           const postDate = post.postDate
-          console.log(post)
           const tagsLowerCase = post.tags?.map( e => e.toLowerCase())
           if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (

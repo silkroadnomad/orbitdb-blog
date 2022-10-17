@@ -36,12 +36,8 @@
 - show currently connected peers
 
 #### ui - todos
-- when loading main feed with posts, media feeds must be loaded too and load all media so they can be displayed in post
-- when deleting post feed mediafeed must be deleted too
-- generate
 - Index-Page modifications
     - alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
-    - only display posts in "published" state, add other states "draft","archived"
     - authentication should be requested when clicking authentication button only
     - display author (identity) next to post (simply id)
     - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
