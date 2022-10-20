@@ -86,7 +86,7 @@ class BlogStore {
       console.log("replicated - loading posts from db");
       console.log("dbAddress", dbAddress);
       console.log("count", count);
-      // console.log("feed", newFeed);
+      console.log("feed", newFeed);
       newFeed.all.map(this.addPostToStore);
     });
 
@@ -104,6 +104,7 @@ class BlogStore {
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
       console.log("replicate.progress", dbAddress, hash);
+      console.log('obj.payload',obj.payload)
       if(obj.payload.op==="DEL"){
         const entryHash = obj.payload.value
         for (let i = 0; i < this.posts.length; i++) {
@@ -159,7 +160,8 @@ class BlogStore {
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
-
+    
+    console.log("storing new post... ",p)
     const hash = await this.feed.add(p);
     return hash;
   }
