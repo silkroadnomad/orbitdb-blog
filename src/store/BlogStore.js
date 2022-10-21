@@ -156,11 +156,11 @@ class BlogStore {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
       tags: this.currentPost.tags?this.currentPost.tags:[],
-      postDate: this.currentPost.postDate,
+      postDate:  this.currentPost.postDate?this.currentPost.postDate:new Date().getTime(),
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
-    
+
     console.log("storing new post... ",p)
     const hash = await this.feed.add(p);
     return hash;

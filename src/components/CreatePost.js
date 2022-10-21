@@ -95,12 +95,12 @@ const CreatePost = (props) => {
       <Textarea
         name="body"
         type="text"
-        value={
+        defaultValue={
           props.store.currentPost?.body ? props.store.currentPost?.body : ""
         }
         cols={70}
         rows={10}
-        onChange={handleValues}
+        onBlur={handleValues}
         placeholder="Body"
       />
       <br />
