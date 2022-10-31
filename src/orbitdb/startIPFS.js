@@ -1,7 +1,7 @@
 import {create} from 'ipfs'
-export const startIPFS = (options) => {
+export const startIPFS = async (options) => {
     let repo = options?.repo!==undefined?options.repo:'./ipfs-repo'
-    const ipfs = create({
+    const ipfs = await create({
       repo: repo,
       EXPERIMENTAL: { pubsub: true },
       preload: { "enabled": false },
