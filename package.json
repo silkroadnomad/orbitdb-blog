@@ -52,7 +52,6 @@
     "@chakra-ui/react": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
-    "@ezerous/eth-identity-provider": "^0.2.0",
     "chakra-ui-contextmenu": "^1.0.4",
     "chakra-ui-markdown-renderer": "^4.1.0",
     "ethers": "^5.7.0",
@@ -72,6 +71,7 @@
     "react-markdown": "^8.0.3",
     "react-moment": "^1.1.2",
     "react-router-dom": "^5.0.1",
+    "react-seo-component": "^2.0.2",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {

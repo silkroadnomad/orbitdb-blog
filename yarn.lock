@@ -2032,14 +2032,6 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@ezerous/eth-identity-provider@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@ezerous/eth-identity-provider/-/eth-identity-provider-0.2.0.tgz#da2c7b89a6817f6c2f7278c42593c10cd4b08ad7"
-  integrity sha512-XdDgaZgFbw8aO0xFIuYxZ8GOIbFvufE1vUC4g4RaJDXDQc/hC4e2pTQTOWzGjqq0Dl6PYpNy0rRl5SLoKGCfcw==
-  dependencies:
-    level "~6.0.1"
-    orbit-db-identity-provider "~0.3.1"
-
 "@grpc/grpc-js@^1.1.8":
   version "1.6.10"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.6.10.tgz#b6584c59ef90aa76d878ac92c21785e602f247ff"
@@ -3221,7 +3213,7 @@ abstract-leveldown@~6.0.0, abstract-leveldown@~6.0.1, abstract-leveldown@~6.0.3:
     level-concat-iterator "~2.0.0"
     xtend "~4.0.0"
 
-abstract-leveldown@~6.2.1, abstract-leveldown@~6.2.3:
+abstract-leveldown@~6.2.1:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/abstract-leveldown/-/abstract-leveldown-6.2.3.tgz#036543d87e3710f2528e47040bc3261b77a9a8eb"
   integrity sha512-BsLm5vFMRUrrLeCcRc+G0t2qOaTzpoJQLOubq2XM72eNpjF5UdU5o/5NvlNhx95XHcAvcl8OMXr4mlg/fRgUXQ==
@@ -8971,16 +8963,6 @@ level-js@^4.0.0:
     ltgt "^2.1.2"
     typedarray-to-buffer "~3.1.5"
 
-level-js@^5.0.0:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/level-js/-/level-js-5.0.2.tgz#5e280b8f93abd9ef3a305b13faf0b5397c969b55"
-  integrity sha512-SnBIDo2pdO5VXh02ZmtAyPP6/+6YTJg2ibLtl9C34pWvmtMEmRTWpra+qO/hifkUtBTOtfx6S9vLDjBsBK4gRg==
-  dependencies:
-    abstract-leveldown "~6.2.3"
-    buffer "^5.5.0"
-    inherits "^2.0.3"
-    ltgt "^2.1.2"
-
 level-js@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/level-js/-/level-js-6.1.0.tgz#982ee9e583fca801aa75689c041995d0e7aab4ef"
@@ -8992,7 +8974,7 @@ level-js@^6.1.0:
     ltgt "^2.1.2"
     run-parallel-limit "^1.1.0"
 
-level-packager@^5.0.0, level-packager@^5.1.0:
+level-packager@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/level-packager/-/level-packager-5.1.1.tgz#323ec842d6babe7336f70299c14df2e329c18939"
   integrity sha512-HMwMaQPlTC1IlcwT3+swhqf/NUO+ZhXVz6TY1zZIIZlIR0YSn8GtAAWmIvKjNY16ZkEg/JcpAuQskxsXqC0yOQ==
@@ -9039,16 +9021,7 @@ level@^7.0.0:
     level-packager "^6.0.1"
     leveldown "^6.1.0"
 
-level@~6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/level/-/level-6.0.1.tgz#dc34c5edb81846a6de5079eac15706334b0d7cd6"
-  integrity sha512-psRSqJZCsC/irNhfHzrVZbmPYXDcEYhA5TVNwr+V92jF44rbf86hqGp8fiT702FyiArScYIlPSBTDUASCVNSpw==
-  dependencies:
-    level-js "^5.0.0"
-    level-packager "^5.1.0"
-    leveldown "^5.4.0"
-
-leveldown@^5.0.0, leveldown@^5.4.0:
+leveldown@^5.0.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/leveldown/-/leveldown-5.6.0.tgz#16ba937bb2991c6094e13ac5a6898ee66d3eee98"
   integrity sha512-iB8O/7Db9lPaITU1aA2txU/cBEXAt4vWwKQRrrWuS6XDgbP4QZGj9BL2aNbwb002atoQ/lIotJkfyzz+ygQnUQ==
@@ -10847,7 +10820,7 @@ orbit-db-identity-provider@0.4.0:
     path-browserify "^1.0.1"
     stream-browserify "^3.0.0"
 
-orbit-db-identity-provider@^0.3.1, orbit-db-identity-provider@~0.3.0, orbit-db-identity-provider@~0.3.1:
+orbit-db-identity-provider@^0.3.1, orbit-db-identity-provider@~0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/orbit-db-identity-provider/-/orbit-db-identity-provider-0.3.1.tgz#ed2eaccf14981fd105984644052bb28e32b2fa20"
   integrity sha512-kR6uUCovNecTTPTDsCkm07VEEg1nozx5bz0/ZUO7Oo+0EhCACPO9DZ3g5Wy9bPBHyaaRYqcocQfqAvTdfwyWLQ==
@@ -12013,6 +11986,11 @@ react-router@5.3.3:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-seo-component@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-seo-component/-/react-seo-component-2.0.2.tgz#0297dd7d6a2c3d54ce71ca3cbedec330e4870149"
+  integrity sha512-OQmrWcOn15ST9oBOfpWHrDwXKELw6ztAblHpTPdL2xmlOWazfZ13Nk6X/+LC7bEcFxGt5Tq6731OnZ35atG0Kg==
 
 react-side-effect@^2.1.0:
   version "2.1.2"

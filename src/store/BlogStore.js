@@ -1,6 +1,7 @@
 import { observable,makeAutoObservable } from 'mobx'
 import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
+import moment from 'moment'
 
 class BlogStore {
 
@@ -156,7 +157,7 @@ class BlogStore {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
       tags: this.currentPost.tags?this.currentPost.tags:[],
-      postDate:  this.currentPost.postDate?this.currentPost.postDate:new Date().getTime(),
+      postDate:  this.currentPost.postDate?this.currentPost.postDate:moment(new Date()).format("YYYY-MM-DD"),
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
