@@ -33,9 +33,9 @@ const App = () => {
             if(cid!==undefined) 
               console.log("calling orbitimage cid",cid)
             else 
-            console.log('image param undefined')
+              console.log('image param undefined')
+              
             const _imgData = await loadImgURL(props.store.ipfs,cid,mimeType,MAX_BYTES)
-            console.log("_imgData",_imgData)
             setImgData(_imgData)
         }
         loadData()
@@ -53,6 +53,7 @@ const App = () => {
     console.log("window.location.hash",window.location.hash)
     if(window.location.hash.indexOf('#/images/')===-1)
       connectOrbit(store) //don't load orbit again when loading an image from ipfs via OrbitImage
+      console.log('store.dbName',store.dbName)
   },[store.dbName])
     return (
       <ChakraProvider>

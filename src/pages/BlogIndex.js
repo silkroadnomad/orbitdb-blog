@@ -37,7 +37,7 @@ const BlogIndex = (props) => {
   
         console.log('received dbName from url',dbName)
         props.store.setDbAddress(dbName)
-        runConnctOrbit({repo:"./ipfs-repo-alt"})
+        runConnctOrbit() //{repo:"./ipfs-repo-alt"}
         props.store.loadPosts().then(console.log('loaded db from url',dbName))
     }
   }, []);

@@ -1,12 +1,13 @@
 import {create} from 'ipfs'
-export const startIPFS = async (options) => {
-    let repo = options?.repo!==undefined?options.repo:'./ipfs-repo'
-    const ipfs = await create({
+export const startIPFS = async (_options) => {
+    let repo = _options?.repo!==undefined?_options.repo:'./ipfs-repo'
+    let ipfs 
+    const options = {
       repo: repo,
       EXPERIMENTAL: { pubsub: true },
       preload: { "enabled": false },
       config: {
-        Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3'],
+        Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3'], 
         Addresses: {
           Swarm: [
             //Use default 
@@ -19,6 +20,26 @@ export const startIPFS = async (options) => {
           ]
         },
       }
+    }
+    try {
+      await ipfs.stop()
+      ipfs = await create(options)
+    }catch(ex){
+        console.log("couldn' create ipfs node trying without network",ex)
+        options.config.Bootstrap = []
+        options.config.Addresses.Swarm = []
+        console.log('options',options)
+        ipfs = await create(options)
+    }
+
+    ipfs.libp2p.on('peer:discovery', (peer) => {
+      console.log('discovered', peer)
+    })
+  
+    ipfs.libp2p.on('peer:connect', async (peer) => {
+      console.log('connected', peer)
+  
+      ipfs.swarm.peers().then(peers => console.log('current peers connected: ', peers))
     })
     return {ipfs};
   }
