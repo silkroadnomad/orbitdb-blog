@@ -28,7 +28,8 @@ class BlogStore {
     //set up orbitdb
     if(ipfs) this.ipfs = ipfs;
     console.log("options",options)
-    if(this.identity===undefined) this.identity = (await Identities.createIdentity({ id: "user" }))
+    console.log("this.identity",this.identity)
+    if(this.identity.id===undefined) this.identity = await Identities.createIdentity({ id: "user" })
     // const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
     options.identity = this.identity
     console.log("this.identity",this.identity)
@@ -137,7 +138,7 @@ class BlogStore {
       })
     }
 
-    this.feed.access.capabilities.admin.forEach((identity) => {
+    this.feed?.access?.capabilities?.admin?.forEach((identity) => {
       //only add if not there yet
       if(Array.from(newMediaFeed?.access?.capabilities?.admin?.keys()  || []).indexOf(identity)===-1){  
         newMediaFeed.access.grant("admin",identity)
@@ -145,7 +146,7 @@ class BlogStore {
       }
     })
 
-    this.feed.access.capabilities.write.forEach((identity) => {
+    this.feed?.access?.capabilities?.write?.forEach((identity) => {
       console.log(`granting admin identity to ${identity} for new feed`,newMediaFeed)
       //only add if not there yet
       if(Array.from(newMediaFeed?.access?.capabilities?.write?.keys()  || []).indexOf(identity)===-1)  
