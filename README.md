@@ -1,12 +1,15 @@
 # orbit-db decentralized blog
 ## features
-- create your own decentralized blog with your own identity key
-- add other identities (metamask supported right now) in order to allow writing to the blog
+- create your own decentralized blog with your own decentralized identity (right now metamask only) 
+- add other identities (metamask supported right now) in order to allow writing / admin permissions to the blog
 - upload images to ipfs as attachments for the post
 - images stored anywhere on ipfs can be embedded inside markdown using IPFS CID instead filename
-- (planed) writing comments (everybody allowed) 
-- (planed) writing comments only against btc deposit to prevent spam 
-- (planed) create several react-ui components to display features posts and/or posts with a certain tag
+- (roadmap) pin image cids and orbitdb cids on aleph-im / ar-weave
+- (roadmap) uploaded images can be minted as nft and sold on the integrated marketplace
+- (roadmap) running a puppeter-js headless browser inside mobile app / or the project inside react-native headless js
+- (roadmap) writing comments (everybody allowed) 
+- (roadmap) writing comments only against btc deposit to prevent spam 
+- (roadmap) create several react-ui components to display features posts and/or posts with a certain tag
 
 ## demo
 - https://ipfs.le-space.de/ipns/decentrasol.network / https://decentrasol.network 
@@ -26,6 +29,11 @@
 
 ## todos
 ### orbit - todos
+- check webtransport to connect to go-ipfs
+    - https://github.com/libp2p/js-libp2p-webtransport.git
+    - try out https://github.com/libp2p/js-libp2p-webtransport/blob/main/test/browser.ts#L17
+    - https://www.youtube.com/watch?v=bmWLvS54-Zs
+    - https://www.youtube.com/watch?v=Dt42Ss6X_Vk
 - ipfs auto-pin uploaded media to own pinning service
 - (auto) pin project on ipfs - orbit-pinning service
     - https://github.com/orbitdb/field-manual/issues/83
