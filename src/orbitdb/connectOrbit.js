@@ -1,19 +1,21 @@
 import {startIPFS} from './startIPFS'
+import {log} from '../utils/loaderPrettyLog.js'
 
 const connectOrbit = async (store,options) => {
-    console.log("running connectIFS with dbName"+store.dbName, options)
+
+  log.action("connectOrbit with dbName and options "+store.dbName, options)
     
     let dbName =  store.dbName===undefined?process.env.DB_NAME:store.dbName
     if(options===undefined) options = {}
     options.dbName= dbName;
   
     let ipfsInstance
-    console.log("store.ipfs",store.ipfs)
+    log.msg("ipfs in store",store.ipfs)
     if(store.ipfs===undefined || store.ipfs===null){
-      console.log('starting ipfs')
+      log.action('starting ipfs')
       const {ipfs} = await startIPFS(options)
       // store.identity = identity
-      console.log('ipfs',ipfs)
+      log.success('created ipfs instance',ipfs)
       // try {
       
       // await ipfs.bootstrap.add("/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3")
@@ -33,8 +35,8 @@ const connectOrbit = async (store,options) => {
     }else  await store.connect(store.ipfs,options)
 
 
-    console.log("odb id:", store.odb.identity.id)
-    console.log("dbName:",dbName)
-    console.log("store.feed.id:", store.feed.id)
+    log.msg("odb.identity.id:", store.odb.identity.id)
+    log.msg("dbName:",dbName)
+    log.msg("feed.id:", store.feed.id)
   }
   export default connectOrbit

@@ -3,14 +3,14 @@ import { Box, Image } from '@chakra-ui/react'
 import {loadImgURL} from '../utils/helper'
 import { ContextMenu } from 'chakra-ui-contextmenu';
 import { MenuList, MenuItem } from '@chakra-ui/menu';
-
+import {log} from '../utils/loaderPrettyLog.js'
 const MediaItem = (props) => {
 
     const [imgData, setImgData] = useState();
     const MAX_BYTES = 100024000
 
     useEffect(() => {
-        console.log("MediaItem",props.item.payload.value.meta)  
+        log.action("requesting media item of of media feed from ipfs ",props.item.payload.value.meta)  
         const loadData = async () => {
             const _imgData = await loadImgURL(props.store.ipfs,props.item.payload.value.content,props.item.payload.value.meta.mimeType, MAX_BYTES);
             setImgData(_imgData)
@@ -19,9 +19,9 @@ const MediaItem = (props) => {
     }, []);
 
     const deleteMediaItem = () => {
-        console.log(`deleting media from mediafeed ${props.store.currentMediaFeed.id} `,props.item.hash)
-        props.store.currentMediaFeed.remove(props.item.hash);
-        console.log('deleted!')
+      log.action(`deleting media item from mediafeed ${props.store.currentMediaFeed.id} `,props.item.hash)
+      props.store.currentMediaFeed.remove(props.item.hash);
+      log.success('deleted!')
     }
 
             // <Box key={props.item.payload.value.content} boxSize='sm'>

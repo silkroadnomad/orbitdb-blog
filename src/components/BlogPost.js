@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import { Divider,HStack,Tag,TagLabel,Img } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { observer } from 'mobx-react'
+import {log} from '../utils/loaderPrettyLog.js'
 import Bio from "./bio"
 import Layout from "./layout"
 import Seo from "./seo"
@@ -28,10 +29,12 @@ const BlogPost = (props) => {
   useEffect(() => {
   
     function load () {
+      console.log("address",address)
       setNextPost( props.store.nextPost(address))
       setPreviousPost( props.store.previousPost(address))
 
       props.store.joinBlogPost(address,media,setMedia)
+
     }
     
     load()
@@ -40,7 +43,10 @@ const BlogPost = (props) => {
       setMedia([])  
     }
   }, [props.store.isOnline,address])
-  
+
+  log.danger("previousPost",previousPost)
+  log.danger("nextPost",nextPost)
+
   return (
     <Layout location={props.location} title={props.store.currentPost?.subject} store={props.store}>
       <Seo
@@ -61,15 +67,17 @@ const BlogPost = (props) => {
             padding: 0,
           }}
         >
-          <li>
+          <li>{
+            (previousPost?.address && previousPost.address!=='#')?
             <Link to={previousPost?.address} rel="prev">
               {previousPost?.subject}
-            </Link>
+            </Link>:''}
           </li>
-          <li>
+          <li>{
+            (nextPost?.address  && previousPost.address!=='#')?
             <Link to={nextPost?.address} rel="next">
               {nextPost?.subject}
-            </Link>
+            </Link>:''}
           </li>
         </ul>
       </nav>
@@ -130,16 +138,18 @@ const BlogPost = (props) => {
             padding: 0,
           }}
         >
-          <li>
-            <Link to={previousPost?.address} rel="prev">
-              {previousPost?.subject}
-            </Link>
-          </li>
-          <li>
-            <Link to={nextPost?.address} rel="next">
-              {nextPost?.subject}
-            </Link>
-          </li>
+        <li>{
+          (previousPost?.address && previousPost.address!=='#')?
+          <Link to={previousPost?.address} rel="prev">
+            {previousPost?.subject}
+          </Link>:''}
+        </li>
+        <li>{
+          (nextPost?.address  && previousPost.address!=='#')?
+          <Link to={nextPost?.address} rel="next">
+            {nextPost?.subject}
+          </Link>:''}
+        </li>
         </ul>
       </nav>
     </Layout>

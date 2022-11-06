@@ -2,6 +2,7 @@ import React, { useEffect,useState } from "react"
 import { ChakraProvider } from '@chakra-ui/react'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import connectOrbit from './orbitdb/connectOrbit'
+import {log} from './utils/loaderPrettyLog.js'
 
 import store from './store/BlogStore'
 import BlogPost from './components/BlogPost'
@@ -31,9 +32,9 @@ const App = () => {
             const cid = props.match.params.cid
             const mimeType = props.match.params.mime.replace('_','/')  
             if(cid!==undefined) 
-              console.log("calling orbitimage cid",cid)
+              log.action("orbitimage CID was requeested in url",cid)
             else 
-              console.log('image param undefined')
+              log.action('no image CID was recognissed in url',props.match.params)
               
             const _imgData = await loadImgURL(props.store.ipfs,cid,mimeType,MAX_BYTES)
             setImgData(_imgData)
@@ -50,10 +51,10 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log("window.location.hash",window.location.hash)
+    log.msg("url hash in browser was",window.location.hash)
     if(window.location.hash.indexOf('#/images/')===-1)
       connectOrbit(store) //don't load orbit again when loading an image from ipfs via OrbitImage
-      console.log('store.dbName',store.dbName)
+      log.success('dbName in store ',store.dbName)
   },[store.dbName])
     return (
       <ChakraProvider>

@@ -37,24 +37,21 @@
 - ipfs auto-pin uploaded media to own pinning service
 - (auto) pin project on ipfs - orbit-pinning service
     - https://github.com/orbitdb/field-manual/issues/83
-- Bug: if device is offline - ipfs cannot connect to webrtc star - must work without internet too
-    - e.g. remove addresses from swarm programmatically 
-    - other possibilities? e.g. tell ipfs to not connect to swarm if not available or work without swarm.
-    - ipfs node connects to some strange nodes e.g. wss://node2.preload.ipfs.io/p2p/QmV7gnbW5VTcJ3oyM2Xk1rdFBJ3kTkvxc87UFGsun29STS where is this coming from?
 - show currently connected peers
 
 #### ui - todos
+- Improvide Settings-Drawer UI
 - Index-Page modifications
     - alternative blog index view with cards + headline e.g. like https://bobbyhadz.com/
     - display author (identity) next to post (simply id)
     - responsive mobile navigation chakra-ui (e.g. about page displaying a certain post)
 - View Edit/Create Post page
+    - bug: when deleting media from post its deleting a wrong media from orbit (last first - wrong index)
     - display author (identity) next to post (simply id)
     - when deleting a post ask user before action
-    - add markdown editor to EditPost https://morioh.com/p/46067e5674d2
-    - bug: when deleting media from post its deleting a wrong media from orbit (last first - wrong index)
     - bug: when using navigation - its not possible to add new media - identity seems not correct 
     - add comments (make writeable to everybody)
+    - add markdown editor to EditPost https://morioh.com/p/46067e5674d2
 
 - create component which lists posts of a certain tag
 - store profile data in orbit-db (bio, seo, profile pic)

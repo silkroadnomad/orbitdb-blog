@@ -21,8 +21,10 @@ export const startIPFS = async (_options) => {
         },
       }
     }
+
     try {
-      await ipfs.stop()
+      if(ipfs!==undefined)
+        await ipfs.stop()
       ipfs = await create(options)
     }catch(ex){
         console.log("couldn' create ipfs node trying without network",ex)

@@ -1,4 +1,5 @@
-// import {fileTypeFromBuffer, fileTypeFromStream} from 'file-type';
+import {log} from './loaderPrettyLog.js'
+
 export function getDataTransferFiles (event) {
     const files = []
     if (event.dataTransfer.items) {
@@ -24,7 +25,7 @@ export  function toArrayBuffer (buffer) {
   }
   
 export  function getFileBuffer (ipfs, hash, options = {}) {
-    if(ipfs===undefined) console.error("ipfs undefined")
+    if(ipfs===undefined) log.danger("ipfs undefined")
     const timeoutError = new Error('Timeout while fetching file')
     const timeout = options.timeout || 15 * 1000
     return new Promise((resolve, reject) => {
@@ -58,7 +59,7 @@ export  function getFileBuffer (ipfs, hash, options = {}) {
   }
 
   export async function loadImgURL (ipfs, cid) {
-    console.log('loading image from cid ',cid)
+    log.action('loading image with CID from local IPFS node ',cid)
     if (cid == "" || cid == null || cid == undefined) {
         return;
     }
@@ -66,7 +67,7 @@ export  function getFileBuffer (ipfs, hash, options = {}) {
     for await (const file of res) {
       let blob = new Blob([file], {type:"image/jpeg"})
       const url = URL.createObjectURL(blob)
-      console.log("found cid created blob url",url)
+      log.success("found CID  and created blob url",url)
       return url
     }
   }

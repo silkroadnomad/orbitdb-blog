@@ -3,6 +3,7 @@ import { Link as ReachLink  } from 'react-router-dom'
 import { Link,HStack,Tag,TagLabel } from '@chakra-ui/react'
 import { observer } from 'mobx-react'
 import Moment from 'react-moment';
+import {log} from '../utils/loaderPrettyLog.js'
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
@@ -19,14 +20,14 @@ const BlogIndex = (props) => {
   const [tag, setTag] = useState();
   
   const getOrbitImageComponent = (otherProps) => {
-    console.log('checking markdown document for ipfs images ...')
+    log.action('parsing markdown document for ipfs images ...')
     return (<OrbitImageComponent store={props.store} {...otherProps}/>)
   }
 
   useEffect(() => {
 
     props.store.currentPost = undefined
-    console.log('loading index',props.store.currentPost)
+    log.action('loading index - current post ',props.store.currentPost?props.store.currentPost:'not given')
     if(props.match.params.tag!==undefined) setTag(props.match.params.tag)
 
     if(props.match.params.hash!==undefined){
@@ -34,11 +35,10 @@ const BlogIndex = (props) => {
         let dbName = props.match.params.hash;
         if(props.match.params.name!==undefined)
           dbName = dbName + '/' + props.match.params.name
-  
-        console.log('received dbName from url',dbName)
+        log.success('received dbName from url',dbName)
         props.store.setDbAddress(dbName)
         runConnctOrbit() //{repo:"./ipfs-repo-alt"}
-        props.store.loadPosts().then(console.log('loaded db from url',dbName))
+        props.store.loadPosts().then(log.success('posts loaded'))
     }
   }, []);
 
@@ -46,7 +46,7 @@ const BlogIndex = (props) => {
     return (
       <Layout location={props.location} store={props.store} title={process.env.TITLE}>
         <Seo title={process.env.TITLE} />
-          {props.store.isOnline?'No blog posts found.':<CircularProgress isIndeterminate  />} 
+          {props.store.isOnline?'Loading posts or no posts found...':<CircularProgress isIndeterminate  />} 
         <Bio />
         <CreatePost {...props} />
       </Layout>
@@ -67,7 +67,7 @@ const BlogIndex = (props) => {
           if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (
             <li key={slug}>
-              <article
+              <article 
                 className="post-list-item"
                 itemScope
                 itemType="http://schema.org/Article"

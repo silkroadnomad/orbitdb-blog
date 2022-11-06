@@ -1,22 +1,24 @@
 import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
 import {startIPFS} from '../orbitdb/startIPFS'
+import {log} from '../utils/loaderPrettyLog.js'
+
 /**
  * Function executable in the command line to spin up a second ipfs node with a second orbit node
  * in order to migrate from another database and change the permissions.
  */
  const cp = async ourDBName => {
-    console.log('starting second ipfs node')
+    log.action('starting second ipfs node...')
     let newDbName = ourDBName!==undefined?ourDBName:"notTheSame02" //process.env.DB_NAME
     const {ipfs,identity} = await startIPFS({'repo':'./ipfs-repo2'})
     const ourIdentity = identity || (await Identities.createIdentity({ id: "user" }))
     window.ipfs2 = ipfs;
-    console.log("ourIdentity",ourIdentity)
+    log.success('using Identity',ourIdentity)
     const odb = await OrbitDB.createInstance(ipfs, {
       ourIdentity,
       directory: "./odb2",
     });
-    console.log('created new odb',odb)
+    log.success('created new odb',odb)
     const feed = await odb.feed(newDbName, {
       identity: ourIdentity, 
       accessController: {
@@ -31,39 +33,39 @@ import {startIPFS} from '../orbitdb/startIPFS'
     })
     feed.access.grant("admin",ourIdentity._id);
     feed.access.grant("write",ourIdentity._id);
-    console.log('created new feed',feed)
+    log.success('created new feed',feed)
   
     const capabilities = feed.access.capabilities
-    console.log("capabilities",capabilities)
+    log.msg("capabilities",capabilities)
   
     feed.events.on("replicated", async (dbAddress, count, newFeed, d) => {
-      console.log("replicated - loading posts from db");
-      console.log("dbAddress", dbAddress);
-      console.log("count", count);
-      console.log("feed", newFeed);
+      log.success("replicated - loading posts from db");
+      log.msg("dbAddress", dbAddress);
+      log.msg("count", count);
+      log.msg("feed", newFeed);
     });
   
     feed.events.on("ready", async (dbAddress, feedReady) => {
-      console.log("database ready " + dbAddress, feedReady);
+      log.success("database ready " + dbAddress, feedReady);
       if(feed !== undefined) feed.all.map((e)=>console.log(e));
-      else console.log('feed is still undefined although ready')
+      else log.msg('feed is still undefined although ready')
   
-      console.log('copying old feed into new feed')
-      console.log('old feed lenghth',store.feed.all.length)
-      console.log('new feed lenghth',feed.all.length)
+      log.action('copying old feed into new feed')
+      log.msg('old feed lenghth',store.feed.all.length)
+      log.msg('new feed lenghth',feed.all.length)
 
       store.feed.all.map((e)=>{
-        console.log("adding object",e)
+        log.action("adding object",e)
         feed.add(e.payload.value)
       });
       
-      console.log('new feed lenghth',feed.all.length)
-      console.log('feed id',feed.id)
+      log.msg('new feed lenghth',feed.all.length)
+      log.msg('feed id',feed.id)
       window.feed2 = feed;
     });
   
     feed.load();
   
   }
-  console.log('cp command for console loaded.')
+  log.success('cp command for console loaded.')
   window.cp = cp;

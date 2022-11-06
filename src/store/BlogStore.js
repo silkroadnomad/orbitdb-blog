@@ -2,6 +2,7 @@ import { observable,makeAutoObservable } from 'mobx'
 import Identities from 'orbit-db-identity-provider'
 import OrbitDB from 'orbit-db'
 import moment from 'moment'
+import {log} from '../utils/loaderPrettyLog.js'
 
 class BlogStore {
 
@@ -27,12 +28,15 @@ class BlogStore {
 
     //set up orbitdb
     if(ipfs) this.ipfs = ipfs;
-    console.log("options",options)
-    console.log("this.identity",this.identity)
-    if(this.identity.id===undefined) this.identity = await Identities.createIdentity({ id: "user" })
-    // const ourIdentity = options.identity || (await Identities.createIdentity({ id: "user" }))
+    log.msg("options creating ",options.id?options:'undefined')
+    log.msg("current identity is",this.identity._id?this.identity._id:'undefined')
+    if(this.identity.id===undefined){
+      this.identity = await Identities.createIdentity({ id: "user" })
+      log.success("Identity created",this.identity)
+    } 
+
     options.identity = this.identity
-    console.log("this.identity",this.identity)
+   
     this.odb = await OrbitDB.createInstance(ipfs, {
       identity: options.identity,
       directory: "./odb",
@@ -77,7 +81,7 @@ class BlogStore {
         createdAt: entry.payload.value.createdAt,
         address: entry.payload.value.address,
       }
-      console.log("adding newPostObj to posts store", newPostObj);
+      log.action("adding newPostObj to posts store", newPostObj);
       this.posts.push(newPostObj);
     }
   }
@@ -85,34 +89,35 @@ class BlogStore {
   async loadPosts() {
 
     this.feed.events.on("replicated", async (dbAddress, count, newFeed, d) => {
-      console.log("replicated - loading posts from db");
-      console.log("dbAddress", dbAddress);
-      console.log("count", count);
-      console.log("feed", newFeed);
+      log.success("replicated - loading posts from db");
+      log.msg("dbAddress", dbAddress);
+      log.msg("count", count);
+      log.msg("feed", newFeed);
       newFeed.all.map(this.addPostToStore);
     });
 
     this.feed.events.on("write", async (hash, entry, heads) => {
-      console.log("wrote something adding to Posts" + hash, entry);
+      log.success("orbit db wrote to ipfs" + hash, entry);
       this.addPostToStore(entry);
     });
 
     // When the database is ready (ie. loaded), display results
     this.feed.events.on("ready", (dbAddress, feedReady) => {
-      console.log("database ready " + dbAddress, feedReady);
+      log.success("database ready " + dbAddress, feedReady);
       if(this.feed !== undefined) this.feed.all.map(this.addPostToStore);
-      else console.log('feed is still undefined although ready')
+      else log.danger('feed is still undefined although ready')
     });
 
     this.feed.events.on("replicate.progress", async (dbAddress, hash, obj) => {
-      console.log("replicate.progress", dbAddress, hash);
-      console.log('obj.payload',obj.payload)
+      log.success("replicate.progress", dbAddress, hash);
+      log.msg('post subject',obj.payload.value.subject)
+      log.msg('post body',obj.payload.value.body)
       if(obj.payload.op==="DEL"){
         const entryHash = obj.payload.value
         for (let i = 0; i < this.posts.length; i++) {
-          console.log(">", this.posts[i].hash, this.posts[i].address);
+          log.msg("iterating through posts>", this.posts[i].hash, this.posts[i].address);
           if (this.posts[i].hash === entryHash) {
-            console.log("removed post from store because it was deleted on another node",entryHash);
+            log.success("removed post from store because it was deleted on another node",entryHash);
             this.posts = [] //empty store because it gets reloaded anyways
           }
         } 
@@ -129,7 +134,7 @@ class BlogStore {
     let newMediaFeed = this.currentMediaFeed
     
     if(update===undefined){ //only create new feed if we create it first time (in case of update no need to do that)
-      console.log(`creating new postFeed update:${(update===true)}`, this.currentPost.subject)
+      log.action(`creating new postFeed update:${(update===true)}`, this.currentPost.subject)
       newMediaFeed = await this.odb.feed(this.currentPost.subject, {
         identity: this.identity, 
         accessController: {
@@ -142,16 +147,16 @@ class BlogStore {
       //only add if not there yet
       if(Array.from(newMediaFeed?.access?.capabilities?.admin?.keys()  || []).indexOf(identity)===-1){  
         newMediaFeed.access.grant("admin",identity)
-        console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
+        log.msg('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
       }
     })
 
     this.feed?.access?.capabilities?.write?.forEach((identity) => {
-      console.log(`granting admin identity to ${identity} for new feed`,newMediaFeed)
+      log.action(`granting admin identity to ${identity} for new feed`,newMediaFeed)
       //only add if not there yet
       if(Array.from(newMediaFeed?.access?.capabilities?.write?.keys()  || []).indexOf(identity)===-1)  
         newMediaFeed.access.grant("write",identity)
-      console.log('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
+        log.msg('newMediaFeed.capabilities',newMediaFeed?.access?.capabilities) 
     })
 
     const p = {
@@ -163,7 +168,7 @@ class BlogStore {
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
 
-    console.log("storing new post... ",p)
+    log.action("storing new post ... ",p)
     const hash = await this.feed.add(p);
     return hash;
   }
@@ -181,7 +186,7 @@ class BlogStore {
 
   previousPost(address) {
     if(!address) return "please provide address of current post"
-    console.log(`loading previous post of address ${address}`);
+    log.action(`loading previous post of address ${address}`);
     for (var i = 0;i < this.posts.length;i++){
       if(this.posts[i].address===address){
         const previousPost =  {address:this.posts[i-1]?.address,subject:this.posts[i-1]?.subject}
@@ -193,7 +198,7 @@ class BlogStore {
 
   nextPost(address) {
     if(!address) return "please provide address of current post"
-    console.log(`loading next post of address ${address}`);
+    log.action(`loading next post of address ${address}`);
     for (var i = 0;i < this.posts.length;i++){
       if(this.posts[i].address===address){
         const nextPost =  {address:this.posts[i+1]?.address,subject:this.posts[i+1]?.subject}
@@ -204,56 +209,56 @@ class BlogStore {
   }
 
   async joinBlogPost(address,getMedia,setMediaFunc) {
-    console.log("joinBlogPost - loading address", address);
+    log.action("joinBlogPost - loading address", address);
     if (this.odb) {
       const ourPost = this.posts.filter((item)=>{return item.address === address})
       
-      this.posts.forEach((item)=>console.log(item.subject))
+      // this.posts.forEach((item)=>log.msg("item.subject))
       this.currentPost = ourPost.length>0?ourPost[0]:this.posts[0]
 
       try {
         const mediaFeedOfPost =  await this.odb.open(address,{identity:this.identity})
-        console.log("opened mediaFeedOfPost",mediaFeedOfPost)
+        log.success("opened mediaFeedOfPost",mediaFeedOfPost)
         // const mediaFeedOfPost = this.odb.stores[address] || (await this.odb.open(address))
-        console.log('mediaFeedOfPost permissions',mediaFeedOfPost.access.capabilities)
+        log.msg('mediaFeedOfPost permissions',mediaFeedOfPost.access.capabilities)
 
         mediaFeedOfPost.events.on("replicated", async (dbAddress, count, newFeed, d) => {
-          console.log("replicated - loading posts from db");
-          console.log("dbAddress", dbAddress);
-          console.log("count", count);
+          log.success("replicated - loading posts from db");
+          log.msg("dbAddress", dbAddress);
+          log.msg("count", count);
           const mediaElements = []
           
-          //this seems necessary because allmfeeds of the current odb are replicating even if its not the current feed
+          //this seems necessary because all feeds of the current odb are replicating even if its not the current feed
           //otherwise a replication of another feed is updating the media in the current media feed.
           if(dbAddress===this.currentMediaFeed.id){ 
             mediaFeedOfPost.all.map( m => mediaElements.push(m));
-            console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+            log.msg('mediaFeedOfPost length',mediaFeedOfPost.all.length)
             setMediaFunc(mediaElements)
           }
         });
     
         mediaFeedOfPost.events.on("write", async (hash, entry, heads) => {
-          console.log("wrote something adding to Posts" + hash, entry);
+          log.success("new feed entrry was written as " + hash, entry);
           const mediaElements = []
           mediaFeedOfPost.all.map( m => mediaElements.push(m));
-          console.log('mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+          log.msg('mediaFeedOfPost length',mediaFeedOfPost.all.length)
           setMediaFunc(mediaElements)
         });
     
         // When the database is ready (ie. loaded), display results
         mediaFeedOfPost.events.on("ready", (dbAddress, feedReady) => {
-          console.log("database ready " + dbAddress, feedReady);
+          log.success("database ready " + dbAddress, feedReady);
           const mediaElements = []
           if(dbAddress===mediaFeedOfPost.id){
             mediaFeedOfPost.all.map( m => mediaElements.push(m));
-            console.log('ready - mediaFeedOfPost.all.length',mediaFeedOfPost.all.length)
+            log.msg('mediaFeedOfPost length',mediaFeedOfPost.all.length)
             setMediaFunc(mediaElements)
           }
         });
     
         mediaFeedOfPost.events.on("replicate.progress", async (dbAddress, hash, obj) => {
-          console.log("replicate.progress", dbAddress, hash);
-          if(obj.payload.op==="DEL"){ //TODO fix deleting media by replication
+          log.success("replicate.progress", dbAddress, hash);
+          if(obj.payload.op==="DEL"){ 
             const entryHash = obj.payload.value
           }
         });
@@ -261,9 +266,9 @@ class BlogStore {
         await mediaFeedOfPost.load()
         this.currentMediaFeed = mediaFeedOfPost
       } catch (ex) {
-        console.log(ex, "comments feed could not loaded",this.currentMediaFeed )
+        log.danger(ex, "comments feed could not loaded",this.currentMediaFeed )
       } 
-    } else console.log('odb not loaded')
+    } else log.danger('odb not loaded')
   }
 
   sendFiles(files, address) {
@@ -275,8 +280,8 @@ class BlogStore {
   }
 
   async _sendFile(file, address) {
-    console.log("file", file);
-    console.log("address", address);
+    log.action("sending file", file);
+    log.msg("with address", address);
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = async (event) => {
@@ -297,14 +302,14 @@ class BlogStore {
     }
     const isBuffer = source.buffer && source.filename;
     const name = source.filename.split("/").pop();
-    console.log("filename", name);
+    log.msg("filename", name);
     const size = source.meta && source.meta.size ? source.meta.size : 0;
 
     const result = await this.ipfs.add(Buffer.from(source.buffer));
-    console.log("result of ipfs.add", result);
+    log.success("ipfs add executed with result", result);
     const hash = result.path;
 
-    console.log("upload hash (cid)", hash);
+    log.action("upload hash (cid)", hash);
 
     // Create a post
     const data = {
@@ -324,11 +329,11 @@ class BlogStore {
   }
 
   async addPost(address, data) {
-    console.log("adding data to db on address", this.currentMediaFeed);
+    log.action("adding data to db on address", this.currentMediaFeed);
     if (this.currentMediaFeed) {
-      console.log("mediaFeed permissions",this.currentMediaFeed?.access?.capabilities)
+      log.msg("mediaFeed permissions",this.currentMediaFeed?.access?.capabilities)
       const hash = await this.currentMediaFeed.add(data);
-      console.log("got hash", hash);
+      log.succes("added media to mediafeed and got hash", hash);
       await this.currentMediaFeed.load();
       return this.currentMediaFeed.get(hash);
     }
