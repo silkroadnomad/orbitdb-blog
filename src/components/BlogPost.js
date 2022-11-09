@@ -44,9 +44,6 @@ const BlogPost = (props) => {
     }
   }, [props.store.isOnline,address])
 
-  log.danger("previousPost",previousPost)
-  log.danger("nextPost",nextPost)
-
   return (
     <Layout location={props.location} title={props.store.currentPost?.subject} store={props.store}>
       <Seo

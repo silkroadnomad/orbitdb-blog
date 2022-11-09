@@ -29,18 +29,19 @@ module.exports = env => {
         },
         module : {
             rules : [
-                {test : /\.(js)$/, use:'babel-loader'},
+                {test : /\.(js)$/, use:'babel-loader', exclude: currentPath+'/node_modules/pako/',},
                 {test : /\.scss|css$/, use:['style-loader', 'css-loader', 'sass-loader']},
                 {test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/, use: 'file-loader' }
             ]
         },
         mode:env.ENVIRONMENT,
-        plugins : [
-            new webpack.DefinePlugin(envKeys),
-            new CleanWebpackPlugin(),
-            new HtmlWebpackPlugin ({
-                template : './src/index.html'
-            })
-        ]
+        plugins : 
+            [
+                new webpack.DefinePlugin(envKeys),
+                new CleanWebpackPlugin(),
+                new HtmlWebpackPlugin ({
+                    template : './src/index.html'
+                })
+            ]
     };
 };

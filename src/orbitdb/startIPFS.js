@@ -1,5 +1,8 @@
 import {create} from 'ipfs'
+import { webTransport } from './webTransport'
+import { noise } from 'libp2p-noise'
 export const startIPFS = async (_options) => {
+    // const {webTransport} = require('@libp2p/webtransport')
     let repo = _options?.repo!==undefined?_options.repo:'./ipfs-repo'
     let ipfs 
     const options = {
@@ -7,18 +10,20 @@ export const startIPFS = async (_options) => {
       EXPERIMENTAL: { pubsub: true },
       preload: { "enabled": false },
       config: {
-        Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3'], 
+        // Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3'], 
         Addresses: {
           Swarm: [
-            //Use default 
-            // "/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star" //doesn't work 
-            // Use IPFS dev webrtc signal server
-            '/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
-            '/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
-            // Use local signal server
-            // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
+            // '/ip4/65.21.180.203/udp/4002/quic/webtransport/certhash/uEiDsQaOEzyisykzrNgwoKEoQWANoP5MzOUZaePw-FRu5rg/certhash/uEiCoVqAKR0Nqyc1OK6-ENX2TJgZ8h1gYy8Wd0Sz6kAPaRw'
           ]
         },
+      },
+      libp2p: {
+        transports: [
+          webTransport()
+        ],
+        connectionEncryption: [
+          noise()
+        ]
       }
     }
 
