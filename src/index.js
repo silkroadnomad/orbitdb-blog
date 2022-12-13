@@ -7,7 +7,7 @@ import {log} from './utils/loaderPrettyLog.js'
 import store from './store/BlogStore'
 import BlogPost from './components/BlogPost'
 import Settings from './components/Settings'
-import BlogIndex from './pages/BlogIndex'
+import StartPage from './pages/StartPage'
 
 import './console/help'
 import './console/cp' //javascript console browser 
@@ -60,10 +60,10 @@ const App = () => {
       <ChakraProvider>
           <Router>
             <Route path="/images/:cid/:mime" component={props => <OrbitImage {...props} store={store} />}/>  
-            <Route exact path="/tag/:tag" component={props => <BlogIndex {...props} store={store} />}/>  
+            <Route exact path="/tag/:tag" component={props => <StartPage {...props} store={store} />}/>  
             <Route path="/orbitdb/:hash/:name" component={(props) => <BlogPost {...props} store={store}/> }/>
-            <Route path="/db/:hash/:name" component={props => <BlogIndex {...props} store={store} />}/>
-            <Route exact path="/" component={props => <BlogIndex {...props} store={store} />}/>
+            <Route path="/db/:hash/:name" component={props => <StartPage {...props} store={store} />}/>
+            <Route exact path="/" component={props => <StartPage {...props} store={store} />}/>
             <Route exact path="/settings" component={props => <Settings {...props} store={store} />}/>
           </Router>
       </ChakraProvider>
