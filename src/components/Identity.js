@@ -1,15 +1,23 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { observer } from 'mobx-react'
-import { Box } from '@chakra-ui/react'
+import { Box,Input,FormLabel } from '@chakra-ui/react'
+
 const Identity = (props) => {
-    console.log("store.feed",props.store?.feed)
+    useEffect(() => {
+        
+        console.log("running useEffect inside Identity",props.store?.identity?.id)
+
+    }, [props.store?.identity?.id]);
     return (
         <Box fontSize='xs'>
-            <div> My Identity: {props.store?.identity?.id} </div>
-            <div> Odb Identity Id: {props.store?.odb?.identity.id} </div>
-            <div> Odb Id: {props.store?.odb?.id} </div>
-            <div> dbName: {props.store?.dbName} </div>
-            <div> dbAddress: {props.store?.feed?.id} </div>
+              <FormLabel htmlFor="myIdentity">My Identity:</FormLabel>
+              <Input name="myIdentity" readOnly={true} value={props.store?.identity?.id}/>
+
+              <FormLabel htmlFor="odbId">Odb Id:</FormLabel>
+              <Input name="odbId" readOnly={true} value={props.store?.odb?.id}/>
+              
+              <FormLabel htmlFor="dbAddress">dbAddress:</FormLabel>
+              <Input name="dbAddress" readOnly={true} value={props.store?.feed?.id}/> 
           </Box>
         )
 }

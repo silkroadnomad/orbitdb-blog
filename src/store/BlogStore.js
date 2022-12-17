@@ -37,12 +37,12 @@ class BlogStore {
 
     options.identity = this.identity
    
-    this.odb = await OrbitDB.createInstance(ipfs, {
+    this.odb = await OrbitDB.createInstance(this.ipfs, {
       identity: options.identity,
       directory: "./odb",
     });
 
-    this.feed = await this.odb.feed(options.dbName, {
+    this.feed = await this.odb.feed(options.dbName?options.dbName:this.dbName, {
       identity: this.identity, 
       accessController: {
         type: 'orbitdb'

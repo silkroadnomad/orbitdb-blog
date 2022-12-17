@@ -3,12 +3,11 @@ import {
   Drawer,
   DrawerBody,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   useDisclosure,
-  Button
+  Button,
+  Tabs, TabList, TabPanels, Tab, TabPanel
 } from "@chakra-ui/react"
 
 import Identity from "./Identity";
@@ -16,7 +15,7 @@ import Capabilities from "./Capabilities";
 import requestIdentity from "../orbitdb/requestIdentity";
 import connectOrbit from "../orbitdb/connectOrbit";
 
-function SettingsDrawer(props) {
+export function SettingsDrawer(props) {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
@@ -30,9 +29,10 @@ function SettingsDrawer(props) {
 
     return (
       <>
-        <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>
+        <Button ref={btnRef} padding={5} spac colorScheme='teal' onClick={onOpen}>
         {props.store?.identity?.id!==undefined?props.store?.identity?.id.substring(0,10)+"..":'Connect'}
         </Button>
+        
         <Drawer
           isOpen={isOpen}
           placement='right'
@@ -41,19 +41,30 @@ function SettingsDrawer(props) {
         >
           <DrawerOverlay />
           <DrawerContent>
-            <DrawerCloseButton />
-  
-            <DrawerHeader>Identity & Permissions</DrawerHeader>
-            <Button ref={btnRef} colorScheme='orange' onClick={openMetamask}>Metamask Connect</Button>
-            <Identity store={props.store} />
-            <DrawerBody>
-                <Capabilities  {...props} />
-            </DrawerBody>
-  
-            <DrawerFooter>
-              <Button variant='outline' mr={3} onClick={onClose}>Cancel</Button>
-              {/*  <Button colorScheme='blue'>Save</Button> */}            
-            </DrawerFooter>
+          <DrawerBody>
+            <Tabs isFitted variant='enclosed'>
+              <TabList mb='1em'>
+                <Tab>ID</Tab>
+                <Tab>Access</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Button ref={btnRef} padding={5} colorScheme='orange' onClick={openMetamask}>Connect Metamask</Button>
+                  <Identity store={props.store} />
+                </TabPanel>
+                <TabPanel>
+                  <Capabilities  {...props} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </DrawerBody>            
+            <DrawerFooter> 
+            <Button variant='outline' mr={3} onClick={onClose}>X</Button>
+                {/*
+                  <DrawerHeader>Identity & Permissions</DrawerHeader>
+                            <DrawerCloseButton />
+                  <Button variant='outline' mr={3} onClick={onClose}>Close</Button>  <Button colorScheme='blue'>Save</Button> */}            
+              </DrawerFooter>
           </DrawerContent>
         </Drawer>
       </>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import { observer } from 'mobx-react'
 import { values } from "mobx"
@@ -12,18 +12,40 @@ import {
   ListItem,
   RadioGroup,
   Radio,
-  Stack
+  Stack,
+  h1
 } from "@chakra-ui/react";
 
 const Capabilities = (props) => {
 
-    const removePermission = (e,a) => {
+    const [capabilitiesChanged, setCapabilitiesChanged] = useState(false);
+    const [writeList, setWriteList] = useState([]);
+    const [adminList, setAdminList] = useState([]);
+    
+    const addPermission = async (values) => {
+      console.log('granting '+values.permission+" permission to ",values.identity)
+      props.store.feed.access.grant(values.permission,values.identity);
+      props.store.capabilities = props.store.feed.access.capabilities
+
+      //change permission recursivly of all posts feeds //TODO do this only if wanted 
+      props.store.feed.all.forEach(async (f) => {
+        console.log(f)
+        const mediaFeedOfPost = props.store.odb.stores[f.payload.value.address] || await props.store.odb.open(f.payload.value.address)
+        await mediaFeedOfPost.load()
+        mediaFeedOfPost.access.grant(values.permission,values.identity);
+        console.log(`granting ${values.permission} permission for id:${values.identity} for feed ${f.payload.value.address}`) 
+      });
+      await props.store.connect()
+      setCapabilitiesChanged(!capabilitiesChanged)
+    }
+
+    const removePermission = async (e,a) => {
       const permission = e.target.name
       const identity = e.target.value
       event.preventDefault();
       console.log('remove '+permission+" permission from ",identity)
       props.store.feed.access.revoke(permission,identity);
-
+      props.store.capabilities = props.store.feed.access.capabilities
       //change permission recursivly of all posts feeds
       props.store.feed.all.forEach( async (f) =>{
         console.log(f)
@@ -32,60 +54,61 @@ const Capabilities = (props) => {
           mediaFeedOfPost.access.revoke(permission,identity);
           console.log(`revoking ${permission} permission for id:${identity} for feed ${f.payload.value.address}`) 
       });
+      await props.store.connect()
+      setCapabilitiesChanged(!capabilitiesChanged)
     }
 
-    function addPermission(values) {
-      console.log('granting '+values.permission+" permission to ",values.identity)
-      props.store.feed.access.grant(values.permission,values.identity);
+    useEffect(() => {
+      console.log('running useEffect inside Capabilities')
+      let _capabilities
+      if(props.store?.capabilities!==undefined) _capabilities = values( props.store?.capabilities)
+      console.log('_capabilities',_capabilities)
+      // setCapabilities(_capabilities)
+  
+      let _adminList,_writeList = []
+      if(_capabilities !==undefined && _capabilities.length>0 && _capabilities[0]){
+        _writeList = values(_capabilities[0]).map((d,i) => <ListItem key={d+i}>{d} <Button key={"button"+d+i} name={"write"} value={d} onClick={ (e) => removePermission(e) }>Remove write permission</Button></ListItem>);//console.log("capabilities[0]", values(capabilities[0]))
+        console.log('_writeList',_writeList)
+        setWriteList(_writeList)
+      }
+  
+      if(_capabilities !==undefined && _capabilities.length>0 && _capabilities[1]){
+        _adminList = values(_capabilities[1]).map((d,i) => <ListItem key={d+i}>{d} <Button key={"button"+d+i} name={"admin"} value={d} onClick={ (e) => removePermission(e) }>Remove  admin permission</Button></ListItem>);//console.log("capabilities[0]", values(capabilities[0]))      
+        console.log('_adminList',_adminList)
+        setAdminList(_adminList)
+      }
 
-      //change permission recursivly of all posts feeds //TODO do this only if wanted 
-      props.store.feed.all.forEach(async (f) => {
-        console.log(f)
-        const mediaFeedOfPost = props.store.odb.stores[f.payload.value.address] || await props.store.odb.open(f.payload.value.address)
-        await mediaFeedOfPost.load()
-        mediaFeedOfPost.access.grant(values.permission,values.identity);
+    }, [capabilitiesChanged]);
 
-        console.log(`granting ${values.permission} permission for id:${values.identity} for feed ${f.payload.value.address}`) 
-      });
-    }
-
-    let capabilities 
-    if(props.store?.capabilities!==undefined) capabilities = values( props.store?.capabilities)
-    console.log('capabilities',capabilities)
-    let adminList,writeList = []
-    if(capabilities !==undefined && capabilities.length>0 && capabilities[0]){
-      writeList = values(capabilities[0]).map((d,i) => <ListItem key={d+i}>{d} <Button key={"button"+d+i} name={"write"} value={d} onClick={ (e) => removePermission(e) }>Remove write permission</Button></ListItem>);//console.log("capabilities[0]", values(capabilities[0]))
-    }
-
-    if(capabilities !==undefined && capabilities.length>0 && capabilities[1]){
-      adminList = values(capabilities[1]).map((d,i) => <ListItem key={d+i}>{d} <Button key={"button"+d+i} name={"admin"} value={d} onClick={ (e) => removePermission(e) }>Remove  admin permission</Button></ListItem>);//console.log("capabilities[0]", values(capabilities[0]))      
-    }
 
     const { handleSubmit,register, formState: { errors, isSubmitting }} = useForm();
 
     return (
       <div>
-        <h1>Capabilities</h1>
-        <form onSubmit={handleSubmit(addPermission)}>
-
-        <b>Write Permission Id's:</b>
-        <UnorderedList>{writeList}</UnorderedList>
-        <b>Admins Id's:</b>
-        <UnorderedList>{adminList}</UnorderedList>
-
-
+        <form onSubmit={handleSubmit(addPermission)} hidden={isSubmitting}>
           <FormControl isInvalid={errors.permission}>
-
             <FormLabel htmlFor="permission">
-              Choose if permssion should be as admin or just a general write permission
+             Give admin permission or write permission - permissions are set recursivly for all posts 
             </FormLabel>
-          
             <RadioGroup defaultValue="write">
               <Stack spacing={4} direction="row">
-                <Radio id="permission" name="permission" {...register("permission")} value="admin">admin</Radio>
-                <Radio id="permission" name="permission" {...register("permission")} value="write">write</Radio>
-              </Stack> 
-     
+                <Radio
+                  id="permission"
+                  name="permission"
+                  {...register("permission")}
+                  value="admin"
+                >
+                  admin
+                </Radio>
+                <Radio
+                  id="permission"
+                  name="permission"
+                  {...register("permission")}
+                  value="write"
+                >
+                  write
+                </Radio>
+              </Stack>
             </RadioGroup>
             <FormErrorMessage>
               {errors.permission && errors.permission.message}
@@ -110,14 +133,14 @@ const Capabilities = (props) => {
               {errors.identity && errors.identity.message}
             </FormErrorMessage>
           </FormControl>
-          <Button
-            mt={4}
-            colorScheme="teal"
-            isLoading={isSubmitting}
-            type="submit"
-          >
-            Submit
-          </Button>
+
+          <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">Add</Button>
+          <p>&nbsp;</p>
+            <b>Write Permission Id's:</b>
+            <UnorderedList>{writeList}</UnorderedList>
+            <b>Admin Permission Id's:</b>
+            <UnorderedList>{adminList}</UnorderedList>
+          
         </form>
       </div>
     )
