@@ -34,7 +34,6 @@ const BlogPost = (props) => {
       setPreviousPost( props.store.previousPost(address))
 
       props.store.joinBlogPost(address,media,setMedia)
-
     }
     
     load()
@@ -93,9 +92,7 @@ const BlogPost = (props) => {
             {props.store.currentPost?.subject}
           </h1>
           <p>
-            <Moment fromNow ago>
-              {props.store.currentPost?.postDate}
-            </Moment>{" "}
+            <Moment fromNow ago>{props.store.currentPost?.postDate}</Moment>{" "}
             ago &nbsp;
             <Moment date={props.store.currentPost?.postDate} />
           </p>
@@ -113,6 +110,7 @@ const BlogPost = (props) => {
             </Tag>
           ))}
         </HStack>
+
         <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{props.store.currentPost?.body}</ReactMarkdown>
 
         {

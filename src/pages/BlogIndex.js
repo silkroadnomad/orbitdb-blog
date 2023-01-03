@@ -63,6 +63,7 @@ const BlogIndex = (props) => {
           const subject  = post.name || post.subject
           const slug = post.hash
           const postDate = post.postDate
+          const photoCID = post.photoCID || "QmdhR6iJYDGVhBw5PQssgtLUC6aqJ6CzfwbiUYPXrDpSoi" 
           const tagsLowerCase = post.tags?.map( e => e.toLowerCase())
           if(tag!==undefined && (tagsLowerCase.indexOf(tag.toLowerCase())!==-1) || tag === undefined)
           return (
@@ -78,7 +79,7 @@ const BlogIndex = (props) => {
                       <span itemProp="headline">{subject}</span>
                     </Link>
                   </h2>
-                  <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} />
+                  <Moment fromNow ago>{postDate}</Moment> ago &nbsp;<Moment date={postDate} format={"YYYY-MM-DD HH:mm:ss"}/>
                 </header>
                 <section>
                 <HStack spacing={4}>
@@ -95,7 +96,10 @@ const BlogIndex = (props) => {
                       ))
                   }
                 </HStack>
-                <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{post.body}</ReactMarkdown>
+                <OrbitImageComponent store={props.store} src={photoCID} /> 
+          {
+            // <ReactMarkdown components={{ChakraUIRenderer, img: getOrbitImageComponent } }>{post.body}</ReactMarkdown>
+          }
                 </section>
               </article>
             </li>

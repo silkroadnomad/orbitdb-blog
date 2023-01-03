@@ -42,7 +42,7 @@ const Capabilities = (props) => {
     const removePermission = async (e,a) => {
       const permission = e.target.name
       const identity = e.target.value
-      event.preventDefault();
+      e.preventDefault();
       console.log('remove '+permission+" permission from ",identity)
       props.store.feed.access.revoke(permission,identity);
       props.store.capabilities = props.store.feed.access.capabilities

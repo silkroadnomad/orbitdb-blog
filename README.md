@@ -1,7 +1,7 @@
 # orbit-db decentralized blog
 ## features
 - create your own decentralized blog with your own decentralized identity (right now metamask only) 
-- add other identities (metamask supported right now) in order to allow writing / admin permissions to the blog
+- add other identities in order to allow writing / admin permissions to the blog
 - upload images to ipfs as attachments for the post
 - images stored anywhere on ipfs can be embedded inside markdown using IPFS CID instead filename
 - (roadmap) pin image cids and orbitdb cids on aleph-im / ar-weave

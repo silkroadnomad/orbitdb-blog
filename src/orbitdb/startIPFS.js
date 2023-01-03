@@ -1,7 +1,9 @@
 import {create} from 'ipfs'
 export const startIPFS = async (_options) => {
+
     let repo = _options?.repo!==undefined?_options.repo:'./ipfs-repo'
     let ipfs 
+
     const options = {
       repo: repo,
       EXPERIMENTAL: { pubsub: true },
@@ -23,9 +25,10 @@ export const startIPFS = async (_options) => {
     }
 
     try {
-      if(ipfs!==undefined)
-        await ipfs.stop()
-      ipfs = await create(options)
+        if(ipfs!==undefined)
+          await ipfs.stop()
+        ipfs = await create(options)
+
     }catch(ex){
         console.log("couldn' create ipfs node trying without network",ex)
         options.config.Bootstrap = []
@@ -41,7 +44,11 @@ export const startIPFS = async (_options) => {
     ipfs.libp2p.on('peer:connect', async (peer) => {
       console.log('connected', peer)
   
-      ipfs.swarm.peers().then(peers => console.log('current peers connected: ', peers))
+    ipfs.swarm.peers().then(peers => console.log('current peers connected: ', peers))
+
+    for await (const { cid, type } of ipfs.pin.ls()) {
+      console.log("pinned files:",{ cid, type })
+    }
     })
     return {ipfs};
   }

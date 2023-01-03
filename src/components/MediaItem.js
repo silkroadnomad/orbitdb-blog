@@ -12,11 +12,24 @@ const MediaItem = (props) => {
     useEffect(() => {
         log.action("requesting media item of of media feed from ipfs ",props.item.payload.value.meta)  
         const loadData = async () => {
-            const _imgData = await loadImgURL(props.store.ipfs,props.item.payload.value.content,props.item.payload.value.meta.mimeType, MAX_BYTES);
+            const _imgData = await loadImgURL(props.store.ipfs,
+                  props.item.payload.value.content,
+                  props.item.payload.value.meta.mimeType, MAX_BYTES);
             setImgData(_imgData)
         }
         loadData()
     }, []);
+
+    const makeDefaultPhoto = async () => {
+      log.action(`making this cid default photo for the post ${props.store.currentMediaFeed.id} `,props.item.hash)
+      await props.store.removePost()
+      const currentPost = props.store.currentPost 
+      currentPost["photoCID"] = props.item.payload.value.content
+      props.store.setCurrentPost(currentPost)
+      await props.store.createNewPost(true) 
+      log.success('made default photo',props.store.currentPost.photoCID)
+
+    }
 
     const deleteMediaItem = () => {
       log.action(`deleting media item from mediafeed ${props.store.currentMediaFeed.id} `,props.item.hash)
@@ -31,7 +44,8 @@ const MediaItem = (props) => {
       <ContextMenu
         renderMenu={() => (
           <MenuList>
-            <MenuItem onClick={() => deleteMediaItem()}>Delete</MenuItem>
+            <MenuItem onClick={() => makeDefaultPhoto()} >Make default photo</MenuItem>
+            <MenuItem onClick={() => deleteMediaItem()}  >Delete</MenuItem>
           </MenuList>
         )}
       >

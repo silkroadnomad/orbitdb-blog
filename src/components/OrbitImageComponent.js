@@ -7,6 +7,7 @@ const OrbitImageComponent = ({...props}) => {
     const [url, setUrl] = useState()
     useEffect(() => {
         const loadData = async (cid) => {
+            console.log('loading image',cid)
             const _url = await loadImgURL(props.store.ipfs,cid)
             setUrl(_url)
         }

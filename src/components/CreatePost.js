@@ -8,6 +8,7 @@ import moment from 'moment'
 const CreatePost = (props) => {
 
   const [dragActive, setDragActive] = useState(false)
+
   async function onDrop (event) {
     event.preventDefault()
     setDragActive(false)
@@ -37,9 +38,7 @@ const CreatePost = (props) => {
   const handleValues = (e) => {
     if(props.store.currentPost===undefined) props.store.currentPost = {}
     let {name,value} = e.target
-      console.log("name",name)
-      console.log("value",value)
-    if(name === "postDate" && value.length===10){ 
+    if(name === "postDate" && value.length>=10){ 
         if(moment(value).isValid()){
           const currentPost = props.store.currentPost
           currentPost["postDate"] = value
@@ -61,10 +60,12 @@ const CreatePost = (props) => {
   async function handleSubmit (event) {
     event.preventDefault()
     if (props.store.currentPost?.hash === undefined) {
+
       await props.store.createNewPost()
       props.history.push("/")
       props.store.currentPost = undefined
-    }else{
+      
+    } else {
       //udpate existing post (first delete old and then create new one - don't create new media feed in such a situation)
       await props.store.removePost()
       await props.store.createNewPost(true) //true means update 
@@ -127,7 +128,7 @@ const CreatePost = (props) => {
           name="postDate"
           type="text"
           // value={  props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:props.store.currentPost?.createdAt!==undefined?moment(props.store.currentPost?.createdAt).format("YYYY-MM-DD"):moment(new Date()).format("YYYY-MM-DD") }
-          defaultValue={ props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:moment(new Date()).format("YYYY-MM-DD")}
+          defaultValue={ props.store.currentPost?.postDate!==undefined?props.store.currentPost?.postDate:moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}
           onChange={handleValues}
           placeholder="Post Date"
       /> 

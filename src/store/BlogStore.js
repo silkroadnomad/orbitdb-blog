@@ -14,7 +14,7 @@ class BlogStore {
   };
   @observable isOnline = false;
   @observable identity = {};
-  @observable currentMediaFeed = {}; //feed holding the current feed
+  @observable currentMediaFeed = {}; //feed holding the current feed (each post has a mediafeed)
   @observable currentPost = {}; //simple object holding the post
   @observable capabilities = []
 
@@ -54,7 +54,7 @@ class BlogStore {
     this.isOnline = true;
   }
 
-  setCurrentPost = currentPost => this.currentPost = currentPost
+  setCurrentPost = _currentPost => this.currentPost = _currentPost
   setDbAddress = dbAddress => this.dbName = dbAddress
 
   canWrite = (identity) => {
@@ -76,6 +76,7 @@ class BlogStore {
         hash: entry.hash,
         subject: entry.payload.value.subject || entry.payload.value.name,
         body: entry.payload.value.body,
+        photoCID: entry.payload.value.photoCID || "QmdhR6iJYDGVhBw5PQssgtLUC6aqJ6CzfwbiUYPXrDpSoi",
         tags: entry.payload.value.tags,
         postDate: entry.payload.value.postDate,
         createdAt: entry.payload.value.createdAt,
@@ -162,8 +163,9 @@ class BlogStore {
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
+      photoCID: this.currentPost.photoCID,
       tags: this.currentPost.tags?this.currentPost.tags:[],
-      postDate:  this.currentPost.postDate?this.currentPost.postDate:moment(new Date()).format("YYYY-MM-DD"),
+      postDate:  this.currentPost.postDate?this.currentPost.postDate:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),
       address: newMediaFeed!==undefined?newMediaFeed.address.toString():this.currentMediaFeed.address.toString(),
     }
@@ -297,6 +299,7 @@ class BlogStore {
   }
 
   async addFile(address, source) {
+
     if (!source || !source.filename) {
       throw new Error("Filename not specified");
     }
