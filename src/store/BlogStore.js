@@ -163,7 +163,7 @@ class BlogStore {
     const p = {
       subject: this.currentPost.subject,
       body: this.currentPost.body,
-      photoCID: this.currentPost.photoCID,
+      photoCID: this.currentPost.photoCID || '',
       tags: this.currentPost.tags?this.currentPost.tags:[],
       postDate:  this.currentPost.postDate?this.currentPost.postDate:moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
       createdAt: this.currentPost.createdAt?this.currentPost.createdAt:new Date().getTime(),

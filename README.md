@@ -19,8 +19,19 @@
 - use node 18.x
 - clone this repo 
 - run ``yarn``
+- create .env file with the following contents to configure your orbitdb blog
+```
+TITLE=Welcome to MyBlog
+AUTOR=SilkroadNomad
+SUMMARY=A new travel blog about the silkroad
+SOCIAL=https://twitter.com/SilkRoadNomadX
+#DB_NAME=/orbitdb/zdpuAoRJtgSTi1SjHuzC9o5Nvg81eZxoDb2PoC82DXLHDt2EB/myblog01
+DB_NAME=myblog01
+```
 - run ``yarn start``
 - open browser on http://localhost:8080
+- as soon as the blog is up - click on the upper right button and copy your dbAddress e.g. /orbitdb/zdpuAyxUrPnAgQfPy5fDGrsVukxQr5sHQ6DXVX5CHdqdV4o7W/myblog01
+- replace in your .env ```DB_NAME=myblog01``` with your real blog address
 - make a copy of the current db: Go to console -> await 
 
 ## build 

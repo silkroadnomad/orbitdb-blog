@@ -9,10 +9,10 @@ const Identity = (props) => {
     return (
         <Box fontSize='xs'>
               <FormLabel htmlFor="myIdentity">My Identity:</FormLabel>
-              <Input name="myIdentity" readOnly={true} value={props.store?.identity?.id}/>
+              <Input name="myIdentity" value={props.store?.identity?.id}/>
 
               <FormLabel htmlFor="dbAddress">dbAddress:</FormLabel>
-              <Input name="dbAddress" readOnly={true} value={props.store.feed?.id}/> 
+              <Input name="dbAddress" value={props.store.feed?.id}/>
           </Box>
         )
 }
