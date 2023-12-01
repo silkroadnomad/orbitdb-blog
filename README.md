@@ -37,6 +37,10 @@ DB_NAME=myblog01
 - click on post / edit post and upload a photo into the drag & drop zone
 - add some markdown 
 - add any uploaded image can be added with the cid
+- open a second browser with the same url see if both browser replicate (new browser should receive all posts from first browser)
+- connect with metamask and add metamask address (eth address to write permissions) possible only from first browser!
+- checkout permissions handling
+- please send me feedback @silkroadnomadx 
 
 ## build 
 - run ``yarn build``
@@ -73,7 +77,7 @@ DB_NAME=myblog01
 - store profile information under id
 
 ## nice to haves
-- dns website - fallback html website hinterlegen als default und nur auf anforderung auf pure ipfs umschalten.
+- dns website - fallback html website in case my browser isn't online
 
 #### difficulties & discoveries
 1. another user reported his Windows defender firewall was blocking the website.
