@@ -32,7 +32,11 @@ DB_NAME=myblog01
 - open browser on http://localhost:8080
 - as soon as the blog is up - click on the upper right button and copy your dbAddress e.g. /orbitdb/zdpuAyxUrPnAgQfPy5fDGrsVukxQr5sHQ6DXVX5CHdqdV4o7W/myblog01
 - replace in your .env ```DB_NAME=myblog01``` with your real blog address
-- make a copy of the current db: Go to console -> await 
+- restart blog
+- create your first post
+- click on post / edit post and upload a photo into the drag & drop zone
+- add some markdown 
+- add any uploaded image can be added with the cid
 
 ## build 
 - run ``yarn build``

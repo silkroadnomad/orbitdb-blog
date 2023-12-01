@@ -336,7 +336,7 @@ class BlogStore {
     if (this.currentMediaFeed) {
       log.msg("mediaFeed permissions",this.currentMediaFeed?.access?.capabilities)
       const hash = await this.currentMediaFeed.add(data);
-      log.succes("added media to mediafeed and got hash", hash);
+      log.success("added media to mediafeed and got hash", hash);
       await this.currentMediaFeed.load();
       return this.currentMediaFeed.get(hash);
     }
