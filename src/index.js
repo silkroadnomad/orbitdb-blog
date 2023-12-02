@@ -1,60 +1,27 @@
 import React, { useEffect,useState } from "react"
 import { ChakraProvider } from '@chakra-ui/react'
 import { HashRouter as Router, Route } from 'react-router-dom'
-import connectOrbit from './orbitdb/connectOrbit'
-import {log} from './utils/loaderPrettyLog.js'
-
-import store from './store/BlogStore'
+import OrbitImage from './components/OrbitImage';
 import BlogPost from './components/BlogPost'
 import Settings from './components/Settings'
 import BlogIndex from './pages/BlogIndex'
+import connectOrbit from './orbitdb/connectOrbit'
+import store from './store/BlogStore'
+import {log} from './utils/loaderPrettyLog.js'
 
 import './console/help'
 import './console/cp' //javascript console browser 
 import './console/dropCurrentMediaFeed'
-import './styles/style.css'
 import './styles/normalize.css'
-
-import {loadImgURL} from './utils/helper'
-
+import './styles/style.css'
 
 const App = () => {
 
-  const OrbitImage = (props) => {
-    
-    const MAX_BYTES = 100024000
-    const [imgData, setImgData] = useState();
-  
-    useEffect(() => {
-
-        const loadData = async () => {
-            await connectOrbit(store,{noAuth:true})
-            const cid = props.match.params.cid
-            const mimeType = props.match.params.mime.replace('_','/')  
-            if(cid!==undefined) 
-              log.action("orbitimage CID was requeested in url",cid)
-            else 
-              log.action('no image CID was recognissed in url',props.match.params)
-              
-            const _imgData = await loadImgURL(props.store.ipfs,cid,mimeType,MAX_BYTES)
-            setImgData(_imgData)
-        }
-        loadData()
-
-    }, [props.store.ipfs,props.store.identity]);
-
-    return (
-      <div>
-        <img src={imgData} />
-      </div>
-    )
-  }
-
   useEffect(() => {
-    log.msg("url hash in browser was",window.location.hash)
+    log.msg("URL hash in browser is",window.location.hash)
     if(window.location.hash.indexOf('#/images/')===-1)
-      connectOrbit(store) //don't load orbit again when loading an image from ipfs via OrbitImage
-      log.success('dbName in store ',store.dbName)
+      connectOrbit(store) //don't load orbit again when loading an image from IPFS via OrbitImage
+      log.success('Database name in store is',store.dbName)
   },[store.dbName])
     return (
       <ChakraProvider>

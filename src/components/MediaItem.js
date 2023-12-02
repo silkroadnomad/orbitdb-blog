@@ -10,11 +10,11 @@ const MediaItem = (props) => {
     const MAX_BYTES = 100024000
 
     useEffect(() => {
-        log.action("requesting media item of of media feed from ipfs ",props.item.payload.value.meta)  
+        log.action("requesting media item of of media feed from ipfs ",props?.item?.payload?.value?.meta)
         const loadData = async () => {
             const _imgData = await loadImgURL(props.store.ipfs,
                   props.item.payload.value.content,
-                  props.item.payload.value.meta.mimeType, MAX_BYTES);
+                  props.item.payload.value?.meta?.mimeType, MAX_BYTES);
             setImgData(_imgData)
         }
         loadData()
@@ -56,7 +56,7 @@ const MediaItem = (props) => {
               objectFit="cover"
               key={"i_" + props.item.payload.value.content}
               src={imgData}
-              alt={props.item.payload.value.meta.name}
+              alt={props.item.payload.value.meta?.name}
             />
             <div>CID:{props.item.payload.value.content}</div>
           </div>

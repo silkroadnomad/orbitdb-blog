@@ -1,7 +1,7 @@
 import React, {useEffect,useState} from "react";
 import { observer } from 'mobx-react'
 import { Button, Input,Textarea,Stack,Box } from '@chakra-ui/react'
-import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons'
+import {EditIcon,DeleteIcon,AddIcon} from '@chakra-ui/icons';
 import { getDataTransferFiles } from '../utils/helper.js'
 import '../styles/CreatePlaylist.scss'
 import moment from 'moment'

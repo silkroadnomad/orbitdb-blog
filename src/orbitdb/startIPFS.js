@@ -1,4 +1,5 @@
 import {create} from 'ipfs'
+import {log} from '../utils/loaderPrettyLog.js'
 export const startIPFS = async (_options) => {
 
     let repo = _options?.repo!==undefined?_options.repo:'./ipfs-repo'
@@ -12,13 +13,8 @@ export const startIPFS = async (_options) => {
         Bootstrap: ['/ip4/65.21.180.203/tcp/4001/p2p/12D3KooWQEaozT9Q7GS7GHEzsVcpAmaaDmjgfH5J8Zba1YoQ4NU3'], 
         Addresses: {
           Swarm: [
-            //Use default 
-            // "/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star" //doesn't work 
-            // Use IPFS dev webrtc signal server
             '/dns6/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
             '/dns4/ipfs.le-space.de/tcp/9091/wss/p2p-webrtc-star',
-            // Use local signal server
-            // '/ip4/0.0.0.0/tcp/9090/wss/p2p-webrtc-star',
           ]
         },
       }
@@ -30,24 +26,24 @@ export const startIPFS = async (_options) => {
         ipfs = await create(options)
 
     }catch(ex){
-        console.log("couldn' create ipfs node trying without network",ex)
+        log.error("Couldn't create IPFS node. Trying without network.",ex)
         options.config.Bootstrap = []
         options.config.Addresses.Swarm = []
-        console.log('options',options)
+        log.action('Options:',options)
         ipfs = await create(options)
     }
 
     ipfs.libp2p.on('peer:discovery', (peer) => {
-      console.log('discovered', peer)
+      log.action('Discovered:', peer)
     })
   
     ipfs.libp2p.on('peer:connect', async (peer) => {
-      console.log('connected', peer)
+      log.action('Connected:', peer)
   
-    ipfs.swarm.peers().then(peers => console.log('current peers connected: ', peers))
+    ipfs.swarm.peers().then(peers => log.info('Current peers connected:', peers))
 
     for await (const { cid, type } of ipfs.pin.ls()) {
-      console.log("pinned files:",{ cid, type })
+      log.action("Pinned files:",{ cid, type })
     }
     })
     return {ipfs};

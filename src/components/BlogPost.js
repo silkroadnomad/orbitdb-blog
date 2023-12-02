@@ -13,26 +13,46 @@ import MediaItem from "./MediaItem"
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import OrbitImageComponent from "./OrbitImageComponent";
 
+// Custom hook for post navigation
+const usePostNavigation = (store, address) => {
+  const [nextPost, setNextPost] = useState({address:'#'});
+  const [previousPost, setPreviousPost] = useState({address:'#'});
+
+  useEffect(() => {
+    function load() {
+      setNextPost(store.nextPost(address));
+      setPreviousPost(store.previousPost(address));
+    }
+    
+    load();
+  }, [store.isOnline, address]);
+
+  return { nextPost, previousPost };
+};
+
+// New PostNavigation component
+const PostNavigation = ({ post, direction }) => (
+  post?.address && post.address !== '#' &&
+  <Link to={post?.address} rel={direction}>
+    {post?.subject}
+  </Link>
+);
 
 const BlogPost = (props) => { 
 
   const [media, setMedia] = useState([])
-
-  const [nextPost,setNextPost] = useState({address:'#'})
-  const [previousPost,setPreviousPost] = useState({address:'#'})
 
   const address = '/orbitdb/' + props.match.params.hash + '/' + props.match.params.name
   const getOrbitImageComponent = (otherProps) => {
     return (<OrbitImageComponent store={props.store} {...otherProps}/>)
   }
 
+  const { nextPost, previousPost } = usePostNavigation(props.store, address);
+
   useEffect(() => {
   
     function load () {
       console.log("address",address)
-      setNextPost( props.store.nextPost(address))
-      setPreviousPost( props.store.previousPost(address))
-
       props.store.joinBlogPost(address,media,setMedia)
     }
     
@@ -66,17 +86,11 @@ const BlogPost = (props) => {
             padding: 0,
           }}
         >
-          <li>{
-            (previousPost?.address && previousPost.address!=='#')?
-            <Link to={previousPost?.address} rel="prev">
-              {previousPost?.subject}
-            </Link>:''}
+          <li>
+            <PostNavigation post={previousPost} direction="prev" />
           </li>
-          <li>{
-            (nextPost?.address  && previousPost.address!=='#')?
-            <Link to={nextPost?.address} rel="next">
-              {nextPost?.subject}
-            </Link>:''}
+          <li>
+            <PostNavigation post={nextPost} direction="next" />
           </li>
         </ul>
       </nav>
@@ -136,17 +150,11 @@ const BlogPost = (props) => {
             padding: 0,
           }}
         >
-        <li>{
-          (previousPost?.address && previousPost.address!=='#')?
-          <Link to={previousPost?.address} rel="prev">
-            {previousPost?.subject}
-          </Link>:''}
+        <li>
+          <PostNavigation post={previousPost} direction="prev" />
         </li>
-        <li>{
-          (nextPost?.address  && previousPost.address!=='#')?
-          <Link to={nextPost?.address} rel="next">
-            {nextPost?.subject}
-          </Link>:''}
+        <li>
+          <PostNavigation post={nextPost} direction="next" />
         </li>
         </ul>
       </nav>

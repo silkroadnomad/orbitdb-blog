@@ -29,7 +29,7 @@ export function SettingsDrawer(props) {
 
     return (
       <>
-        <Button ref={btnRef} padding={5} spac colorScheme='teal' onClick={onOpen}>
+        <Button ref={btnRef} padding={5} colorScheme='teal' onClick={onOpen}>
         {props.store?.identity?.id!==undefined?props.store?.identity?.id.substring(0,10)+"..":'Connect'}
         </Button>
         
